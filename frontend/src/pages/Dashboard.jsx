@@ -76,7 +76,7 @@ const Dashboard = () => {
   return (
     <div className="space-y-8 pb-12">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-primary/5 pb-8">
         <div>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -152,17 +152,17 @@ const Dashboard = () => {
             Live Market Data
           </h2>
           <div className="flex gap-2">
-            <button className="px-3 py-1.5 rounded-lg bg-surface border border-white/10 text-xs text-text-secondary hover:text-text-primary transition-colors">
+            <button className="px-3 py-1.5 rounded-lg bg-surface border border-primary/10 text-xs text-text-secondary hover:text-text-primary transition-colors">
               Filter
             </button>
-            <button className="px-3 py-1.5 rounded-lg bg-surface border border-white/10 text-xs text-text-secondary hover:text-text-primary transition-colors">
+            <button className="px-3 py-1.5 rounded-lg bg-surface border border-primary/10 text-xs text-text-secondary hover:text-text-primary transition-colors">
               Export
             </button>
           </div>
         </div>
 
         {crops.length === 0 ? (
-          <div className="glass-panel p-12 text-center rounded-xl border-dashed border-2 border-white/10">
+          <div className="glass-panel p-12 text-center rounded-xl border-dashed border-2 border-primary/10">
             <p className="text-text-secondary">No market data available matching your criteria.</p>
           </div>
         ) : (

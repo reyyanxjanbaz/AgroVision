@@ -40,9 +40,9 @@ class ErrorBoundary extends React.Component {
             </button>
             
             {process.env.NODE_ENV === 'development' && (
-              <div className="mt-6 p-4 bg-black/50 rounded border border-white/10 text-left">
+              <div className="mt-6 p-4 bg-slate-900 rounded border border-slate-800 text-left">
                 <p className="text-xs font-mono text-danger mb-2">ERROR_LOG:</p>
-                <pre className="text-[10px] font-mono text-text-muted overflow-auto max-h-40 whitespace-pre-wrap">
+                <pre className="text-[10px] font-mono text-slate-400 overflow-auto max-h-40 whitespace-pre-wrap">
                   {this.state.error?.toString()}
                 </pre>
               </div>

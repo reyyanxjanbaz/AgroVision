@@ -108,13 +108,13 @@ const CropDetail = () => {
           <div className="flex items-start gap-6 relative z-10">
             <div className="relative">
               {crop.image_url ? (
-                <img src={crop.image_url} alt={crop.name} className="w-24 h-24 rounded-xl border border-white/10 object-cover" />
+                <img src={crop.image_url} alt={crop.name} className="w-24 h-24 rounded-xl border border-primary/10 object-cover" />
               ) : (
-                <div className="w-24 h-24 rounded-xl bg-surfaceHighlight border border-white/10 flex items-center justify-center text-4xl">
+                <div className="w-24 h-24 rounded-xl bg-surfaceHighlight border border-primary/10 flex items-center justify-center text-4xl">
                   🌾
                 </div>
               )}
-              <div className="absolute -bottom-2 -right-2 bg-background px-2 py-1 rounded border border-white/10 text-xs font-mono text-primary">
+              <div className="absolute -bottom-2 -right-2 bg-background px-2 py-1 rounded border border-primary/10 text-xs font-mono text-primary">
                 ID: {String(crop.id).substring(0, 4).toUpperCase()}
               </div>
             </div>
@@ -155,24 +155,24 @@ const CropDetail = () => {
           <div>
             <h3 className="text-text-secondary text-sm font-mono uppercase mb-4">Market Summary</h3>
             <div className="space-y-4">
-              <div className="flex justify-between items-center border-b border-white/5 pb-2">
+              <div className="flex justify-between items-center border-b border-primary/5 pb-2">
                 <span className="text-text-muted text-sm">7 Day Trend</span>
                 <span className={`font-mono ${crop.price_change_7d >= 0 ? 'text-secondary' : 'text-danger'}`}>
                   {crop.price_change_7d >= 0 ? '+' : ''}{crop.price_change_7d?.toFixed(2)}%
                 </span>
               </div>
-              <div className="flex justify-between items-center border-b border-white/5 pb-2">
+              <div className="flex justify-between items-center border-b border-primary/5 pb-2">
                 <span className="text-text-muted text-sm">Volume</span>
                 <span className="font-mono text-text-primary">High</span>
               </div>
-              <div className="flex justify-between items-center border-b border-white/5 pb-2">
+              <div className="flex justify-between items-center border-b border-primary/5 pb-2">
                 <span className="text-text-muted text-sm">Volatility</span>
                 <span className="font-mono text-accent">Medium</span>
               </div>
             </div>
           </div>
           
-          <div className="mt-6 pt-4 border-t border-white/10">
+          <div className="mt-6 pt-4 border-t border-primary/10">
              <PredictionCard prediction={prediction} />
           </div>
         </motion.div>
@@ -187,7 +187,7 @@ const CropDetail = () => {
           </div>
           
           <div className="flex flex-wrap gap-4">
-            <div className="flex bg-surface rounded-lg p-1 border border-white/10">
+            <div className="flex bg-surface rounded-lg p-1 border border-primary/10">
               {periods.map((period) => (
                 <button
                   key={period.label}
@@ -195,7 +195,7 @@ const CropDetail = () => {
                   className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                     timePeriod === period.label
                       ? 'bg-primary text-white shadow-lg'
-                      : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
+                      : 'text-text-secondary hover:text-text-primary hover:bg-primary/5'
                   }`}
                 >
                   {period.label}
@@ -208,7 +208,7 @@ const CropDetail = () => {
               <select
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
-                className="pl-9 pr-8 py-1.5 bg-surface border border-white/10 rounded-lg text-sm text-text-primary focus:border-primary/50 focus:outline-none appearance-none cursor-pointer"
+                className="pl-9 pr-8 py-1.5 bg-surface border border-primary/10 rounded-lg text-sm text-text-primary focus:border-primary/50 focus:outline-none appearance-none cursor-pointer"
               >
                 <option value="all">All Regions</option>
                 <option value="north">North India</option>
@@ -223,7 +223,7 @@ const CropDetail = () => {
         {filteredData.length > 0 ? (
           <PriceChart data={filteredData} showArea={true} />
         ) : (
-          <div className="h-[400px] flex items-center justify-center border border-dashed border-white/10 rounded-xl">
+          <div className="h-[400px] flex items-center justify-center border border-dashed border-primary/10 rounded-xl">
             <p className="text-text-secondary">No price data available for selected period</p>
           </div>
         )}
@@ -249,7 +249,7 @@ const CropDetail = () => {
                   href={article.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="glass-panel p-4 rounded-lg flex gap-3 hover:bg-surfaceHighlight transition-all group border border-white/5 hover:border-primary/30"
+                  className="glass-panel p-4 rounded-lg flex gap-3 hover:bg-surfaceHighlight transition-all group border border-primary/5 hover:border-primary/30"
                 >
                   {article.image_url && (
                     <img 

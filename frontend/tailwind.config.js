@@ -6,19 +6,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Command Center Palette
-        background: '#0B1121', // Deep midnight blue
-        surface: '#151E32',    // Slightly lighter blue for cards
-        surfaceHighlight: '#1E293B',
-        primary: '#3B82F6',    // Electric Blue
-        primaryGlow: '#60A5FA',
-        secondary: '#10B981',  // Signal Green (Success/Growth)
+        // Light & Green Palette
+        background: '#F0FDF4', // Very light green/white (green-50)
+        surface: '#FFFFFF',    // Pure white for cards
+        surfaceHighlight: '#DCFCE7', // Light green highlight (green-100)
+        primary: '#16A34A',    // Green-600
+        primaryGlow: '#4ADE80', // Green-400
+        secondary: '#0D9488',  // Teal-600 (Complementary)
         accent: '#F59E0B',     // Amber (Warning/Attention)
         danger: '#EF4444',     // Red (Threats)
         text: {
-          primary: '#F8FAFC',  // Almost white
-          secondary: '#94A3B8', // Muted blue-grey
-          muted: '#64748B',
+          primary: '#1E293B',  // Slate-800
+          secondary: '#64748B', // Slate-500
+          muted: '#94A3B8',    // Slate-400
         }
       },
       fontFamily: {
@@ -27,9 +27,9 @@ module.exports = {
         mono: ['JetBrains Mono', 'monospace'],
       },
       boxShadow: {
-        'glow-blue': '0 0 20px -5px rgba(59, 130, 246, 0.5)',
-        'glow-green': '0 0 20px -5px rgba(16, 185, 129, 0.5)',
-        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+        'glow-primary': '0 0 20px -5px rgba(22, 163, 74, 0.3)', // Green glow
+        'glow-secondary': '0 0 20px -5px rgba(13, 148, 136, 0.3)', // Teal glow
+        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.05)', // Softer shadow for light mode
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

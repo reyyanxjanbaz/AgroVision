@@ -17,15 +17,15 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-surface/60 backdrop-blur-md border border-white/10 shadow-glass;
+    @apply bg-white/70 backdrop-blur-md border border-primary/10 shadow-glass;
   }
   
   .glass-panel-hover {
-    @apply hover:bg-surface/80 hover:border-primary/30 hover:shadow-glow-blue transition-all duration-300;
+    @apply hover:bg-white/90 hover:border-primary/30 hover:shadow-glow-primary transition-all duration-300;
   }
 
   .tech-border {
-    @apply border border-white/10 relative;
+    @apply border border-primary/10 relative;
   }
   
   .tech-border::before {
@@ -38,13 +38,13 @@
   }
 
   .btn-primary {
-    @apply bg-primary/90 hover:bg-primary text-white font-medium px-6 py-3 rounded-lg 
+    @apply bg-primary hover:bg-primary/90 text-white font-medium px-6 py-3 rounded-lg 
     shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 
     transition-all duration-200 flex items-center justify-center gap-2;
   }
   
   .btn-ghost {
-    @apply bg-transparent hover:bg-white/5 text-text-secondary hover:text-text-primary 
+    @apply bg-transparent hover:bg-primary/5 text-text-secondary hover:text-primary 
     px-4 py-2 rounded-lg transition-colors duration-200;
   }
 
@@ -64,5 +64,5 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-surfaceHighlight rounded-full hover:bg-primary/50 transition-colors;
+  @apply bg-primary/20 rounded-full hover:bg-primary/50 transition-colors;
 }
