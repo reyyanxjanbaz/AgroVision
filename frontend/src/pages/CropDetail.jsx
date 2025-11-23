@@ -195,7 +195,7 @@ const CropDetail = () => {
             </div>
 
             {/* Chart Section */}
-            <div className="flex-1 flex flex-col min-h-[400px] border-t border-gray-100 pt-6">
+            <div className="border-t border-gray-100 pt-6 mt-6">
               <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                   <h3 className="text-lg font-bold text-text-primary flex items-center gap-2">
                       <Activity size={18} className="text-primary" />
@@ -232,7 +232,7 @@ const CropDetail = () => {
                   </div>
               </div>
 
-              <div className="flex-1 w-full min-h-[300px]">
+              <div className="w-full h-[500px]">
                   {filteredData.length > 0 ? (
                   <PriceChart data={filteredData} prediction={prediction} onRefresh={loadCropData} />
                   ) : (
