@@ -91,3 +91,12 @@ AgroVision is an AI-powered agricultural platform that provides real-time crop p
 ## License
 
 MIT
+
+
+
+
+
+
+
+
+DONE
