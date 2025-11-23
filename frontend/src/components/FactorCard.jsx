@@ -4,30 +4,36 @@ import { Cloud, Users, TrendingUp, FileText, DollarSign } from 'lucide-react';
 const FactorCard = ({ factor }) => {
   const getFactorIcon = (type) => {
     switch(type) {
-      case 'weather': return <Cloud size={24} className="text-blue-500" />;
-      case 'demand': return <Users size={24} className="text-purple-500" />;
-      case 'supply': return <TrendingUp size={24} className="text-green-500" />;
-      case 'policy': return <FileText size={24} className="text-orange-500" />;
-      default: return <DollarSign size={24} className="text-gray-500" />;
+      case 'weather': return <Cloud size={20} className="text-primary" />;
+      case 'demand': return <Users size={20} className="text-secondary" />;
+      case 'supply': return <TrendingUp size={20} className="text-accent" />;
+      case 'policy': return <FileText size={20} className="text-orange-400" />;
+      default: return <DollarSign size={20} className="text-text-muted" />;
     }
   };
 
+  const isPositive = factor.impact_score > 0;
+
   return (
-    <div className="glass-card p-6">
+    <div className="glass-panel p-4 hover:bg-surfaceHighlight transition-colors group border border-white/5 hover:border-primary/30">
       <div className="flex items-start gap-4">
-        <div className="p-3 bg-gray-100 rounded-xl">
+        <div className="p-2.5 bg-surface border border-white/10 rounded-lg group-hover:border-primary/30 transition-colors">
           {getFactorIcon(factor.factor_type)}
         </div>
         <div className="flex-1">
-          <h3 className="font-bold text-gray-900 mb-1 capitalize">{factor.factor_type}</h3>
-          <p className="text-gray-600 text-sm mb-2">{factor.description}</p>
-          <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-            factor.impact_score > 0 
-              ? 'bg-green-100 text-green-700' 
-              : 'bg-red-100 text-red-700'
-          }`}>
-            Impact: {factor.impact_score > 0 ? '+' : ''}{factor.impact_score}%
-          </span>
+          <div className="flex justify-between items-start mb-1">
+            <h3 className="font-bold text-text-primary capitalize text-sm font-display tracking-wide">
+              {factor.factor_type}
+            </h3>
+            <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${
+              isPositive 
+                ? 'bg-secondary/10 border-secondary/20 text-secondary' 
+                : 'bg-danger/10 border-danger/20 text-danger'
+            }`}>
+              {isPositive ? '+' : ''}{factor.impact_score}%
+            </span>
+          </div>
+          <p className="text-text-secondary text-xs leading-relaxed">{factor.description}</p>
         </div>
       </div>
     </div>

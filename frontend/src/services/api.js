@@ -110,7 +110,7 @@ const generatePriceHistory = (basePrice) => {
 };
 
 const DUMMY_PREDICTION = {
-  predicted_price: 2250,
+  nextWeek: 2250,
   confidence: 85,
   trend: 'up',
   prediction_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
@@ -118,9 +118,9 @@ const DUMMY_PREDICTION = {
 };
 
 const DUMMY_FACTORS = [
-  { id: 1, name: "Rainfall", impact: "high", description: "Above average rainfall expected in key growing regions", type: "positive" },
-  { id: 2, name: "Global Demand", impact: "medium", description: "Increasing export demand from neighboring countries", type: "positive" },
-  { id: 3, name: "Fuel Costs", impact: "low", description: "Rising transportation costs may affect final prices", type: "negative" }
+  { id: 1, factor_type: "weather", impact_score: 85, description: "Above average rainfall expected in key growing regions" },
+  { id: 2, factor_type: "demand", impact_score: 65, description: "Increasing export demand from neighboring countries" },
+  { id: 3, factor_type: "supply", impact_score: -30, description: "Rising transportation costs may affect final prices" }
 ];
 
 const DUMMY_NEWS = [

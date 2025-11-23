@@ -1,36 +1,57 @@
 import React from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, TrendingUp, AlertCircle } from 'lucide-react';
 
 const PredictionCard = ({ prediction }) => {
   if (!prediction) return null;
 
   return (
-    <div className="glass-card p-8 mb-8 bg-gradient-to-br from-primary/5 to-emerald-500/5 border-2 border-primary/20">
-      <div className="flex items-center gap-3 mb-4">
-        <Sparkles className="text-primary" size={28} />
-        <h2 className="text-2xl font-bold text-gray-900">AI-Powered Price Prediction</h2>
+    <div className="glass-panel p-6 relative overflow-hidden group">
+      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+        <Sparkles size={80} className="text-primary" />
       </div>
-      <div className="grid md:grid-cols-2 gap-6">
-        <div>
-          <p className="text-gray-600 mb-2">Next Week Prediction</p>
-          <p className="text-4xl font-bold text-primary">₹{prediction.nextWeek?.toFixed(2)}</p>
+
+      <div className="flex items-center gap-2 mb-4 relative z-10">
+        <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
+          <Sparkles className="text-primary" size={20} />
         </div>
+        <h2 className="text-lg font-bold text-text-primary font-display tracking-wide">AI FORECAST</h2>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 relative z-10">
         <div>
-          <p className="text-gray-600 mb-2">Confidence Level</p>
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-primary to-emerald-600 rounded-full transition-all duration-500"
-                style={{ width: `${prediction.confidence}%` }}
-              ></div>
+          <p className="text-text-secondary text-xs font-mono uppercase mb-1">Projected Price (7 Days)</p>
+          <div className="flex items-baseline gap-2">
+            <p className="text-3xl font-bold text-text-primary font-mono tracking-tight">
+              ₹{prediction.nextWeek?.toFixed(2)}
+            </p>
+            <span className="text-xs font-mono text-secondary bg-secondary/10 px-1.5 py-0.5 rounded border border-secondary/20">
+              +2.4%
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <div className="flex justify-between items-end mb-2">
+            <p className="text-text-secondary text-xs font-mono uppercase">Confidence Score</p>
+            <span className="text-xl font-bold text-primary font-mono">{prediction.confidence}%</span>
+          </div>
+          <div className="h-2 bg-surface border border-white/10 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-primary relative"
+              style={{ width: `${prediction.confidence}%` }}
+            >
+              <div className="absolute top-0 right-0 bottom-0 w-1 bg-white/50 shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
             </div>
-            <span className="text-2xl font-bold text-primary">{prediction.confidence}%</span>
           </div>
         </div>
       </div>
-      <p className="text-xs text-gray-500 mt-4">
-        * Predictions are based on historical data, market trends, and AI algorithms. Not financial advice.
-      </p>
+
+      <div className="mt-4 pt-4 border-t border-white/10 flex gap-2 items-start">
+        <AlertCircle size={14} className="text-text-muted mt-0.5 flex-shrink-0" />
+        <p className="text-[10px] text-text-muted leading-relaxed font-mono">
+          AI model v2.4. Predictions based on historical volatility and market sentiment analysis.
+        </p>
+      </div>
     </div>
   );
 };
