@@ -1,50 +1,75 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+- Version change: 0.0.0 -> 1.0.0 (Initial Ratification)
+- List of modified principles:
+  - [PRINCIPLE_1_NAME] -> I. Speed First
+  - [PRINCIPLE_2_NAME] -> II. Data Clarity
+  - [PRINCIPLE_3_NAME] -> III. Mobile-First
+  - [PRINCIPLE_4_NAME] -> IV. AI-Powered
+  - [PRINCIPLE_5_NAME] -> V. Multi-Stakeholder
+  - Added: VI. Trust Through Transparency
+- Added sections:
+  - Technical Standards
+  - Design & UX Standards
+  - Success Metrics
+- Removed sections: None (Templates filled)
+- Templates requiring updates: None (Generic templates align with new constitution)
+- Follow-up TODOs: None
+-->
+# AgroVision Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Speed First
+Must load in <2 seconds, all interactions feel instant. Performance is a feature.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Data Clarity
+Complex agricultural data presented simply and beautifully.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Mobile-First
+Works flawlessly on phones (farmers in fields). Responsive design (mobile → tablet → desktop).
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. AI-Powered
+Intelligent predictions and conversational assistance throughout.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Multi-Stakeholder
+Seamlessly serves farmers, merchants, and customers with role-specific views.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### VI. Trust Through Transparency
+Show data sources, prediction confidence, and factors clearly.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## Technical Standards
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+- Modern React with functional components and hooks
+- Tailwind CSS for consistent, beautiful UI
+- API-first architecture (backend agnostic frontend)
+- Progressive enhancement (works without JS for core content)
+- Performance: Core Web Vitals green scores
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Design & UX Standards
+
+### Design
+- **Color Palette**: Emerald green (#10b981) primary, Sky blue (#0ea5e9) secondary, Amber (#f59e0b) accent.
+- **Typography**: Inter headers, System fonts body, Tabular numbers for data.
+- **Visual Style**: Glassmorphism cards, subtle animations (150-300ms), stock-market inspired charts, clean layouts.
+
+### User Experience
+- Zero learning curve for basic features
+- Progressive disclosure (advanced features don't clutter)
+- Instant feedback on all actions
+- Graceful error handling with helpful messages
+- Contextual help always available (AI chatbot)
+
+## Success Metrics
+
+- **Demo wow factor**: Audience says "whoa" in first 10 seconds
+- **Functionality**: All core features work without errors
+- **Performance**: Loads fully in <3 seconds on demo WiFi
+- **Mobile**: Perfect on phone screens
+- **Polish**: Looks like a $1M funded startup
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+Constitution supersedes all other practices. Amendments require documentation and approval. All PRs must verify compliance.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-11-23 | **Last Amended**: 2025-11-23
