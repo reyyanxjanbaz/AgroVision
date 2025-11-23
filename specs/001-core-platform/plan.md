@@ -1,6 +1,6 @@
 # Implementation Plan: AgroVision Core Platform
 
-**Branch**: `001-core-platform` | **Date**: 2025-11-23 | **Spec**: [spec.md](./spec.md)
+**Branch**: `main` | **Date**: 2025-11-23 | **Spec**: [spec.md](./spec.md)
 **Input**: Feature specification from `/specs/001-core-platform/spec.md`
 
 **Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.

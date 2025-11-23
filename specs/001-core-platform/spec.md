@@ -1,6 +1,6 @@
 # Feature Specification: AgroVision Core Platform
 
-**Feature Branch**: `001-core-platform`
+**Feature Branch**: `main`
 **Created**: 2025-11-23
 **Status**: Draft
 **Input**: User description: "AgroVision - Detailed Specification"
