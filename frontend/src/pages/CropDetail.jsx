@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { subDays, format } from 'date-fns';
 import { motion } from 'framer-motion';
@@ -30,34 +30,34 @@ const CropDetail = () => {
     { label: '1Y', days: 365 },
   ];
 
-  useEffect(() => {
-    const loadCropData = async () => {
-      try {
-        setLoading(true);
-        
-        // Fetch all data in parallel
-        const [cropData, historyData, predictionData, factorsData, newsData] = await Promise.all([
-          fetchCropDetails(id),
-          fetchPriceHistory(id, { region }),
-          fetchPrediction(id),
-          fetchFactors(id),
-          fetchNews(id),
-        ]);
+  const loadCropData = useCallback(async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch all data in parallel
+      const [cropData, historyData, predictionData, factorsData, newsData] = await Promise.all([
+        fetchCropDetails(id),
+        fetchPriceHistory(id, { region }),
+        fetchPrediction(id),
+        fetchFactors(id),
+        fetchNews(id),
+      ]);
 
-        setCrop(cropData);
-        setPriceHistory(historyData);
-        setPrediction(predictionData);
-        setFactors(factorsData);
-        setNews(newsData);
-      } catch (err) {
-        console.error('Error loading crop data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadCropData();
+      setCrop(cropData);
+      setPriceHistory(historyData);
+      setPrediction(predictionData);
+      setFactors(factorsData);
+      setNews(newsData);
+    } catch (err) {
+      console.error('Error loading crop data:', err);
+    } finally {
+      setLoading(false);
+    }
   }, [id, region]);
+
+  useEffect(() => {
+    loadCropData();
+  }, [loadCropData]);
 
   const getFilteredData = () => {
     const period = periods.find(p => p.label === timePeriod);
@@ -231,7 +231,7 @@ const CropDetail = () => {
 
             <div className="flex-1 w-full">
                 {filteredData.length > 0 ? (
-                <PriceChart data={filteredData} showArea={true} />
+                <PriceChart data={filteredData} prediction={prediction} onRefresh={loadCropData} />
                 ) : (
                 <div className="h-full flex items-center justify-center border border-dashed border-gray-200 rounded-xl bg-gray-50/50">
                     <p className="text-text-secondary">No price data available</p>
@@ -347,15 +347,11 @@ const CropDetail = () => {
 
         {/* RIGHT: Factors (Narrower) */}
         <div className="space-y-6">
-            {role !== 'customer' && (
-                <>
-                    <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">
-                        <Layers className="text-primary" size={20} />
-                        Market Drivers
-                    </h2>
-                    <FactorsList factors={factors} />
-                </>
-            )}
+            <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">
+                <Layers className="text-primary" size={20} />
+                Market Drivers
+            </h2>
+            <FactorsList factors={factors} />
             
             {/* Maybe add something else for customers here if factors are hidden? */}
             {role === 'customer' && (
