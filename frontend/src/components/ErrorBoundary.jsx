@@ -18,7 +18,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-background text-text-primary p-4">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 text-text-primary p-4">
           <div className="glass-panel p-8 max-w-md w-full text-center border border-danger/30 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-danger/50"></div>
             
@@ -40,9 +40,9 @@ class ErrorBoundary extends React.Component {
             </button>
             
             {process.env.NODE_ENV === 'development' && (
-              <div className="mt-6 p-4 bg-slate-900 rounded border border-slate-800 text-left">
+              <div className="mt-6 p-4 bg-gray-100 rounded border border-gray-200 text-left">
                 <p className="text-xs font-mono text-danger mb-2">ERROR_LOG:</p>
-                <pre className="text-[10px] font-mono text-slate-400 overflow-auto max-h-40 whitespace-pre-wrap">
+                <pre className="text-[10px] font-mono text-text-muted overflow-auto max-h-40 whitespace-pre-wrap">
                   {this.state.error?.toString()}
                 </pre>
               </div>

@@ -11,7 +11,7 @@ const Navbar = () => {
   const location = useLocation();
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-primary/10 bg-background/80 backdrop-blur-xl">
+    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-xl">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -39,7 +39,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-6">
             {/* Role Selector */}
             <div className="relative group">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-primary/10 bg-surface hover:border-primary/30 transition-colors cursor-pointer">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:border-primary/30 transition-colors cursor-pointer">
                 <span className="text-xs text-text-secondary uppercase font-mono">Role:</span>
                 <select
                   value={role}
@@ -55,14 +55,14 @@ const Navbar = () => {
             </div>
 
             {/* User Profile */}
-            <button className="flex items-center gap-3 pl-6 border-l border-primary/10 group">
+            <button className="flex items-center gap-3 pl-6 border-l border-gray-200 group">
               <div className="text-right hidden lg:block">
                 <div className="text-sm font-medium text-text-primary group-hover:text-primary transition-colors">
                   Guest User
                 </div>
                 <div className="text-xs text-text-secondary font-mono">ID: 8X-92</div>
               </div>
-              <div className="w-9 h-9 rounded-full bg-surface border border-primary/10 flex items-center justify-center group-hover:border-primary/50 transition-colors">
+              <div className="w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center group-hover:border-primary/50 transition-colors">
                 <User size={18} className="text-text-secondary group-hover:text-primary" />
               </div>
             </button>
@@ -85,7 +85,7 @@ const Navbar = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="md:hidden border-t border-primary/10 bg-surface/95 backdrop-blur-xl overflow-hidden"
+            className="md:hidden border-t border-gray-200 bg-white/95 backdrop-blur-xl overflow-hidden"
           >
             <div className="p-4 space-y-4">
               <SearchBar />
@@ -94,7 +94,7 @@ const Navbar = () => {
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-background border border-primary/10 text-text-primary focus:border-primary/50 focus:outline-none"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 text-text-primary focus:border-primary/50 focus:outline-none"
                 >
                   <option value="farmer">Farmer</option>
                   <option value="merchant">Merchant</option>

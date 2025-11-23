@@ -35,7 +35,7 @@ const PredictionCard = ({ prediction }) => {
             <p className="text-text-secondary text-xs font-mono uppercase">Confidence Score</p>
             <span className="text-xl font-bold text-primary font-mono">{prediction.confidence}%</span>
           </div>
-          <div className="h-2 bg-primary/5 border border-primary/10 rounded-full overflow-hidden">
+          <div className="h-2 bg-gray-100 border border-gray-200 rounded-full overflow-hidden">
             <div 
               className="h-full bg-primary relative"
               style={{ width: `${prediction.confidence}%` }}
@@ -46,7 +46,7 @@ const PredictionCard = ({ prediction }) => {
         </div>
       </div>
 
-      <div className="mt-4 pt-4 border-t border-primary/10 flex gap-2 items-start">
+      <div className="mt-4 pt-4 border-t border-gray-200 flex gap-2 items-start">
         <AlertCircle size={14} className="text-text-muted mt-0.5 flex-shrink-0" />
         <p className="text-[10px] text-text-muted leading-relaxed font-mono">
           AI model v2.4. Predictions based on historical volatility and market sentiment analysis.

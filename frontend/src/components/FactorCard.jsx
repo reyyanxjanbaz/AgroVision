@@ -15,9 +15,9 @@ const FactorCard = ({ factor }) => {
   const isPositive = factor.impact_score > 0;
 
   return (
-    <div className="glass-panel p-4 hover:bg-surfaceHighlight transition-colors group border border-primary/5 hover:border-primary/30">
+    <div className="glass-panel p-4 hover:bg-gray-50 transition-colors group border border-gray-200 hover:border-primary/30">
       <div className="flex items-start gap-4">
-        <div className="p-2.5 bg-surface border border-primary/10 rounded-lg group-hover:border-primary/30 transition-colors">
+        <div className="p-2.5 bg-white border border-gray-200 rounded-lg group-hover:border-primary/30 transition-colors">
           {getFactorIcon(factor.factor_type)}
         </div>
         <div className="flex-1">

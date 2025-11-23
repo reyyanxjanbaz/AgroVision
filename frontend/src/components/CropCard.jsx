@@ -24,14 +24,14 @@ const CropCard = ({ crop }) => {
                 <img
                   src={crop.image_url}
                   alt={crop.name}
-                  className="w-12 h-12 rounded-lg object-cover border border-primary/10 group-hover:border-primary/50 transition-colors"
+                  className="w-12 h-12 rounded-lg object-cover border border-gray-200 group-hover:border-primary/50 transition-colors"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-lg bg-surfaceHighlight border border-primary/10 flex items-center justify-center text-xl group-hover:border-primary/50 transition-colors">
+                <div className="w-12 h-12 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center text-xl group-hover:border-primary/50 transition-colors">
                   🌾
                 </div>
               )}
-              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-secondary rounded-full border-2 border-surface" />
+              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-secondary rounded-full border-2 border-white" />
             </div>
             <div>
               <h3 className="text-lg font-bold text-text-primary font-display tracking-tight group-hover:text-primary transition-colors">
@@ -40,7 +40,7 @@ const CropCard = ({ crop }) => {
               <p className="text-xs text-text-secondary font-mono uppercase tracking-wider">{crop.category}</p>
             </div>
           </div>
-          <div className={`flex items-center gap-1 px-2 py-1 rounded bg-surfaceHighlight border border-primary/5 ${trendColor}`}>
+          <div className={`flex items-center gap-1 px-2 py-1 rounded bg-gray-100 border border-gray-200 ${trendColor}`}>
             <TrendIcon size={14} />
             <span className="text-xs font-mono font-bold">{Math.abs(change).toFixed(2)}%</span>
           </div>
@@ -58,7 +58,7 @@ const CropCard = ({ crop }) => {
         </div>
 
         {/* Footer / Action */}
-        <div className="pt-4 border-t border-primary/5 flex items-center justify-between relative z-10">
+        <div className="pt-4 border-t border-gray-100 flex items-center justify-between relative z-10">
           <div className="flex flex-col">
             <span className="text-[10px] text-text-muted uppercase tracking-wider">7D Trend</span>
             <span className={`text-xs font-mono ${crop.price_change_7d >= 0 ? 'text-secondary' : 'text-danger'}`}>
@@ -66,7 +66,7 @@ const CropCard = ({ crop }) => {
             </span>
           </div>
           
-          <div className="w-8 h-8 rounded-full bg-surfaceHighlight flex items-center justify-center text-text-secondary group-hover:bg-primary group-hover:text-white transition-all duration-300 transform group-hover:translate-x-1">
+          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-text-secondary group-hover:bg-primary group-hover:text-white transition-all duration-300 transform group-hover:translate-x-1">
             <ArrowRight size={14} />
           </div>
         </div>

@@ -6,7 +6,7 @@ const PriceChart = ({ data, showArea = false }) => {
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="glass-panel p-4 border border-primary/30 shadow-lg">
+        <div className="glass-panel p-4 border border-primary/30 shadow-glow-green">
           <p className="text-xs font-mono text-text-secondary mb-1">
             {format(parseISO(payload[0].payload.date), 'PPP')}
           </p>

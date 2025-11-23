@@ -6,19 +6,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Light & Green Palette
-        background: '#F0FDF4', // Very light green/white (green-50)
-        surface: '#FFFFFF',    // Pure white for cards
-        surfaceHighlight: '#DCFCE7', // Light green highlight (green-100)
-        primary: '#16A34A',    // Green-600
-        primaryGlow: '#4ADE80', // Green-400
-        secondary: '#0D9488',  // Teal-600 (Complementary)
-        accent: '#F59E0B',     // Amber (Warning/Attention)
-        danger: '#EF4444',     // Red (Threats)
+        // Light & Green "Eco-Vision" Palette
+        background: '#F9FAFB', // Gray 50 - Clean, high visibility
+        surface: '#FFFFFF',    // Pure White
+        surfaceHighlight: '#F3F4F6', // Gray 100
+        primary: '#16A34A',    // Green 600 - Vibrant Nature Green
+        primaryGlow: '#4ADE80', // Green 400
+        secondary: '#059669',  // Emerald 600 - Deep Green
+        accent: '#D97706',     // Amber 600 - Earthy Orange
+        danger: '#DC2626',     // Red 600
         text: {
-          primary: '#1E293B',  // Slate-800
-          secondary: '#64748B', // Slate-500
-          muted: '#94A3B8',    // Slate-400
+          primary: '#111827',  // Gray 900 - High Contrast
+          secondary: '#4B5563', // Gray 600
+          muted: '#9CA3AF',    // Gray 400
         }
       },
       fontFamily: {
@@ -27,9 +27,10 @@ module.exports = {
         mono: ['JetBrains Mono', 'monospace'],
       },
       boxShadow: {
-        'glow-primary': '0 0 20px -5px rgba(22, 163, 74, 0.3)', // Green glow
-        'glow-secondary': '0 0 20px -5px rgba(13, 148, 136, 0.3)', // Teal glow
-        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.05)', // Softer shadow for light mode
+        'glow-green': '0 0 20px -5px rgba(22, 163, 74, 0.3)',
+        'glow-emerald': '0 0 20px -5px rgba(5, 150, 105, 0.3)',
+        'glass': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
