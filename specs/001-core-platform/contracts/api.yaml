@@ -1,0 +1,177 @@
+openapi: 3.0.0
+info:
+  title: AgroVision API
+  version: 1.0.0
+  description: API for AgroVision Core Platform
+paths:
+  /api/crops:
+    get:
+      summary: List all crops
+      responses:
+        "200":
+          description: A list of crops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Crop"
+
+  /api/crops/{id}:
+    get:
+      summary: Get a specific crop
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Crop details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Crop"
+
+  /api/crops/{id}/prices:
+    get:
+      summary: Get price history for a crop
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [1W, 1M, 3M, 6M, 1Y, ALL]
+        - name: region
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Price history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PricePoint"
+
+  /api/crops/{id}/prediction:
+    get:
+      summary: Get price prediction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Prediction data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Prediction"
+
+  /api/crops/{id}/factors:
+    get:
+      summary: Get influencing factors
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of factors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Factor"
+
+  /api/chatbot:
+    post:
+      summary: Send message to AI chatbot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                context:
+                  type: object
+                  description: Current page context (crop, price, etc.)
+      responses:
+        "200":
+          description: AI response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+
+components:
+  schemas:
+    Crop:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        current_price:
+          type: number
+        price_change_24h:
+          type: number
+        image_url:
+          type: string
+
+    PricePoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        price:
+          type: number
+        region:
+          type: string
+
+    Prediction:
+      type: object
+      properties:
+        predicted_price:
+          type: number
+        confidence:
+          type: number
+        timeframe:
+          type: string
+
+    Factor:
+      type: object
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+        impact_score:
+          type: number

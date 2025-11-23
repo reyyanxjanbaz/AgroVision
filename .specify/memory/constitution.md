@@ -16,26 +16,33 @@ Sync Impact Report:
 - Templates requiring updates: None (Generic templates align with new constitution)
 - Follow-up TODOs: None
 -->
+
 # AgroVision Constitution
 
 ## Core Principles
 
 ### I. Speed First
+
 Must load in <2 seconds, all interactions feel instant. Performance is a feature.
 
 ### II. Data Clarity
+
 Complex agricultural data presented simply and beautifully.
 
 ### III. Mobile-First
+
 Works flawlessly on phones (farmers in fields). Responsive design (mobile → tablet → desktop).
 
 ### IV. AI-Powered
+
 Intelligent predictions and conversational assistance throughout.
 
 ### V. Multi-Stakeholder
+
 Seamlessly serves farmers, merchants, and customers with role-specific views.
 
 ### VI. Trust Through Transparency
+
 Show data sources, prediction confidence, and factors clearly.
 
 ## Technical Standards
@@ -49,11 +56,13 @@ Show data sources, prediction confidence, and factors clearly.
 ## Design & UX Standards
 
 ### Design
+
 - **Color Palette**: Emerald green (#10b981) primary, Sky blue (#0ea5e9) secondary, Amber (#f59e0b) accent.
 - **Typography**: Inter headers, System fonts body, Tabular numbers for data.
 - **Visual Style**: Glassmorphism cards, subtle animations (150-300ms), stock-market inspired charts, clean layouts.
 
 ### User Experience
+
 - Zero learning curve for basic features
 - Progressive disclosure (advanced features don't clutter)
 - Instant feedback on all actions
