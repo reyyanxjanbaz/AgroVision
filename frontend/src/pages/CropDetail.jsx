@@ -10,6 +10,14 @@ import { fetchCropDetails, fetchPriceHistory, fetchPrediction, fetchFactors, fet
 import { useAuth } from '../context/AuthContext';
 import { ArrowLeft, TrendingUp, TrendingDown, Calendar, MapPin, ExternalLink, Activity, Layers } from 'lucide-react';
 
+const getCropImage = (name) => {
+  const lower = name.toLowerCase();
+  if (lower.includes('cotton')) return 'https://cdn.britannica.com/18/156618-050-39339EA2/cotton-harvest-field-Texas.jpg';
+  if (lower.includes('sugarcane')) return 'https://4.imimg.com/data4/QX/AP/MY-8729085/sugarcane-plant-1000x1000.jpg';
+  if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqnl0mDa36Zsd2B2rCkZ2ZGhvhcqV2hqU_2g&s';
+  return null;
+};
+
 const CropDetail = () => {
   const { id } = useParams();
   const { role } = useAuth();
@@ -146,13 +154,15 @@ const CropDetail = () => {
             {/* Header: Image & Info */}
             <div className="flex flex-col sm:flex-row items-start gap-6 mb-8 relative z-10">
               <div className="relative flex-shrink-0">
-                {crop.image_url ? (
-                  <img src={crop.image_url} alt={crop.name} className="w-32 h-32 rounded-2xl border border-gray-200 object-cover shadow-lg" />
-                ) : (
-                  <div className="w-32 h-32 rounded-2xl bg-gray-100 border border-gray-200 flex items-center justify-center text-5xl">
-                    🌾
-                  </div>
-                )}
+                <img 
+                  src={crop.image_url || getCropImage(crop.name) || `https://loremflickr.com/400/400/${crop.name},agriculture/all`} 
+                  alt={crop.name} 
+                  className="w-32 h-32 rounded-2xl border border-gray-200 object-cover shadow-lg"
+                  onError={(e) => {
+                    e.target.onerror = null; 
+                    e.target.src = `https://ui-avatars.com/api/?name=${crop.name}&background=random&size=400`;
+                  }}
+                />
                 <div className="absolute -bottom-3 -right-3 bg-white px-3 py-1 rounded-lg border border-gray-200 text-xs font-mono text-primary shadow-sm">
                   ID: {String(crop.id).substring(0, 4).toUpperCase()}
                 </div>

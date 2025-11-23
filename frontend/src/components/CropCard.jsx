@@ -3,6 +3,14 @@ import { Link } from 'react-router-dom';
 import { TrendingUp, TrendingDown, Minus, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
+const getCropImage = (name) => {
+  const lower = name.toLowerCase();
+  if (lower.includes('cotton')) return 'https://cdn.britannica.com/18/156618-050-39339EA2/cotton-harvest-field-Texas.jpg';
+  if (lower.includes('sugarcane')) return 'https://4.imimg.com/data4/QX/AP/MY-8729085/sugarcane-plant-1000x1000.jpg';
+  if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqnl0mDa36Zsd2B2rCkZ2ZGhvhcqV2hqU_2g&s';
+  return null;
+};
+
 const CropCard = ({ crop }) => {
   const { role } = useAuth();
   const change = crop.price_change_24h || 0;
@@ -51,17 +59,15 @@ const CropCard = ({ crop }) => {
         <div className="flex items-start justify-between mb-6 relative z-10">
           <div className="flex items-center gap-4">
             <div className="relative">
-              {crop.image_url ? (
-                <img
-                  src={crop.image_url}
-                  alt={crop.name}
-                  className="w-12 h-12 rounded-lg object-cover border border-gray-200 group-hover:border-primary/50 transition-colors"
-                />
-              ) : (
-                <div className="w-12 h-12 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center text-xl group-hover:border-primary/50 transition-colors">
-                  🌾
-                </div>
-              )}
+              <img
+                src={crop.image_url || getCropImage(crop.name) || `https://loremflickr.com/200/200/${crop.name},agriculture/all`}
+                alt={crop.name}
+                className="w-12 h-12 rounded-lg object-cover border border-gray-200 group-hover:border-primary/50 transition-colors"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = `https://ui-avatars.com/api/?name=${crop.name}&background=random&size=200`;
+                }}
+              />
               <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-secondary rounded-full border-2 border-white" />
             </div>
             <div>
