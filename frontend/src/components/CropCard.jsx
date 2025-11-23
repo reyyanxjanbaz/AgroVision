@@ -1,14 +1,45 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { TrendingUp, TrendingDown, Minus, ArrowRight } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const CropCard = ({ crop }) => {
+  const { role } = useAuth();
   const change = crop.price_change_24h || 0;
   const isPositive = change > 0;
   const isNeutral = change === 0;
 
   const TrendIcon = isNeutral ? Minus : isPositive ? TrendingUp : TrendingDown;
   const trendColor = isNeutral ? 'text-text-muted' : isPositive ? 'text-secondary' : 'text-danger';
+
+  const getPriceDisplay = () => {
+    let price = crop.current_price || 0;
+    let unit = crop.unit || 'Quintal';
+    let label = 'MARKET PRICE';
+
+    if (role === 'customer') {
+      // Convert Quintal to Kg and add 20% retail markup
+      price = (price / 100) * 1.20;
+      unit = 'Kg';
+      label = 'RETAIL';
+    } else if (role === 'merchant') {
+      // Wholesale price (same as base for now)
+      unit = 'Quintal';
+      label = 'WHOLESALE';
+    } else {
+      // Farmer price (Mandi price)
+      unit = 'Quintal';
+      label = 'MARKET PRICE';
+    }
+
+    return {
+      price: price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      unit: unit.toUpperCase(),
+      label
+    };
+  };
+
+  const { price: displayPrice, unit: displayUnit, label: displayLabel } = getPriceDisplay();
 
   return (
     <Link to={`/crop/${crop.id}`} className="block h-full">
@@ -51,10 +82,10 @@ const CropCard = ({ crop }) => {
           <div className="flex items-baseline gap-1">
             <span className="text-sm text-text-secondary font-mono">₹</span>
             <span className="text-3xl font-bold text-text-primary font-mono tracking-tight">
-              {crop.current_price?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}
+              {displayPrice}
             </span>
           </div>
-          <p className="text-xs text-text-muted font-mono">PER {crop.unit?.toUpperCase() || 'QUINTAL'}</p>
+          <p className="text-xs text-text-muted font-mono">{displayLabel} PER {displayUnit}</p>
         </div>
 
         {/* Footer / Action */}

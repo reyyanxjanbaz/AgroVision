@@ -7,10 +7,12 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import PredictionCard from '../components/PredictionCard';
 import FactorsList from '../components/FactorsList';
 import { fetchCropDetails, fetchPriceHistory, fetchPrediction, fetchFactors, fetchNews } from '../services/api';
-import { ArrowLeft, TrendingUp, TrendingDown, Calendar, MapPin, ExternalLink, Activity } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { ArrowLeft, TrendingUp, TrendingDown, Calendar, MapPin, ExternalLink, Activity, Layers } from 'lucide-react';
 
 const CropDetail = () => {
   const { id } = useParams();
+  const { role } = useAuth();
   const [crop, setCrop] = useState(null);
   const [priceHistory, setPriceHistory] = useState([]);
   const [prediction, setPrediction] = useState(null);
@@ -65,6 +67,35 @@ const CropDetail = () => {
     return priceHistory.filter(item => new Date(item.date) >= cutoffDate);
   };
 
+  const getPriceDisplay = () => {
+    if (!crop) return { price: '0.00', unit: '' };
+    
+    let price = crop.current_price || 0;
+    let unit = crop.unit || 'Quintal';
+
+    if (role === 'customer') {
+      // Convert Quintal to Kg and add 20% retail markup
+      price = (price / 100) * 1.20;
+      unit = 'Kg';
+    } else if (role === 'merchant') {
+      // Wholesale price
+      unit = 'Quintal';
+    } else {
+      // Farmer price
+      unit = 'Quintal';
+    }
+
+    return {
+      price: price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      unit: unit.toUpperCase()
+    };
+  };
+
+  const getFilteredNews = () => {
+    if (!news.length) return [];
+    return news.filter(article => !article.audience || article.audience.includes(role));
+  };
+
   if (loading) return <LoadingSpinner message="Accessing Crop Database..." />;
 
   if (!crop) {
@@ -83,201 +114,260 @@ const CropDetail = () => {
   }
 
   const filteredData = getFilteredData();
+  const filteredNews = getFilteredNews();
+  const { price: displayPrice, unit: displayUnit } = getPriceDisplay();
   const isPositive = crop.price_change_24h >= 0;
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-8 pb-12">
       {/* Breadcrumb */}
-      <Link to="/" className="inline-flex items-center gap-2 text-text-secondary hover:text-primary transition-colors mb-2 group">
+      <Link to="/" className="inline-flex items-center gap-2 text-text-secondary hover:text-primary transition-colors mb-4 group">
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
         <span className="text-sm font-mono uppercase tracking-wider">Back to Dashboard</span>
       </Link>
 
-      {/* Header Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Info Card */}
+      {/* Top Section: Combined Main + Chart vs Summary */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        
+        {/* LEFT: Combined Main Info + Chart */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="lg:col-span-2 glass-panel p-8 rounded-xl relative overflow-hidden"
+          className="lg:col-span-2 glass-panel p-6 rounded-xl relative overflow-hidden flex flex-col"
         >
-          <div className="absolute top-0 right-0 p-4 opacity-10">
-            <Activity size={120} className="text-primary" />
+           {/* Background Decoration */}
+           <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+            <Activity size={200} className="text-primary" />
           </div>
-          
-          <div className="flex items-start gap-6 relative z-10">
-            <div className="relative">
+
+          {/* Header: Image & Info */}
+          <div className="flex flex-col sm:flex-row items-start gap-6 mb-8 relative z-10">
+            <div className="relative flex-shrink-0">
               {crop.image_url ? (
-                <img src={crop.image_url} alt={crop.name} className="w-24 h-24 rounded-xl border border-gray-200 object-cover" />
+                <img src={crop.image_url} alt={crop.name} className="w-32 h-32 rounded-2xl border border-gray-200 object-cover shadow-lg" />
               ) : (
-                <div className="w-24 h-24 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center text-4xl">
+                <div className="w-32 h-32 rounded-2xl bg-gray-100 border border-gray-200 flex items-center justify-center text-5xl">
                   🌾
                 </div>
               )}
-              <div className="absolute -bottom-2 -right-2 bg-white px-2 py-1 rounded border border-gray-200 text-xs font-mono text-primary">
+              <div className="absolute -bottom-3 -right-3 bg-white px-3 py-1 rounded-lg border border-gray-200 text-xs font-mono text-primary shadow-sm">
                 ID: {String(crop.id).substring(0, 4).toUpperCase()}
               </div>
             </div>
             
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-4xl font-bold text-text-primary font-display">{crop.name}</h1>
-                <span className="px-2 py-1 rounded bg-primary/10 border border-primary/20 text-primary text-xs font-mono uppercase">
-                  {crop.category}
-                </span>
+            <div className="flex-1 w-full">
+              <div className="flex justify-between items-start">
+                <div>
+                    <h1 className="text-4xl font-bold text-text-primary font-display mb-2">{crop.name}</h1>
+                    <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-mono uppercase tracking-wide">
+                    {crop.category}
+                    </span>
+                </div>
+                {/* Price Display */}
+                <div className="text-right">
+                    <div className="flex items-baseline justify-end gap-1">
+                        <span className="text-lg text-text-secondary font-mono">₹</span>
+                        <span className="text-4xl font-bold text-text-primary font-mono tracking-tight">
+                        {displayPrice}
+                        </span>
+                    </div>
+                    <p className="text-xs text-text-secondary font-mono mt-1">
+                        {role === 'customer' ? 'RETAIL' : role === 'merchant' ? 'WHOLESALE' : 'MARKET'} PER {displayUnit}
+                    </p>
+                </div>
               </div>
               
-              <div className="flex items-baseline gap-4 mt-4">
-                <span className="text-5xl font-bold text-text-primary font-mono tracking-tight">
-                  ₹{crop.current_price?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                </span>
-                <div className={`flex items-center gap-1 px-3 py-1 rounded-lg border ${
+              <div className="mt-6 flex items-center gap-4">
+                 <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${
                   isPositive 
                     ? 'bg-secondary/10 border-secondary/20 text-secondary' 
                     : 'bg-danger/10 border-danger/20 text-danger'
                 }`}>
-                  {isPositive ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
-                  <span className="font-mono font-bold">{Math.abs(crop.price_change_24h).toFixed(2)}%</span>
+                  {isPositive ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
+                  <span className="font-mono font-bold text-lg">{Math.abs(crop.price_change_24h).toFixed(2)}%</span>
+                  <span className="text-xs opacity-80 font-medium uppercase ml-1">24h Change</span>
                 </div>
               </div>
-              <p className="text-text-secondary font-mono text-sm mt-2">PER {crop.unit?.toUpperCase()}</p>
+            </div>
+          </div>
+
+          {/* Chart Section */}
+          <div className="flex-1 flex flex-col min-h-[400px] border-t border-gray-100 pt-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <h3 className="text-lg font-bold text-text-primary flex items-center gap-2">
+                    <Activity size={18} className="text-primary" />
+                    Price Analysis
+                </h3>
+                
+                <div className="flex gap-3">
+                    <div className="flex bg-gray-100 rounded-lg p-1">
+                    {periods.map((period) => (
+                        <button
+                        key={period.label}
+                        onClick={() => setTimePeriod(period.label)}
+                        className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+                            timePeriod === period.label
+                            ? 'bg-white text-primary shadow-sm'
+                            : 'text-text-secondary hover:text-text-primary'
+                        }`}
+                        >
+                        {period.label}
+                        </button>
+                    ))}
+                    </div>
+                    <select
+                        value={region}
+                        onChange={(e) => setRegion(e.target.value)}
+                        className="px-3 py-1 bg-white border border-gray-200 rounded-lg text-xs text-text-primary focus:border-primary/50 focus:outline-none"
+                    >
+                        <option value="all">All Regions</option>
+                        <option value="north">North</option>
+                        <option value="south">South</option>
+                        <option value="east">East</option>
+                        <option value="west">West</option>
+                    </select>
+                </div>
+            </div>
+
+            <div className="flex-1 w-full">
+                {filteredData.length > 0 ? (
+                <PriceChart data={filteredData} showArea={true} />
+                ) : (
+                <div className="h-full flex items-center justify-center border border-dashed border-gray-200 rounded-xl bg-gray-50/50">
+                    <p className="text-text-secondary">No price data available</p>
+                </div>
+                )}
             </div>
           </div>
         </motion.div>
 
-        {/* Quick Stats / Prediction Placeholder */}
+        {/* RIGHT: Market Summary (Stretched) */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="glass-panel p-6 rounded-xl flex flex-col justify-between"
+          className="glass-panel p-6 rounded-xl flex flex-col h-full"
         >
-          <div>
-            <h3 className="text-text-secondary text-sm font-mono uppercase mb-4">Market Summary</h3>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center border-b border-gray-200 pb-2">
-                <span className="text-text-muted text-sm">7 Day Trend</span>
-                <span className={`font-mono ${crop.price_change_7d >= 0 ? 'text-secondary' : 'text-danger'}`}>
-                  {crop.price_change_7d >= 0 ? '+' : ''}{crop.price_change_7d?.toFixed(2)}%
-                </span>
-              </div>
-              <div className="flex justify-between items-center border-b border-gray-200 pb-2">
-                <span className="text-text-muted text-sm">Volume</span>
-                <span className="font-mono text-text-primary">High</span>
-              </div>
-              <div className="flex justify-between items-center border-b border-gray-200 pb-2">
-                <span className="text-text-muted text-sm">Volatility</span>
-                <span className="font-mono text-accent">Medium</span>
-              </div>
-            </div>
-          </div>
+          <h3 className="text-text-secondary text-sm font-mono uppercase mb-6 flex items-center gap-2">
+            <Activity size={14} /> Market Summary
+          </h3>
           
-          <div className="mt-6 pt-4 border-t border-gray-200">
-             <PredictionCard prediction={prediction} />
+          <div className="space-y-6 flex-1">
+            <div className="p-4 rounded-xl bg-gray-50 border border-gray-100">
+                <div className="flex justify-between items-center mb-2">
+                    <span className="text-text-muted text-sm">7 Day Trend</span>
+                    <span className={`font-mono font-bold ${crop.price_change_7d >= 0 ? 'text-secondary' : 'text-danger'}`}>
+                        {crop.price_change_7d >= 0 ? '+' : ''}{crop.price_change_7d?.toFixed(2)}%
+                    </span>
+                </div>
+                <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+                    <div 
+                        className={`h-full ${crop.price_change_7d >= 0 ? 'bg-secondary' : 'bg-danger'}`} 
+                        style={{ width: `${Math.min(Math.abs(crop.price_change_7d) * 10, 100)}%` }}
+                    />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl bg-gray-50 border border-gray-100">
+                    <span className="text-text-muted text-xs uppercase block mb-1">Volume</span>
+                    <span className="font-mono font-bold text-text-primary">High</span>
+                </div>
+                <div className="p-4 rounded-xl bg-gray-50 border border-gray-100">
+                    <span className="text-text-muted text-xs uppercase block mb-1">Volatility</span>
+                    <span className="font-mono font-bold text-accent">Medium</span>
+                </div>
+            </div>
+
+            <div className="pt-6 border-t border-gray-100 mt-auto">
+                <PredictionCard prediction={prediction} />
+            </div>
           </div>
         </motion.div>
       </div>
 
-      {/* Controls & Chart */}
-      <div className="glass-panel p-6 rounded-xl">
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <div className="flex items-center gap-2">
-            <Activity className="text-primary" size={20} />
-            <h2 className="text-xl font-bold text-text-primary">Price Analysis</h2>
-          </div>
-          
-          <div className="flex flex-wrap gap-4">
-            <div className="flex bg-white rounded-lg p-1 border border-gray-200">
-              {periods.map((period) => (
-                <button
-                  key={period.label}
-                  onClick={() => setTimePeriod(period.label)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                    timePeriod === period.label
-                      ? 'bg-primary text-white shadow-lg'
-                      : 'text-text-secondary hover:text-text-primary hover:bg-gray-100'
-                  }`}
-                >
-                  {period.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" size={14} />
-              <select
-                value={region}
-                onChange={(e) => setRegion(e.target.value)}
-                className="pl-9 pr-8 py-1.5 bg-white border border-gray-200 rounded-lg text-sm text-text-primary focus:border-primary/50 focus:outline-none appearance-none cursor-pointer"
-              >
-                <option value="all">All Regions</option>
-                <option value="north">North India</option>
-                <option value="south">South India</option>
-                <option value="east">East India</option>
-                <option value="west">West India</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {filteredData.length > 0 ? (
-          <PriceChart data={filteredData} showArea={true} />
-        ) : (
-          <div className="h-[400px] flex items-center justify-center border border-dashed border-gray-200 rounded-xl">
-            <p className="text-text-secondary">No price data available for selected period</p>
-          </div>
-        )}
-      </div>
-
+      {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Factors */}
-        <div className="lg:col-span-2">
-           <FactorsList factors={factors} />
-        </div>
-
-        {/* News Feed */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">
-            <Calendar className="text-primary" size={20} />
-            Market News
+        
+        {/* LEFT: News Feed (Wider, Bigger Cards) */}
+        <div className="lg:col-span-2 space-y-6">
+          <h2 className="text-2xl font-bold text-text-primary flex items-center gap-3">
+            <Calendar className="text-primary" size={24} />
+            {role === 'customer' ? 'Consumer Insights' : 'Market Intelligence'}
           </h2>
-          {news.length > 0 ? (
-            <div className="space-y-3">
-              {news.slice(0, 5).map((article, index) => (
-                <a
+          
+          {filteredNews.length > 0 ? (
+            <div className="grid gap-6">
+              {filteredNews.map((article, index) => (
+                <motion.a
                   key={index}
                   href={article.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="glass-panel p-4 rounded-lg flex gap-3 hover:bg-gray-50 transition-all group border border-gray-200 hover:border-primary/30"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="glass-panel p-0 rounded-2xl overflow-hidden hover:shadow-xl transition-all group border border-gray-200 flex flex-col sm:flex-row h-full sm:h-48"
                 >
                   {article.image_url && (
-                    <img 
-                      src={article.image_url} 
-                      alt={article.title}
-                      className="w-16 h-16 object-cover rounded-lg flex-shrink-0 opacity-80 group-hover:opacity-100 transition-opacity"
-                    />
+                    <div className="sm:w-1/3 h-48 sm:h-full relative overflow-hidden">
+                        <img 
+                        src={article.image_url} 
+                        alt={article.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent sm:bg-gradient-to-r" />
+                    </div>
                   )}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-text-primary text-sm mb-1 group-hover:text-primary transition-colors line-clamp-2">
+                  <div className="flex-1 p-6 flex flex-col justify-center">
+                    <div className="flex items-center gap-2 text-xs text-primary font-mono uppercase tracking-wider mb-2">
+                        <span>{article.source}</span>
+                        <span>•</span>
+                        <span>{format(new Date(article.published_date), 'MMM d, yyyy')}</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-text-primary mb-3 group-hover:text-primary transition-colors leading-tight">
                       {article.title}
                     </h3>
-                    <div className="flex items-center gap-2 text-[10px] text-text-secondary font-mono">
-                      <span>{article.source}</span>
-                      <span>•</span>
-                      <span>{format(new Date(article.published_date), 'MMM d')}</span>
+                    <p className="text-text-secondary text-sm line-clamp-2 mb-4 leading-relaxed">
+                        {article.summary}
+                    </p>
+                    <div className="flex items-center gap-2 text-sm font-medium text-primary mt-auto">
+                        Read Analysis <ExternalLink size={14} />
                     </div>
                   </div>
-                  <ExternalLink size={14} className="text-text-muted group-hover:text-primary opacity-0 group-hover:opacity-100 transition-all" />
-                </a>
+                </motion.a>
               ))}
             </div>
           ) : (
-            <div className="glass-panel p-6 text-center rounded-xl">
-              <p className="text-text-secondary text-sm">No recent news available.</p>
+            <div className="glass-panel p-12 text-center rounded-2xl border-dashed border-2 border-gray-200">
+              <p className="text-text-secondary">No relevant news available for your profile.</p>
             </div>
           )}
         </div>
+
+        {/* RIGHT: Factors (Narrower) */}
+        <div className="space-y-6">
+            {role !== 'customer' && (
+                <>
+                    <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">
+                        <Layers className="text-primary" size={20} />
+                        Market Drivers
+                    </h2>
+                    <FactorsList factors={factors} />
+                </>
+            )}
+            
+            {/* Maybe add something else for customers here if factors are hidden? */}
+            {role === 'customer' && (
+                <div className="glass-panel p-6 rounded-xl bg-gradient-to-br from-primary/5 to-transparent border-primary/10">
+                    <h3 className="font-bold text-lg text-text-primary mb-2">Did you know?</h3>
+                    <p className="text-sm text-text-secondary leading-relaxed">
+                        Buying seasonal produce not only saves you money but also ensures you get the best nutrition and flavor.
+                    </p>
+                </div>
+            )}
+        </div>
+
       </div>
     </div>
   );

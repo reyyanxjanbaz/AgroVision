@@ -131,7 +131,8 @@ const DUMMY_NEWS = [
     source: "AgriNews India",
     published_date: new Date().toISOString(),
     url: "#",
-    image_url: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=200&q=80"
+    image_url: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=200&q=80",
+    audience: ["farmer", "merchant"]
   },
   {
     id: 2,
@@ -140,7 +141,68 @@ const DUMMY_NEWS = [
     source: "Weather Daily",
     published_date: new Date(Date.now() - 86400000).toISOString(),
     url: "#",
-    image_url: "https://images.unsplash.com/photo-1530563885674-66db50a1af19?auto=format&fit=crop&w=200&q=80"
+    image_url: "https://images.unsplash.com/photo-1530563885674-66db50a1af19?auto=format&fit=crop&w=200&q=80",
+    audience: ["farmer"]
+  },
+  {
+    id: 3,
+    title: "Global Wheat Prices Surge",
+    summary: "International demand for wheat spikes as supply chain issues persist in Europe.",
+    source: "Global Trade Review",
+    published_date: new Date(Date.now() - 172800000).toISOString(),
+    url: "#",
+    image_url: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=200&q=80",
+    audience: ["merchant"]
+  },
+  {
+    id: 4,
+    title: "Best Seasonal Fruits for Summer",
+    summary: "Discover the health benefits of eating locally grown mangoes and melons this season.",
+    source: "Healthy Living",
+    published_date: new Date(Date.now() - 200000000).toISOString(),
+    url: "#",
+    image_url: "https://images.unsplash.com/photo-1599940824399-b87987ce0799?auto=format&fit=crop&w=200&q=80",
+    audience: ["customer"]
+  },
+  {
+    id: 5,
+    title: "Organic Farming Techniques Workshop",
+    summary: "Join our free workshop on sustainable farming practices and organic certification.",
+    source: "AgriTech Weekly",
+    published_date: new Date(Date.now() - 300000000).toISOString(),
+    url: "#",
+    image_url: "https://images.unsplash.com/photo-1601599963565-b7b42c13c332?auto=format&fit=crop&w=200&q=80",
+    audience: ["farmer"]
+  },
+  {
+    id: 6,
+    title: "Supermarket Price Watch: Veggies Drop",
+    summary: "Retail prices for tomatoes and onions have seen a significant drop this week.",
+    source: "Consumer Watch",
+    published_date: new Date(Date.now() - 100000000).toISOString(),
+    url: "#",
+    image_url: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=200&q=80",
+    audience: ["customer"]
+  },
+  {
+    id: 7,
+    title: "New Cold Storage Subsidy Announced",
+    summary: "Merchants can now avail up to 40% subsidy on setting up new cold storage units.",
+    source: "Logistics Today",
+    published_date: new Date(Date.now() - 400000000).toISOString(),
+    url: "#",
+    image_url: "https://images.unsplash.com/photo-1594040291028-236f6884d70c?auto=format&fit=crop&w=200&q=80",
+    audience: ["merchant", "farmer"]
+  },
+  {
+    id: 8,
+    title: "5 Easy Recipes with Fresh Corn",
+    summary: "Make the most of the corn season with these delicious and quick recipes.",
+    source: "Foodie Corner",
+    published_date: new Date(Date.now() - 500000000).toISOString(),
+    url: "#",
+    image_url: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=200&q=80",
+    audience: ["customer"]
   }
 ];
 

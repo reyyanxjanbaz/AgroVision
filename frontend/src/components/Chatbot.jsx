@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Sparkles, Bot } from 'lucide-react';
 import { sendChatMessage } from '../services/api';
 import usePageContext from '../hooks/usePageContext';
+import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Chatbot = () => {
+  const { role } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'System initialized. I am your AgroVision AI assistant. How can I assist with your market analysis today?' }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
@@ -17,6 +17,18 @@ const Chatbot = () => {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    const initialMsg = {
+      farmer: "System initialized. I am your AgroVision AI assistant. How can I help you with your harvest today?",
+      merchant: "System initialized. I am your AgroVision AI assistant. Ready to assist with market trends and bulk orders.",
+      customer: "System initialized. I am your AgroVision AI assistant. Looking for the best seasonal produce?"
+    };
+    
+    setMessages([
+      { role: 'assistant', content: initialMsg[role] || initialMsg.farmer }
+    ]);
+  }, [role]);
 
   useEffect(() => {
     scrollToBottom();
@@ -31,7 +43,7 @@ const Chatbot = () => {
     setLoading(true);
 
     try {
-      const response = await sendChatMessage(input, pageContext);
+      const response = await sendChatMessage(input, { ...pageContext, role });
       setMessages(prev => [...prev, { 
         role: 'assistant', 
         content: response.message || response.response || 'I apologize, but I couldn\'t process that request.' 
@@ -94,7 +106,7 @@ const Chatbot = () => {
                   <h3 className="font-bold text-sm text-text-primary font-display tracking-wide">AI ASSISTANT</h3>
                   <div className="flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
-                    <p className="text-[10px] text-text-secondary font-mono uppercase">Online</p>
+                    <p className="text-[10px] text-text-secondary font-mono uppercase">Online • {role.toUpperCase()}</p>
                   </div>
                 </div>
               </div>

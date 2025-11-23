@@ -4,7 +4,20 @@ import { motion } from 'framer-motion';
 import CropCard from '../components/CropCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { fetchCrops } from '../services/api';
-import { TrendingUp, Users, Database, Activity, ArrowUpRight } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { 
+  TrendingUp, 
+  Users, 
+  Database, 
+  Activity, 
+  ArrowUpRight, 
+  CloudRain, 
+  ShoppingCart, 
+  Truck, 
+  ShoppingBag, 
+  Star, 
+  MapPin 
+} from 'lucide-react';
 
 const StatCard = ({ icon: Icon, label, value, trend, color }) => (
   <motion.div 
@@ -33,11 +46,44 @@ const StatCard = ({ icon: Icon, label, value, trend, color }) => (
 );
 
 const Dashboard = () => {
+  const { role } = useAuth();
   const [crops, setCrops] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q');
+
+  const roleConfig = {
+    farmer: {
+      title: "Farm Management",
+      subtitle: "Monitor market prices and optimize your harvest.",
+      stats: [
+        { icon: Database, label: "Active Crops", value: crops.length || "0", trend: "+12%", color: "primary" },
+        { icon: TrendingUp, label: "Market Trends", value: "Bullish", trend: "High", color: "secondary" },
+        { icon: CloudRain, label: "Weather", value: "24°C", trend: "Clear", color: "accent" }
+      ]
+    },
+    merchant: {
+      title: "Trading Desk",
+      subtitle: "Track bulk prices and manage your supply chain.",
+      stats: [
+        { icon: ShoppingCart, label: "Active Orders", value: "8", trend: "+3", color: "primary" },
+        { icon: TrendingUp, label: "Market Volatility", value: "Medium", trend: "-2%", color: "secondary" },
+        { icon: Truck, label: "Logistics", value: "On Time", trend: "98%", color: "accent" }
+      ]
+    },
+    customer: {
+      title: "Fresh Market",
+      subtitle: "Discover seasonal produce and best local prices.",
+      stats: [
+        { icon: ShoppingBag, label: "Cart", value: "3 Items", trend: "₹450", color: "primary" },
+        { icon: Star, label: "Seasonal Picks", value: "Mango", trend: "New", color: "secondary" },
+        { icon: MapPin, label: "Nearest Store", value: "2.4km", trend: "Open", color: "accent" }
+      ]
+    }
+  };
+
+  const currentConfig = roleConfig[role] || roleConfig.farmer;
 
   useEffect(() => {
     const loadCrops = async () => {
@@ -84,7 +130,7 @@ const Dashboard = () => {
             className="flex items-center gap-2 mb-2"
           >
             <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-            <span className="text-xs font-mono text-secondary uppercase tracking-widest">System Online</span>
+            <span className="text-xs font-mono text-secondary uppercase tracking-widest">System Online • {role.toUpperCase()} VIEW</span>
           </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
@@ -92,7 +138,7 @@ const Dashboard = () => {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold text-text-primary mb-2"
           >
-            Market Intelligence
+            {currentConfig.title}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -100,7 +146,7 @@ const Dashboard = () => {
             transition={{ delay: 0.2 }}
             className="text-text-secondary max-w-xl"
           >
-            Real-time predictive analytics for agricultural commodities.
+            {currentConfig.subtitle}
           </motion.p>
         </div>
         
@@ -121,27 +167,16 @@ const Dashboard = () => {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatCard 
-          icon={Database} 
-          label="Active Crops" 
-          value={crops.length} 
-          trend="+12%"
-          color="primary"
-        />
-        <StatCard 
-          icon={TrendingUp} 
-          label="Market Accuracy" 
-          value="98.4%" 
-          trend="+2.1%"
-          color="secondary"
-        />
-        <StatCard 
-          icon={Users} 
-          label="Active Traders" 
-          value="52.1K" 
-          trend="+5.4%"
-          color="accent"
-        />
+        {currentConfig.stats.map((stat, index) => (
+          <StatCard 
+            key={index}
+            icon={stat.icon} 
+            label={stat.label} 
+            value={stat.value} 
+            trend={stat.trend}
+            color={stat.color}
+          />
+        ))}
       </div>
 
       {/* Main Content */}
@@ -149,7 +184,7 @@ const Dashboard = () => {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">
             <Activity size={20} className="text-primary" />
-            Live Market Data
+            {role === 'customer' ? 'Fresh Arrivals' : 'Live Market Data'}
           </h2>
           <div className="flex gap-2">
             <button className="px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-xs text-text-secondary hover:text-text-primary transition-colors">
