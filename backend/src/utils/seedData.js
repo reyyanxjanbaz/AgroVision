@@ -14,7 +14,6 @@ const crops = [
     name: 'Wheat',
     category: 'Grains',
     image_url: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400',
-    description: 'Staple grain crop used for food and feed',
     current_price: 2145.50,
     price_change_24h: 2.5,
     price_change_7d: 5.2,
@@ -24,7 +23,6 @@ const crops = [
     name: 'Rice',
     category: 'Grains',
     image_url: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400',
-    description: 'Major cereal crop and primary food source',
     current_price: 3250.00,
     price_change_24h: -1.2,
     price_change_7d: 0.8,
@@ -34,7 +32,6 @@ const crops = [
     name: 'Corn',
     category: 'Grains',
     image_url: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400',
-    description: 'Versatile crop used for food, feed, and fuel',
     current_price: 1890.75,
     price_change_24h: 3.8,
     price_change_7d: 7.5,
@@ -44,7 +41,6 @@ const crops = [
     name: 'Soybeans',
     category: 'Pulses',
     image_url: 'https://images.unsplash.com/photo-1589543965688-b7d1c0c2c1c9?w=400',
-    description: 'Protein-rich legume used in various products',
     current_price: 4520.00,
     price_change_24h: 1.5,
     price_change_7d: 3.2,
@@ -54,7 +50,6 @@ const crops = [
     name: 'Cotton',
     category: 'Fiber',
     image_url: 'https://images.unsplash.com/photo-1583829365719-45d20e2d55f7?w=400',
-    description: 'Natural fiber crop for textile production',
     current_price: 5680.00,
     price_change_24h: -2.1,
     price_change_7d: -4.5,
@@ -64,7 +59,6 @@ const crops = [
     name: 'Sugarcane',
     category: 'Cash Crops',
     image_url: 'https://images.unsplash.com/photo-1568392830939-0a8e5efe4e37?w=400',
-    description: 'Major source of sugar production',
     current_price: 350.00,
     price_change_24h: 0.5,
     price_change_7d: 1.2,
@@ -89,8 +83,7 @@ function generatePriceHistory(basePrice, cropId, days = 365) {
       crop_id: cropId,
       price: parseFloat(currentPrice.toFixed(2)),
       date: date.toISOString(),
-      region: ['north', 'south', 'east', 'west'][Math.floor(Math.random() * 4)],
-      source: 'market_data'
+      region: ['north', 'south', 'east', 'west'][Math.floor(Math.random() * 4)]
     });
   }
 
