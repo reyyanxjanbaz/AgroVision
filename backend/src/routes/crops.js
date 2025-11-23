@@ -55,13 +55,13 @@ router.get('/:id/prices', async (req, res) => {
 // GET prediction
 router.get('/:id/prediction', async (req, res) => {
   try {
-    // Fetch recent price history
+    // Fetch recent price history (extended to 60 days for better ML predictions)
     const { data: priceHistory, error } = await supabase
       .from('price_history')
       .select('price, date')
       .eq('crop_id', req.params.id)
       .order('date', { ascending: false })
-      .limit(30);
+      .limit(60);
 
     if (error) throw error;
 
@@ -73,10 +73,44 @@ router.get('/:id/prediction', async (req, res) => {
       });
     }
 
-    // Simple prediction algorithm
+    // Try to use ML service for predictions
+    const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:5001';
+    let mlPrediction = null;
+
+    try {
+      const mlResponse = await axios.post(`${ML_SERVICE_URL}/predict`, {
+        crop_id: req.params.id,
+        price_history: priceHistory.reverse(), // ML service expects chronological order
+        horizon: 'both'
+      }, {
+        timeout: 5000 // 5 second timeout
+      });
+
+      if (mlResponse.data && mlResponse.data.success) {
+        mlPrediction = mlResponse.data.predictions;
+      }
+    } catch (mlError) {
+      console.warn('ML service unavailable, using fallback prediction:', mlError.message);
+    }
+
+    // If ML service provided predictions, format and return them
+    if (mlPrediction) {
+      return res.json({
+        nextWeek: mlPrediction['7d']?.predicted_price || null,
+        nextMonth: mlPrediction['30d']?.predicted_price || null,
+        confidence: Math.round(mlPrediction['7d']?.confidence || 75),
+        trend: mlPrediction.trend === 'up' ? 'upward' : mlPrediction.trend === 'down' ? 'downward' : 'stable',
+        algorithm: mlPrediction.algorithm || 'ml_service',
+        change_7d: mlPrediction['7d']?.change_percent || null,
+        change_30d: mlPrediction['30d']?.change_percent || null,
+        ml_powered: true
+      });
+    }
+
+    // Fallback: Simple prediction algorithm
     const prices = priceHistory.map(p => p.price);
     const recentPrice = prices[0];
-    
+
     // Calculate trend (simple moving average)
     const avgRecent = prices.slice(0, 7).reduce((a, b) => a + b, 0) / 7;
     const avgOlder = prices.slice(7, 14).reduce((a, b) => a + b, 0) / 7;
@@ -91,13 +125,15 @@ router.get('/:id/prediction', async (req, res) => {
     const nextMonthPrediction = recentPrice * (1 + trend * 2 + randomFactor * 1.5);
 
     // Calculate confidence (based on data availability)
-    const confidence = Math.min(95, 60 + (priceHistory.length / 30) * 35);
+    const confidence = Math.min(95, 60 + (priceHistory.length / 60) * 35);
 
     res.json({
       nextWeek: parseFloat(nextWeekPrediction.toFixed(2)),
       nextMonth: parseFloat(nextMonthPrediction.toFixed(2)),
       confidence: Math.round(confidence),
-      trend: trend > 0 ? 'upward' : 'downward'
+      trend: trend > 0 ? 'upward' : 'downward',
+      algorithm: 'statistical_fallback',
+      ml_powered: false
     });
   } catch (error) {
     console.error('Error generating prediction:', error);
