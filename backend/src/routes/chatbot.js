@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const Anthropic = require('@anthropic-ai/sdk');
+const OpenAI = require('openai');
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  baseURL: process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1', // Support for GitHub Models
 });
 
 router.post('/', async (req, res) => {
@@ -30,16 +31,16 @@ Current context:
 
 Be concise, helpful, and friendly. If you don't know something, admit it. Never make up price data.`;
 
-    const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1024,
-      system: systemPrompt,
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o', // Default to GPT-4o, can be overridden by GitHub Models
       messages: [
+        { role: 'system', content: systemPrompt },
         { role: 'user', content: message }
       ],
+      max_tokens: 1024,
     });
 
-    const assistantMessage = response.content[0].text;
+    const assistantMessage = response.choices[0].message.content;
 
     res.json({
       message: assistantMessage,

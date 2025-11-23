@@ -16,14 +16,14 @@ AgroVision is an AI-powered agricultural platform that provides real-time crop p
 - **Frontend**: React, Tailwind CSS, Recharts, Lucide React
 - **Backend**: Node.js, Express
 - **Database**: Supabase (PostgreSQL)
-- **AI**: Anthropic Claude API (for Chatbot)
+- **AI**: OpenAI / GitHub Models (for Chatbot)
 
 ## Prerequisites
 
 - Node.js (v14 or higher)
 - npm or yarn
 - Supabase account
-- Anthropic API Key (optional, for chatbot)
+- OpenAI API Key or GitHub Token (optional, for chatbot)
 - NewsAPI Key (optional, for news)
 
 ## Setup
@@ -55,7 +55,7 @@ AgroVision is an AI-powered agricultural platform that provides real-time crop p
    PORT=5000
    SUPABASE_URL=your_supabase_url
    SUPABASE_KEY=your_supabase_anon_key
-   ANTHROPIC_API_KEY=your_anthropic_key
+   OPENAI_API_KEY=your_openai_or_github_token
    NEWS_API_KEY=your_news_api_key
    ```
 
