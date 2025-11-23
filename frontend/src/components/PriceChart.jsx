@@ -11,21 +11,23 @@ import {
   ComposedChart
 } from 'recharts';
 import { format, parseISO } from 'date-fns';
-import { RefreshCw, Download, TrendingUp, TrendingDown, ArrowRight, Check } from 'lucide-react';
+import { RefreshCw, Download, TrendingUp, TrendingDown, ArrowRight, Check, Camera } from 'lucide-react';
 
 const PriceChart = ({ data, prediction, onRefresh }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
+  const [isSnapshotTaken, setIsSnapshotTaken] = useState(false);
   
   const { chartData, currentPrice, predictedPrice, percentChange } = useMemo(() => {
     if (!data || data.length === 0) return { chartData: [], currentPrice: 0, predictedPrice: 0, percentChange: 0 };
 
     const historyData = data.map(item => ({
       date: item.date,
+      timestamp: new Date(item.date).getTime(),
       historical: item.price,
       predicted: null,
       originalDate: item.date // Keep original for formatting
-    }));
+    })).sort((a, b) => a.timestamp - b.timestamp);
 
     const lastPoint = historyData[historyData.length - 1];
     const current = lastPoint.historical;
@@ -46,8 +48,10 @@ const PriceChart = ({ data, prediction, onRefresh }) => {
       };
 
       // Add prediction point
+      const predDate = prediction.prediction_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
       finalChartData.push({
-        date: prediction.prediction_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        date: predDate,
+        timestamp: new Date(predDate).getTime(),
         historical: null,
         predicted: predicted,
         isPrediction: true
@@ -68,6 +72,41 @@ const PriceChart = ({ data, prediction, onRefresh }) => {
       await onRefresh();
       setTimeout(() => setIsRefreshing(false), 500); // Min duration for visual feedback
     }
+  };
+
+  const handleSnapshot = () => {
+    const svg = document.querySelector('.recharts-surface');
+    if (!svg) return;
+
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(svg);
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+    
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = svg.getBoundingClientRect().width * 2; // 2x for better resolution
+      canvas.height = svg.getBoundingClientRect().height * 2;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(2, 2);
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width / 2, canvas.height / 2);
+      ctx.drawImage(img, 0, 0);
+      
+      const pngUrl = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = pngUrl;
+      link.download = `chart_snapshot_${format(new Date(), 'yyyyMMdd_HHmmss')}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      setIsSnapshotTaken(true);
+      setTimeout(() => setIsSnapshotTaken(false), 2000);
+    };
+    img.src = url;
   };
 
   const handleDownload = () => {
@@ -148,6 +187,13 @@ const PriceChart = ({ data, prediction, onRefresh }) => {
             <RefreshCw size={16} className={isRefreshing ? "animate-spin" : ""} />
           </button>
           <button 
+            onClick={handleSnapshot}
+            className="p-2 hover:bg-gray-50 rounded-lg text-text-secondary hover:text-primary transition-colors flex items-center gap-1" 
+            title="Take Snapshot"
+          >
+            {isSnapshotTaken ? <Check size={16} className="text-green-600" /> : <Camera size={16} />}
+          </button>
+          <button 
             onClick={handleDownload}
             className="p-2 hover:bg-gray-50 rounded-lg text-text-secondary hover:text-primary transition-colors flex items-center gap-1" 
             title="Download CSV"
@@ -169,18 +215,21 @@ const PriceChart = ({ data, prediction, onRefresh }) => {
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
             <XAxis 
-              dataKey="date" 
-              tickFormatter={(date) => {
-                try { return format(new Date(date), 'MMM dd'); } catch (e) { return ''; }
+              dataKey="timestamp"
+              type="number"
+              domain={['dataMin', 'dataMax']}
+              tickFormatter={(timestamp) => {
+                try { return format(new Date(timestamp), 'MMM dd'); } catch (e) { return ''; }
               }}
               stroke="#94A3B8"
               style={{ fontSize: '11px', fontFamily: 'JetBrains Mono' }}
               tickLine={false}
               axisLine={false}
               dy={10}
-              minTickGap={30}
+              tickCount={6}
             />
             <YAxis 
+              domain={['auto', 'auto']}
               stroke="#94A3B8"
               style={{ fontSize: '11px', fontFamily: 'JetBrains Mono' }}
               tickFormatter={(value) => `₹${value}`}
