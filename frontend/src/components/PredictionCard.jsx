@@ -1,7 +1,7 @@
 import React from 'react';
 import { Sparkles, AlertCircle } from 'lucide-react';
 
-const PredictionCard = ({ prediction }) => {
+const PredictionCard = ({ prediction, unit = 'Quintal' }) => {
   if (!prediction) return null;
 
   return (
@@ -22,7 +22,7 @@ const PredictionCard = ({ prediction }) => {
           <p className="text-text-secondary text-xs font-mono uppercase mb-1">Projected Price (7 Days)</p>
           <div className="flex items-baseline gap-2">
             <p className="text-3xl font-bold text-text-primary font-mono tracking-tight">
-              ₹{prediction.nextWeek?.toFixed(2)}
+              ₹{prediction.nextWeek?.toFixed(2)} <span className="text-sm text-text-secondary font-normal">/{unit}</span>
             </p>
             <span className="text-xs font-mono text-secondary bg-secondary/10 px-1.5 py-0.5 rounded border border-secondary/20">
               +2.4%

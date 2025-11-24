@@ -104,6 +104,23 @@ const CropDetail = () => {
     return news.filter(article => !article.audience || article.audience.includes(role));
   };
 
+  const getAdjustedPrediction = () => {
+    if (!prediction) return null;
+    let nextWeek = prediction.nextWeek;
+
+    if (role === 'customer') {
+      // Convert Quintal to Kg and add 20% retail markup
+      nextWeek = (nextWeek / 100) * 1.20;
+    }
+
+    return {
+      ...prediction,
+      nextWeek
+    };
+  };
+
+
+
   if (loading) return <LoadingSpinner message="Accessing Crop Database..." />;
 
   if (!crop) {
@@ -124,7 +141,19 @@ const CropDetail = () => {
   const filteredData = getFilteredData();
   const filteredNews = getFilteredNews();
   const { price: displayPrice, unit: displayUnit } = getPriceDisplay();
+  const adjustedPrediction = getAdjustedPrediction();
   const isPositive = crop.price_change_24h >= 0;
+
+  const adjustedHistory = filteredData.map(item => {
+    let price = item.price;
+    if (role === 'customer') {
+      price = (price / 100) * 1.20;
+    }
+    return {
+      ...item,
+      price
+    };
+  });
 
   return (
     <div className="space-y-6 pb-12">
@@ -243,8 +272,8 @@ const CropDetail = () => {
               </div>
 
               <div className="w-full h-[500px]">
-                  {filteredData.length > 0 ? (
-                  <PriceChart data={filteredData} prediction={prediction} onRefresh={loadCropData} />
+                  {adjustedHistory.length > 0 ? (
+                  <PriceChart data={adjustedHistory} prediction={adjustedPrediction} unit={displayUnit} onRefresh={loadCropData} />
                   ) : (
                   <div className="h-full flex items-center justify-center border border-dashed border-gray-200 rounded-xl bg-gray-50/50">
                       <p className="text-text-secondary">No price data available</p>
@@ -353,7 +382,7 @@ const CropDetail = () => {
               </div>
 
               <div className="pt-4 border-t border-gray-100">
-                  <PredictionCard prediction={prediction} />
+                  <PredictionCard prediction={adjustedPrediction} unit={displayUnit} />
               </div>
             </div>
           </motion.div>

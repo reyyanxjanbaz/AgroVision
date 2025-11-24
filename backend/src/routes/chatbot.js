@@ -32,6 +32,8 @@ router.post('/', async (req, res) => {
       { name: 'Tomato', current_price: 2500, unit: 'Quintal', price_change_24h: 5.4 }
     ];
 
+    let adjustedCrops = [];
+
     try {
       const crops = await Crop.getAll();
       
@@ -56,18 +58,49 @@ router.post('/', async (req, res) => {
       // Add any remaining live crops that weren't in fallback
       liveCropMap.forEach(live => mergedCrops.push(live));
 
+      // Apply role-based pricing logic
+      const userRole = context?.role || 'farmer';
+      adjustedCrops = mergedCrops.map(c => {
+        let price = c.current_price;
+        let unit = c.unit || 'Quintal';
+        
+        if (userRole === 'customer') {
+            // Convert Quintal to Kg and add 20% retail markup
+            price = (price / 100) * 1.20;
+            unit = 'Kg';
+        }
+        
+        return {
+            ...c,
+            current_price: price,
+            unit: unit
+        };
+      });
+
       // Generate the context string
-      cropContext += mergedCrops.map(c => 
-        `- ${c.name}: ₹${c.current_price}/${c.unit || 'Quintal'} (${c.price_change_24h >= 0 ? '+' : ''}${c.price_change_24h}%)`
+      cropContext += adjustedCrops.map(c => 
+        `- ${c.name}: ₹${c.current_price.toFixed(2)}/${c.unit} (${c.price_change_24h >= 0 ? '+' : ''}${c.price_change_24h}%)`
       ).join('\n');
 
     } catch (err) {
       console.error("Error fetching crops for chatbot:", err);
       // On error, just use the fallback list
+      adjustedCrops = fallbackCrops; // Fallback doesn't have IDs, but that's fine
       cropContext += fallbackCrops.map(c => 
         `- ${c.name}: ₹${c.current_price}/${c.unit} (${c.price_change_24h >= 0 ? '+' : ''}${c.price_change_24h}%)`
       ).join('\n');
       cropContext += "\n(Note: Using system reference data due to database connection error)";
+    }
+
+    // Determine active crop from page context
+    let activeCropContext = "";
+    if (context?.page && context.page.startsWith('/crop/')) {
+        const cropId = context.page.split('/crop/')[1];
+        // Find crop by ID
+        const activeCrop = adjustedCrops.find(c => String(c.id) === String(cropId));
+        if (activeCrop) {
+            activeCropContext = `\nUser is currently viewing the details for: **${activeCrop.name}**.\nIf the user asks "what is the price?" or "current price" without specifying a crop, refer to **${activeCrop.name}**'s price (₹${activeCrop.current_price.toFixed(2)}/${activeCrop.unit}).\n`;
+        }
     }
 
     // Fetch latest market news
@@ -98,6 +131,8 @@ Your capabilities:
 - Help users navigate the app.
 
 ${cropContext}
+
+${activeCropContext}
 
 ${newsContext}
 

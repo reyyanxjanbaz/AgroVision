@@ -12,7 +12,7 @@ import {
 import { format } from 'date-fns';
 import { RefreshCw, Download, TrendingUp, TrendingDown, ArrowRight, Check, Camera } from 'lucide-react';
 
-const PriceChart = ({ data, prediction, onRefresh }) => {
+const PriceChart = ({ data, prediction, onRefresh, unit = 'Quintal' }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
   const [isSnapshotTaken, setIsSnapshotTaken] = useState(false);
@@ -153,7 +153,7 @@ const PriceChart = ({ data, prediction, onRefresh }) => {
                 {entry.dataKey === 'predicted' ? 'Forecast' : 'Actual'}:
               </span>
               <span className="text-lg font-bold font-mono">
-                ₹{entry.value?.toFixed(2)}
+                ₹{entry.value?.toFixed(2)} <span className="text-xs font-normal">/{unit}</span>
               </span>
             </div>
           ))}
@@ -266,13 +266,17 @@ const PriceChart = ({ data, prediction, onRefresh }) => {
       <div className="bg-green-50/50 border-t border-green-100 px-6 py-4 grid grid-cols-3 gap-4">
         <div>
           <p className="text-xs text-text-secondary uppercase font-mono mb-1">Current Price</p>
-          <p className="text-xl font-bold text-text-primary font-mono">₹{currentPrice.toLocaleString()}</p>
+          <p className="text-xl font-bold text-text-primary font-mono">
+            ₹{currentPrice.toLocaleString()} <span className="text-sm text-text-secondary">/{unit}</span>
+          </p>
         </div>
         
         <div className="border-l border-green-200 pl-4">
           <p className="text-xs text-text-secondary uppercase font-mono mb-1">Predicted (7d)</p>
           <div className="flex items-center gap-2">
-            <p className="text-xl font-bold text-amber-600 font-mono">₹{predictedPrice.toLocaleString()}</p>
+            <p className="text-xl font-bold text-amber-600 font-mono">
+              ₹{predictedPrice.toLocaleString()} <span className="text-sm text-amber-600/70">/{unit}</span>
+            </p>
             <ArrowRight size={14} className="text-amber-400" />
           </div>
         </div>
