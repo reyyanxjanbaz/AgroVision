@@ -69,6 +69,36 @@ const Chatbot = () => {
     setInput(action);
   };
 
+  // Simple Markdown Parser Component
+  const MessageContent = ({ content }) => {
+    if (!content) return null;
+
+    // Split by newlines to handle paragraphs
+    const lines = content.split('\n');
+
+    return (
+      <div className="space-y-1">
+        {lines.map((line, i) => {
+          if (!line.trim()) return <div key={i} className="h-2" />; // Spacer for empty lines
+
+          // Parse bold text (**text**)
+          const parts = line.split(/(\*\*.*?\*\*)/g);
+          
+          return (
+            <p key={i} className="leading-relaxed">
+              {parts.map((part, j) => {
+                if (part.startsWith('**') && part.endsWith('**')) {
+                  return <strong key={j} className="font-bold text-inherit">{part.slice(2, -2)}</strong>;
+                }
+                return <span key={j}>{part}</span>;
+              })}
+            </p>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <>
       {/* Floating Action Button */}
@@ -130,7 +160,7 @@ const Chatbot = () => {
                       ? 'bg-primary text-white rounded-br-none shadow-lg shadow-primary/20' 
                       : 'bg-white border border-gray-200 text-text-primary rounded-bl-none shadow-sm'
                   }`}> 
-                    <p className="leading-relaxed">{msg.content}</p>
+                    <MessageContent content={msg.content} />
                   </div>
                 </div>
               ))}

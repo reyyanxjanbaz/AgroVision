@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const OpenAI = require('openai');
+const Crop = require('../models/Crop');
+const supabase = require('../config/supabase');
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -15,21 +17,106 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Message is required' });
     }
 
+    // Fetch real-time crop data
+    let cropContext = "Current Market Data:\n";
+    
+    // Hardcoded fallback data (The "Website's Code" Source)
+    const fallbackCrops = [
+      { name: 'Wheat', current_price: 2200, unit: 'Quintal', price_change_24h: 1.2 },
+      { name: 'Rice', current_price: 2800, unit: 'Quintal', price_change_24h: -0.5 },
+      { name: 'Cotton', current_price: 6200, unit: 'Quintal', price_change_24h: 2.1 },
+      { name: 'Sugarcane', current_price: 310, unit: 'Quintal', price_change_24h: 0.0 },
+      { name: 'Corn', current_price: 1950, unit: 'Quintal', price_change_24h: 0.8 },
+      { name: 'Soybeans', current_price: 4800, unit: 'Quintal', price_change_24h: -1.5 },
+      { name: 'Potato', current_price: 1200, unit: 'Quintal', price_change_24h: -1.5 },
+      { name: 'Tomato', current_price: 2500, unit: 'Quintal', price_change_24h: 5.4 }
+    ];
+
+    try {
+      const crops = await Crop.getAll();
+      
+      // Create a map of live crops for easy lookup
+      const liveCropMap = new Map();
+      if (crops && crops.length > 0) {
+        crops.forEach(c => liveCropMap.set(c.name.toLowerCase(), c));
+      }
+
+      // Merge: Use live data if available, otherwise use fallback
+      const mergedCrops = [...fallbackCrops];
+      
+      // Update fallback with live data if it exists
+      mergedCrops.forEach((fc, index) => {
+        const live = liveCropMap.get(fc.name.toLowerCase());
+        if (live) {
+          mergedCrops[index] = live; // Replace with live data
+          liveCropMap.delete(fc.name.toLowerCase()); // Remove from map to avoid duplicates
+        }
+      });
+
+      // Add any remaining live crops that weren't in fallback
+      liveCropMap.forEach(live => mergedCrops.push(live));
+
+      // Generate the context string
+      cropContext += mergedCrops.map(c => 
+        `- ${c.name}: ₹${c.current_price}/${c.unit || 'Quintal'} (${c.price_change_24h >= 0 ? '+' : ''}${c.price_change_24h}%)`
+      ).join('\n');
+
+    } catch (err) {
+      console.error("Error fetching crops for chatbot:", err);
+      // On error, just use the fallback list
+      cropContext += fallbackCrops.map(c => 
+        `- ${c.name}: ₹${c.current_price}/${c.unit} (${c.price_change_24h >= 0 ? '+' : ''}${c.price_change_24h}%)`
+      ).join('\n');
+      cropContext += "\n(Note: Using system reference data due to database connection error)";
+    }
+
+    // Fetch latest market news
+    let newsContext = "\nLatest Market News:\n";
+    try {
+      const { data: newsData } = await supabase
+        .from('news')
+        .select('title, summary, source')
+        .order('published_date', { ascending: false })
+        .limit(3);
+      
+      if (newsData && newsData.length > 0) {
+        newsContext += newsData.map(n => `- ${n.title} (${n.source})`).join('\n');
+      } else {
+        newsContext += "No recent news available.";
+      }
+    } catch (err) {
+      console.error("Error fetching news for chatbot:", err);
+    }
+
     // Build context-aware system prompt
-    let systemPrompt = `You are AgroVision AI Assistant, a helpful assistant for an agricultural price prediction platform. 
+    let systemPrompt = `You are AgroVision AI Assistant, an expert agricultural advisor for the AgroVision platform.
 
 Your capabilities:
-- Explain crop prices and market trends
-- Summarize page content when asked
-- Answer questions about agricultural factors affecting prices
-- Help users navigate the app
-- Provide general agricultural advice
+- Provide accurate, real-time price information based on the data provided below.
+- Explain market drivers (weather, supply/demand, policy, global trade).
+- Summarize page content when asked.
+- Help users navigate the app.
 
-Current context:
+${cropContext}
+
+${newsContext}
+
+General Market Knowledge:
+- Prices are driven by: Weather conditions (monsoons, droughts), Input costs (fertilizers, fuel), Government policies (MSP, export bans), and Global demand.
+- "Bullish" means prices are rising; "Bearish" means prices are falling.
+
+Current User Context:
 - User is on page: ${context?.page || 'unknown'}
 - User role: ${context?.role || 'farmer'}
 
-Be concise, helpful, and friendly. If you don't know something, admit it. Never make up price data.`;
+Instructions:
+- If asked about a specific crop's price, ALWAYS use the "Current Market Data" provided above. Do not make up prices.
+- If the crop is not in the list, say you don't have live data for it.
+- If asked about market trends, use the "Latest Market News" and general knowledge.
+- Be concise, professional, and helpful.
+- Format currency as ₹ (INR).
+- **IMPORTANT**: Use bold formatting for crop names and prices (e.g., **Wheat** is trading at **₹2200**).
+`;
 
     const response = await openai.chat.completions.create({
       model: 'gpt-4o', // Default to GPT-4o, can be overridden by GitHub Models
