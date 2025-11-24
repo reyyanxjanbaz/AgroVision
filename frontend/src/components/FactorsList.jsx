@@ -1,6 +1,5 @@
 import React from 'react';
 import FactorCard from './FactorCard';
-import { Layers } from 'lucide-react';
 
 const FactorsList = ({ factors }) => {
   if (!factors || factors.length === 0) return null;

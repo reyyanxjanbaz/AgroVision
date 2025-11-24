@@ -8,7 +8,7 @@ import PredictionCard from '../components/PredictionCard';
 import FactorsList from '../components/FactorsList';
 import { fetchCropDetails, fetchPriceHistory, fetchPrediction, fetchFactors, fetchNews } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { ArrowLeft, TrendingUp, TrendingDown, Calendar, MapPin, ExternalLink, Activity, Layers } from 'lucide-react';
+import { ArrowLeft, TrendingUp, TrendingDown, Calendar, ExternalLink, Activity, Layers } from 'lucide-react';
 
 const getCropImage = (name) => {
   const lower = name.toLowerCase();

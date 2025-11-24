@@ -8,7 +8,6 @@ import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
 import { 
   TrendingUp, 
-  Users, 
   Database, 
   Activity, 
   ArrowUpRight, 
@@ -21,7 +20,6 @@ import {
   Filter,
   Download,
   Check,
-  X,
   ChevronDown
 } from 'lucide-react';
 

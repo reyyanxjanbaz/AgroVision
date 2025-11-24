@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Sparkles, Bot } from 'lucide-react';
+import { X, Send, Sparkles, Bot } from 'lucide-react';
 import { sendChatMessage } from '../services/api';
 import usePageContext from '../hooks/usePageContext';
 import { useAuth } from '../context/AuthContext';

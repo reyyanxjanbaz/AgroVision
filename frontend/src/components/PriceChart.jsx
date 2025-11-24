@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { 
-  AreaChart, 
   Area, 
   XAxis, 
   YAxis, 
@@ -10,7 +9,7 @@ import {
   Line,
   ComposedChart
 } from 'recharts';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { RefreshCw, Download, TrendingUp, TrendingDown, ArrowRight, Check, Camera } from 'lucide-react';
 
 const PriceChart = ({ data, prediction, onRefresh }) => {
@@ -160,7 +159,7 @@ const PriceChart = ({ data, prediction, onRefresh }) => {
           ))}
           {isPred && (
             <div className="mt-2 pt-2 border-t border-white/10 text-xs text-amber-400 flex items-center gap-1">
-              <Activity size={12} /> AI Prediction
+              <ActivityIcon size={12} /> AI Prediction
             </div>
           )}
         </div>
@@ -291,7 +290,7 @@ const PriceChart = ({ data, prediction, onRefresh }) => {
 };
 
 // Helper for tooltip
-const Activity = ({ size, className }) => (
+const ActivityIcon = ({ size, className }) => (
   <svg 
     width={size} 
     height={size} 
