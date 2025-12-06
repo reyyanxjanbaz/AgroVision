@@ -11,9 +11,11 @@ app.use(express.json());
 // Routes
 const cropsRoutes = require('./routes/crops');
 const chatbotRoutes = require('./routes/chatbot');
+const weatherRoutes = require('./routes/weather');
 
 app.use('/api/crops', cropsRoutes);
 app.use('/api/chatbot', chatbotRoutes);
+app.use('/api/weather', weatherRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

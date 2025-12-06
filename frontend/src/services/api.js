@@ -65,4 +65,14 @@ export const sendChatMessage = async (message, context) => {
   return response.data;
 };
 
+export const fetchWeather = async (region = 'default') => {
+  const response = await api.get('/weather/current', { params: { region } });
+  return response.data;
+};
+
+export const fetchWeatherForecast = async (region = 'default') => {
+  const response = await api.get('/weather/forecast', { params: { region } });
+  return response.data;
+};
+
 export default api;

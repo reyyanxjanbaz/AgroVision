@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import CropCard from '../components/CropCard';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { fetchCrops } from '../services/api';
+import { fetchCrops, fetchWeather } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
 import { 
@@ -105,6 +105,8 @@ const Dashboard = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
+  const [weather, setWeather] = useState(null);
+
   const roleConfig = {
     farmer: {
       title: "Farm Management",
@@ -112,7 +114,7 @@ const Dashboard = () => {
       stats: [
         { icon: Database, label: "Active Crops", value: crops.length || "0", trend: "+12%", color: "primary", subtext: "Total crops in database" },
         { icon: TrendingUp, label: "Market Trends", value: "Bullish", trend: "High", color: "secondary", subtext: "Overall market sentiment" },
-        { icon: CloudRain, label: "Weather", value: "24°C", trend: "Clear", color: "accent", subtext: "Optimal sowing conditions" }
+        { icon: CloudRain, label: "Weather", value: weather ? `${weather.temperature}°C` : "Loading...", trend: weather?.condition || "...", color: "accent", subtext: weather?.impact?.description || "Fetching weather data..." }
       ]
     },
     merchant: {
@@ -153,6 +155,26 @@ const Dashboard = () => {
 
     loadCrops();
   }, [query]);
+
+  useEffect(() => {
+    const loadWeather = async () => {
+      try {
+        const weatherData = await fetchWeather('default');
+        setWeather(weatherData);
+      } catch (err) {
+        console.error('Error fetching weather:', err);
+        // Use fallback if available, otherwise set default error state
+        const fallback = err.response?.data?.fallback || {
+          temperature: '--',
+          condition: 'Unavailable',
+          impact: { description: 'Weather service unavailable' }
+        };
+        setWeather(fallback);
+      }
+    };
+
+    loadWeather();
+  }, []);
 
   // Filter Logic
   const categories = ['All', ...new Set(crops.map(c => c.category))];

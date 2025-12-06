@@ -119,12 +119,28 @@ router.get('/:id/factors', async (req, res) => {
 
     // If no factors in DB, generate sample ones
     if (!data || data.length === 0) {
-      const sampleFactors = [
-        {
+      // Fetch real weather data to generate weather factor
+      const weatherService = require('../services/weatherService');
+      let weatherFactor = {
+        factor_type: 'weather',
+        description: 'Weather data unavailable',
+        impact_score: 0
+      };
+
+      try {
+        const weather = await weatherService.getCurrentWeather('default');
+        const impact = weatherService.assessAgriculturalImpact(weather);
+        weatherFactor = {
           factor_type: 'weather',
-          description: 'Favorable weather conditions supporting crop growth',
-          impact_score: 8.5
-        },
+          description: `${weather.condition} conditions: ${impact.description}`,
+          impact_score: impact.impactScore
+        };
+      } catch (err) {
+        console.error('Weather service unavailable for factors:', err.message);
+      }
+
+      const sampleFactors = [
+        weatherFactor,
         {
           factor_type: 'demand',
           description: 'Increased demand from export markets',

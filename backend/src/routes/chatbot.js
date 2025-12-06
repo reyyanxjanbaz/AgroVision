@@ -121,18 +121,41 @@ router.post('/', async (req, res) => {
       console.error("Error fetching news for chatbot:", err);
     }
 
+    // Fetch real-time weather data
+    let weatherContext = "\nCurrent Weather Conditions:\n";
+    try {
+      const weatherService = require('../services/weatherService');
+      const weather = await weatherService.getCurrentWeather('default');
+      const impact = weatherService.assessAgriculturalImpact(weather);
+      
+      weatherContext += `- Temperature: ${weather.temperature}°C (Feels like ${weather.feelsLike}°C)\n`;
+      weatherContext += `- Condition: ${weather.condition} (${weather.description})\n`;
+      weatherContext += `- Humidity: ${weather.humidity}%\n`;
+      weatherContext += `- Agricultural Impact: ${impact.description}\n`;
+      weatherContext += `- Impact Score: ${impact.impactScore}/10 (${impact.sentiment})\n`;
+      if (impact.recommendations.length > 0) {
+        weatherContext += `- Recommendations: ${impact.recommendations.join(', ')}\n`;
+      }
+    } catch (err) {
+      console.error("Error fetching weather for chatbot:", err.message);
+      weatherContext += "Weather data temporarily unavailable.";
+    }
+
     // Build context-aware system prompt
     let systemPrompt = `You are AgroVision AI Assistant, an expert agricultural advisor for the AgroVision platform.
 
 Your capabilities:
 - Provide accurate, real-time price information based on the data provided below.
 - Explain market drivers (weather, supply/demand, policy, global trade).
+- Provide real-time weather insights and agricultural recommendations.
 - Summarize page content when asked.
 - Help users navigate the app.
 
 ${cropContext}
 
 ${activeCropContext}
+
+${weatherContext}
 
 ${newsContext}
 
