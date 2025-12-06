@@ -8,6 +8,7 @@ import PredictionCard from '../components/PredictionCard';
 import FactorsList from '../components/FactorsList';
 import { fetchCropDetails, fetchPriceHistory, fetchPrediction, fetchFactors, fetchNews } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useSettings } from '../context/SettingsContext';
 import { ArrowLeft, TrendingUp, TrendingDown, Calendar, ExternalLink, Activity, Layers } from 'lucide-react';
 
 const getCropImage = (name) => {
@@ -21,6 +22,7 @@ const getCropImage = (name) => {
 const CropDetail = () => {
   const { id } = useParams();
   const { role } = useAuth();
+  const { t } = useSettings();
   const [crop, setCrop] = useState(null);
   const [priceHistory, setPriceHistory] = useState([]);
   const [prediction, setPrediction] = useState(null);
@@ -106,33 +108,33 @@ const CropDetail = () => {
 
   const getAdjustedPrediction = () => {
     if (!prediction) return null;
-    let nextWeek = prediction.nextWeek;
+    let next3Days = prediction.next3Days;
 
     if (role === 'customer') {
       // Convert Quintal to Kg and add 20% retail markup
-      nextWeek = (nextWeek / 100) * 1.20;
+      next3Days = (next3Days / 100) * 1.20;
     }
 
     return {
       ...prediction,
-      nextWeek
+      next3Days
     };
   };
 
 
 
-  if (loading) return <LoadingSpinner message="Accessing Crop Database..." />;
+  if (loading) return <LoadingSpinner message={t('accessingDatabase')} />;
 
   if (!crop) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-          <Activity className="text-text-muted" size={32} />
+        <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
+          <Activity className="text-text-muted dark:text-gray-500" size={32} />
         </div>
-        <h2 className="text-xl font-bold text-text-primary mb-2">Data Not Found</h2>
-        <p className="text-text-secondary mb-6">The requested crop data could not be retrieved.</p>
+        <h2 className="text-xl font-bold text-text-primary dark:text-white mb-2">{t('dataNotFound')}</h2>
+        <p className="text-text-secondary dark:text-gray-400 mb-6">{t('cropDataNotFound')}</p>
         <Link to="/" className="btn-primary">
-          Return to Dashboard
+          {t('returnDashboard')}
         </Link>
       </div>
     );
@@ -158,9 +160,9 @@ const CropDetail = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Breadcrumb */}
-      <Link to="/" className="inline-flex items-center gap-2 text-text-secondary hover:text-primary transition-colors mb-4 group">
+      <Link to="/" className="inline-flex items-center gap-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors mb-4 group">
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-        <span className="text-sm font-mono uppercase tracking-wider">Back to Dashboard</span>
+        <span className="text-sm font-mono uppercase tracking-wider">{t('backToDashboard')}</span>
       </Link>
 
       {/* Main Grid Layout */}
@@ -173,7 +175,7 @@ const CropDetail = () => {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-panel p-6 rounded-xl relative overflow-hidden flex flex-col"
+            className="glass-panel p-6 rounded-xl relative overflow-hidden flex flex-col dark:bg-gray-800 dark:border-gray-700"
           >
              {/* Background Decoration */}
              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
@@ -186,13 +188,13 @@ const CropDetail = () => {
                 <img 
                   src={crop.image_url || getCropImage(crop.name) || `https://loremflickr.com/400/400/${crop.name},agriculture/all`} 
                   alt={crop.name} 
-                  className="w-32 h-32 rounded-2xl border border-gray-200 object-cover shadow-lg"
+                  className="w-32 h-32 rounded-2xl border border-gray-200 dark:border-gray-600 object-cover shadow-lg"
                   onError={(e) => {
                     e.target.onerror = null; 
                     e.target.src = `https://ui-avatars.com/api/?name=${crop.name}&background=random&size=400`;
                   }}
                 />
-                <div className="absolute -bottom-3 -right-3 bg-white px-3 py-1 rounded-lg border border-gray-200 text-xs font-mono text-primary shadow-sm">
+                <div className="absolute -bottom-3 -right-3 bg-white dark:bg-gray-700 px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-600 text-xs font-mono text-primary shadow-sm">
                   ID: {String(crop.id).substring(0, 4).toUpperCase()}
                 </div>
               </div>
@@ -200,7 +202,7 @@ const CropDetail = () => {
               <div className="flex-1 w-full">
                 <div className="flex justify-between items-start">
                   <div>
-                      <h1 className="text-4xl font-bold text-text-primary font-display mb-2">{crop.name}</h1>
+                      <h1 className="text-4xl font-bold text-text-primary dark:text-white font-display mb-2">{t(crop.name.toLowerCase()) || crop.name}</h1>
                       <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-mono uppercase tracking-wide">
                       {crop.category}
                       </span>
@@ -208,13 +210,13 @@ const CropDetail = () => {
                   {/* Price Display */}
                   <div className="text-right">
                       <div className="flex items-baseline justify-end gap-1">
-                          <span className="text-lg text-text-secondary font-mono">₹</span>
-                          <span className="text-4xl font-bold text-text-primary font-mono tracking-tight">
+                          <span className="text-lg text-text-secondary dark:text-gray-400 font-mono">₹</span>
+                          <span className="text-4xl font-bold text-text-primary dark:text-white font-mono tracking-tight">
                           {displayPrice}
                           </span>
                       </div>
-                      <p className="text-xs text-text-secondary font-mono mt-1">
-                          {role === 'customer' ? 'RETAIL' : role === 'merchant' ? 'WHOLESALE' : 'MARKET'} PER {displayUnit}
+                      <p className="text-xs text-text-secondary dark:text-gray-400 font-mono mt-1">
+                          {role === 'customer' ? t('retail') : role === 'merchant' ? t('wholesale') : t('marketPrice')} PER {displayUnit}
                       </p>
                   </div>
                 </div>
@@ -222,35 +224,35 @@ const CropDetail = () => {
                 <div className="mt-6 flex items-center gap-4">
                    <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${
                     isPositive 
-                      ? 'bg-secondary/10 border-secondary/20 text-secondary' 
-                      : 'bg-danger/10 border-danger/20 text-danger'
+                      ? 'bg-secondary/10 border-secondary/20 text-secondary dark:bg-secondary/20 dark:border-secondary/30' 
+                      : 'bg-danger/10 border-danger/20 text-danger dark:bg-danger/20 dark:border-danger/30'
                   }`}>
                     {isPositive ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
                     <span className="font-mono font-bold text-lg">{Math.abs(crop.price_change_24h).toFixed(2)}%</span>
-                    <span className="text-xs opacity-80 font-medium uppercase ml-1">24h Change</span>
+                    <span className="text-xs opacity-80 font-medium uppercase ml-1">{t('24hChange')}</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Chart Section */}
-            <div className="border-t border-gray-100 pt-6 mt-6">
+            <div className="border-t border-gray-100 dark:border-gray-700 pt-6 mt-6">
               <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-                  <h3 className="text-lg font-bold text-text-primary flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-text-primary dark:text-white flex items-center gap-2">
                       <Activity size={18} className="text-primary" />
-                      Price Analysis
+                      {t('priceAnalysis')}
                   </h3>
                   
                   <div className="flex gap-3">
-                      <div className="flex bg-gray-100 rounded-lg p-1">
+                      <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
                       {periods.map((period) => (
                           <button
                           key={period.label}
                           onClick={() => setTimePeriod(period.label)}
                           className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
                               timePeriod === period.label
-                              ? 'bg-white text-primary shadow-sm'
-                              : 'text-text-secondary hover:text-text-primary'
+                              ? 'bg-white dark:bg-gray-600 text-primary shadow-sm'
+                              : 'text-text-secondary dark:text-gray-400 hover:text-text-primary dark:hover:text-white'
                           }`}
                           >
                           {period.label}
@@ -260,13 +262,13 @@ const CropDetail = () => {
                       <select
                           value={region}
                           onChange={(e) => setRegion(e.target.value)}
-                          className="px-3 py-1 bg-white border border-gray-200 rounded-lg text-xs text-text-primary focus:border-primary/50 focus:outline-none"
+                          className="px-3 py-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs text-text-primary dark:text-white focus:border-primary/50 focus:outline-none"
                       >
-                          <option value="all">All Regions</option>
-                          <option value="north">North</option>
-                          <option value="south">South</option>
-                          <option value="east">East</option>
-                          <option value="west">West</option>
+                          <option value="all">{t('allRegions')}</option>
+                          <option value="north">{t('north')}</option>
+                          <option value="south">{t('south')}</option>
+                          <option value="east">{t('east')}</option>
+                          <option value="west">{t('west')}</option>
                       </select>
                   </div>
               </div>
@@ -275,8 +277,8 @@ const CropDetail = () => {
                   {adjustedHistory.length > 0 ? (
                   <PriceChart data={adjustedHistory} prediction={adjustedPrediction} unit={displayUnit} onRefresh={loadCropData} />
                   ) : (
-                  <div className="h-full flex items-center justify-center border border-dashed border-gray-200 rounded-xl bg-gray-50/50">
-                      <p className="text-text-secondary">No price data available</p>
+                  <div className="h-full flex items-center justify-center border border-dashed border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50/50 dark:bg-gray-800/50">
+                      <p className="text-text-secondary dark:text-gray-400">{t('noPriceData')}</p>
                   </div>
                   )}
               </div>
@@ -285,9 +287,9 @@ const CropDetail = () => {
 
           {/* News Feed */}
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">
+            <h2 className="text-xl font-bold text-text-primary dark:text-white flex items-center gap-2">
               <Calendar className="text-primary" size={20} />
-              {role === 'customer' ? 'Consumer Insights' : 'Market Intelligence'}
+              {role === 'customer' ? t('consumerInsights') : t('marketIntelligence')}
             </h2>
             
             {filteredNews.length > 0 ? (
@@ -301,7 +303,7 @@ const CropDetail = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="glass-panel p-0 rounded-xl overflow-hidden hover:shadow-lg transition-all group border border-gray-200 flex flex-col sm:flex-row h-auto sm:h-40"
+                    className="glass-panel p-0 rounded-xl overflow-hidden hover:shadow-lg transition-all group border border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row h-auto sm:h-40 dark:bg-gray-800"
                   >
                     {article.image_url && (
                       <div className="sm:w-40 h-40 sm:h-full relative overflow-hidden flex-shrink-0">
@@ -318,22 +320,22 @@ const CropDetail = () => {
                           <span>•</span>
                           <span>{format(new Date(article.published_date), 'MMM d')}</span>
                       </div>
-                      <h3 className="text-base font-bold text-text-primary mb-2 group-hover:text-primary transition-colors leading-tight line-clamp-2">
+                      <h3 className="text-base font-bold text-text-primary dark:text-white mb-2 group-hover:text-primary transition-colors leading-tight line-clamp-2">
                         {article.title}
                       </h3>
-                      <p className="text-text-secondary text-xs line-clamp-2 mb-2 leading-relaxed">
+                      <p className="text-text-secondary dark:text-gray-400 text-xs line-clamp-2 mb-2 leading-relaxed">
                           {article.summary}
                       </p>
                       <div className="flex items-center gap-1 text-xs font-medium text-primary mt-auto">
-                          Read Analysis <ExternalLink size={12} />
+                          {t('readAnalysis')} <ExternalLink size={12} />
                       </div>
                     </div>
                   </motion.a>
                 ))}
               </div>
             ) : (
-              <div className="glass-panel p-8 text-center rounded-xl border-dashed border-2 border-gray-200">
-                <p className="text-text-secondary text-sm">No relevant news available.</p>
+              <div className="glass-panel p-8 text-center rounded-xl border-dashed border-2 border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+                <p className="text-text-secondary dark:text-gray-400 text-sm">{t('noNews')}</p>
               </div>
             )}
           </div>
@@ -348,21 +350,21 @@ const CropDetail = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
-            className="glass-panel p-5 rounded-xl flex flex-col"
+            className="glass-panel p-5 rounded-xl flex flex-col dark:bg-gray-800 dark:border-gray-700"
           >
-            <h3 className="text-text-secondary text-sm font-mono uppercase mb-4 flex items-center gap-2">
-              <Activity size={14} /> Market Summary
+            <h3 className="text-text-secondary dark:text-gray-400 text-sm font-mono uppercase mb-4 flex items-center gap-2">
+              <Activity size={14} /> {t('marketSummary')}
             </h3>
             
             <div className="space-y-4 flex-1">
-              <div className="p-3 rounded-xl bg-gray-50 border border-gray-100">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600">
                   <div className="flex justify-between items-center mb-2">
-                      <span className="text-text-muted text-sm">7 Day Trend</span>
+                      <span className="text-text-muted dark:text-gray-400 text-sm">{t('7DayTrend')}</span>
                       <span className={`font-mono font-bold ${crop.price_change_7d >= 0 ? 'text-secondary' : 'text-danger'}`}>
                           {crop.price_change_7d >= 0 ? '+' : ''}{crop.price_change_7d?.toFixed(2)}%
                       </span>
                   </div>
-                  <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-gray-200 dark:bg-gray-600 h-1.5 rounded-full overflow-hidden">
                       <div 
                           className={`h-full ${crop.price_change_7d >= 0 ? 'bg-secondary' : 'bg-danger'}`} 
                           style={{ width: `${Math.min(Math.abs(crop.price_change_7d) * 10, 100)}%` }}
@@ -371,17 +373,17 @@ const CropDetail = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 rounded-xl bg-gray-50 border border-gray-100">
-                      <span className="text-text-muted text-xs uppercase block mb-1">Volume</span>
-                      <span className="font-mono font-bold text-text-primary">High</span>
+                  <div className="p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600">
+                      <span className="text-text-muted dark:text-gray-400 text-xs uppercase block mb-1">{t('volume')}</span>
+                      <span className="font-mono font-bold text-text-primary dark:text-white">{t('high')}</span>
                   </div>
-                  <div className="p-3 rounded-xl bg-gray-50 border border-gray-100">
-                      <span className="text-text-muted text-xs uppercase block mb-1">Volatility</span>
-                      <span className="font-mono font-bold text-accent">Medium</span>
+                  <div className="p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600">
+                      <span className="text-text-muted dark:text-gray-400 text-xs uppercase block mb-1">{t('volatility')}</span>
+                      <span className="font-mono font-bold text-accent">{t('medium')}</span>
                   </div>
               </div>
 
-              <div className="pt-4 border-t border-gray-100">
+              <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
                   <PredictionCard prediction={adjustedPrediction} unit={displayUnit} />
               </div>
             </div>
@@ -389,17 +391,17 @@ const CropDetail = () => {
 
           {/* Market Drivers */}
           <div className="space-y-4">
-              <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">
+              <h2 className="text-xl font-bold text-text-primary dark:text-white flex items-center gap-2">
                   <Layers className="text-primary" size={20} />
-                  Market Drivers
+                  {t('marketDrivers')}
               </h2>
               <FactorsList factors={factors} />
               
               {role === 'customer' && (
-                  <div className="glass-panel p-5 rounded-xl bg-gradient-to-br from-primary/5 to-transparent border-primary/10">
-                      <h3 className="font-bold text-base text-text-primary mb-2">Did you know?</h3>
-                      <p className="text-xs text-text-secondary leading-relaxed">
-                          Buying seasonal produce not only saves you money but also ensures you get the best nutrition and flavor.
+                  <div className="glass-panel p-5 rounded-xl bg-gradient-to-br from-primary/5 to-transparent border-primary/10 dark:from-primary/10 dark:border-primary/20">
+                      <h3 className="font-bold text-base text-text-primary dark:text-white mb-2">{t('didYouKnow')}</h3>
+                      <p className="text-xs text-text-secondary dark:text-gray-400 leading-relaxed">
+                          {t('seasonalTip')}
                       </p>
                   </div>
               )}

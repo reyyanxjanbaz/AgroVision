@@ -12,6 +12,7 @@ const openai = new OpenAI({
 router.post('/', async (req, res) => {
   try {
     const { message, context } = req.body;
+    const language = context?.language || 'en';
 
     if (!message) {
       return res.status(400).json({ error: 'Message is required' });
@@ -174,6 +175,8 @@ Instructions:
 - Be concise, professional, and helpful.
 - Format currency as ₹ (INR).
 - **IMPORTANT**: Use bold formatting for crop names and prices (e.g., **Wheat** is trading at **₹2200**).
+
+${language !== 'en' ? `IMPORTANT: The user's preferred language code is "${language}". You MUST respond in this language. Translate all technical terms appropriately but keep currency symbols (₹) and numbers as is.` : ''}
 `;
 
     const response = await openai.chat.completions.create({

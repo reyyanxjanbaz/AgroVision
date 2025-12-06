@@ -3,10 +3,12 @@ import { X, Send, Sparkles, Bot } from 'lucide-react';
 import { sendChatMessage } from '../services/api';
 import usePageContext from '../hooks/usePageContext';
 import { useAuth } from '../context/AuthContext';
+import { useSettings } from '../context/SettingsContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Chatbot = () => {
   const { role } = useAuth();
+  const { t, language } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -20,15 +22,15 @@ const Chatbot = () => {
 
   useEffect(() => {
     const initialMsg = {
-      farmer: "System initialized. I am your AgroVision AI assistant. How can I help you with your harvest today?",
-      merchant: "System initialized. I am your AgroVision AI assistant. Ready to assist with market trends and bulk orders.",
-      customer: "System initialized. I am your AgroVision AI assistant. Looking for the best seasonal produce?"
+      farmer: t('chatbotWelcomeFarmer'),
+      merchant: t('chatbotWelcomeMerchant'),
+      customer: t('chatbotWelcomeCustomer')
     };
     
     setMessages([
       { role: 'assistant', content: initialMsg[role] || initialMsg.farmer }
     ]);
-  }, [role]);
+  }, [role, language, t]);
 
   useEffect(() => {
     scrollToBottom();
@@ -43,16 +45,16 @@ const Chatbot = () => {
     setLoading(true);
 
     try {
-      const response = await sendChatMessage(input, { ...pageContext, role });
+      const response = await sendChatMessage(input, { ...pageContext, role, language });
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: response.message || response.response || 'I apologize, but I couldn\'t process that request.' 
+        content: response.message || response.response || t('chatbotError') 
       }]);
     } catch (error) {
       console.error('Chatbot error:', error);
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: 'System error. Connection interrupted. Please retry.' 
+        content: t('chatbotSystemError') 
       }]);
     } finally {
       setLoading(false);
@@ -60,9 +62,9 @@ const Chatbot = () => {
   };
 
   const quickActions = [
-    'Market Summary',
-    'Price Trends',
-    'Risk Factors',
+    t('marketSummary'),
+    t('priceTrends'),
+    t('riskFactors'),
   ];
 
   const handleQuickAction = (action) => {

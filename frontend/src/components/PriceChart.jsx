@@ -11,8 +11,10 @@ import {
 } from 'recharts';
 import { format } from 'date-fns';
 import { RefreshCw, Download, TrendingUp, TrendingDown, ArrowRight, Check, Camera } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
 
 const PriceChart = ({ data, prediction, onRefresh, unit = 'Quintal' }) => {
+  const { t } = useSettings();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
   const [isSnapshotTaken, setIsSnapshotTaken] = useState(false);
@@ -36,7 +38,7 @@ const PriceChart = ({ data, prediction, onRefresh, unit = 'Quintal' }) => {
     let finalChartData = [...historyData];
 
     if (prediction) {
-      predicted = prediction.nextWeek || current;
+      predicted = prediction.next3Days || current;
       change = ((predicted - current) / current) * 100;
       
       // Add the bridge point (last historical point is also start of prediction)
@@ -47,7 +49,7 @@ const PriceChart = ({ data, prediction, onRefresh, unit = 'Quintal' }) => {
       };
 
       // Add prediction point
-      const predDate = prediction.prediction_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      const predDate = prediction.prediction_date || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString();
       finalChartData.push({
         date: predDate,
         timestamp: new Date(predDate).getTime(),
@@ -150,7 +152,7 @@ const PriceChart = ({ data, prediction, onRefresh, unit = 'Quintal' }) => {
             <div key={index} className="flex items-center gap-2">
               <div className={`w-2 h-2 rounded-full ${entry.dataKey === 'predicted' ? 'bg-amber-500' : 'bg-green-500'}`} />
               <span className="text-sm font-medium">
-                {entry.dataKey === 'predicted' ? 'Forecast' : 'Actual'}:
+                {entry.dataKey === 'predicted' ? t('forecast') : t('actual')}:
               </span>
               <span className="text-lg font-bold font-mono">
                 ₹{entry.value?.toFixed(2)} <span className="text-xs font-normal">/{unit}</span>
@@ -159,7 +161,7 @@ const PriceChart = ({ data, prediction, onRefresh, unit = 'Quintal' }) => {
           ))}
           {isPred && (
             <div className="mt-2 pt-2 border-t border-white/10 text-xs text-amber-400 flex items-center gap-1">
-              <ActivityIcon size={12} /> AI Prediction
+              <ActivityIcon size={12} /> {t('aiPrediction')}
             </div>
           )}
         </div>
@@ -169,35 +171,35 @@ const PriceChart = ({ data, prediction, onRefresh, unit = 'Quintal' }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
+    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden flex flex-col h-full">
       {/* Header */}
-      <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white">
+      <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-white dark:bg-gray-800">
         <div className="flex items-center gap-2">
           <div className="w-1 h-4 bg-primary rounded-full" />
-          <h3 className="font-bold text-text-primary">Price Trend</h3>
+          <h3 className="font-bold text-text-primary dark:text-white">{t('priceTrend')}</h3>
         </div>
         <div className="flex gap-2">
           <button 
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="p-2 hover:bg-gray-50 rounded-lg text-text-secondary hover:text-primary transition-colors disabled:opacity-50" 
-            title="Refresh Data"
+            className="p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors disabled:opacity-50" 
+            title={t('refreshData')}
           >
             <RefreshCw size={16} className={isRefreshing ? "animate-spin" : ""} />
           </button>
           <button 
             onClick={handleSnapshot}
-            className="p-2 hover:bg-gray-50 rounded-lg text-text-secondary hover:text-primary transition-colors flex items-center gap-1" 
-            title="Take Snapshot"
+            className="p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors flex items-center gap-1" 
+            title={t('takeSnapshot')}
           >
-            {isSnapshotTaken ? <Check size={16} className="text-green-600" /> : <Camera size={16} />}
+            {isSnapshotTaken ? <Check size={16} className="text-green-600 dark:text-green-400" /> : <Camera size={16} />}
           </button>
           <button 
             onClick={handleDownload}
-            className="p-2 hover:bg-gray-50 rounded-lg text-text-secondary hover:text-primary transition-colors flex items-center gap-1" 
-            title="Download CSV"
+            className="p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors flex items-center gap-1" 
+            title={t('downloadCSV')}
           >
-            {isDownloaded ? <Check size={16} className="text-green-600" /> : <Download size={16} />}
+            {isDownloaded ? <Check size={16} className="text-green-600 dark:text-green-400" /> : <Download size={16} />}
           </button>
         </div>
       </div>
@@ -263,27 +265,27 @@ const PriceChart = ({ data, prediction, onRefresh, unit = 'Quintal' }) => {
       </div>
 
       {/* Footer Summary */}
-      <div className="bg-green-50/50 border-t border-green-100 px-6 py-4 grid grid-cols-3 gap-4">
+      <div className="bg-green-50/50 dark:bg-green-900/10 border-t border-green-100 dark:border-green-900/30 px-6 py-4 grid grid-cols-3 gap-4">
         <div>
-          <p className="text-xs text-text-secondary uppercase font-mono mb-1">Current Price</p>
-          <p className="text-xl font-bold text-text-primary font-mono">
-            ₹{currentPrice.toLocaleString()} <span className="text-sm text-text-secondary">/{unit}</span>
+          <p className="text-xs text-text-secondary dark:text-gray-400 uppercase font-mono mb-1">{t('currentPrice')}</p>
+          <p className="text-xl font-bold text-text-primary dark:text-white font-mono">
+            ₹{currentPrice.toLocaleString()} <span className="text-sm text-text-secondary dark:text-gray-400">/{unit}</span>
           </p>
         </div>
         
-        <div className="border-l border-green-200 pl-4">
-          <p className="text-xs text-text-secondary uppercase font-mono mb-1">Predicted (7d)</p>
+        <div className="border-l border-green-200 dark:border-green-800 pl-4">
+          <p className="text-xs text-text-secondary dark:text-gray-400 uppercase font-mono mb-1">{t('predicted7d')}</p>
           <div className="flex items-center gap-2">
-            <p className="text-xl font-bold text-amber-600 font-mono">
-              ₹{predictedPrice.toLocaleString()} <span className="text-sm text-amber-600/70">/{unit}</span>
+            <p className="text-xl font-bold text-amber-600 dark:text-amber-500 font-mono">
+              ₹{predictedPrice.toLocaleString()} <span className="text-sm text-amber-600/70 dark:text-amber-500/70">/{unit}</span>
             </p>
             <ArrowRight size={14} className="text-amber-400" />
           </div>
         </div>
 
-        <div className="border-l border-green-200 pl-4">
-          <p className="text-xs text-text-secondary uppercase font-mono mb-1">Expected Change</p>
-          <div className={`flex items-center gap-1 ${percentChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+        <div className="border-l border-green-200 dark:border-green-800 pl-4">
+          <p className="text-xs text-text-secondary dark:text-gray-400 uppercase font-mono mb-1">{t('expectedChange')}</p>
+          <div className={`flex items-center gap-1 ${percentChange >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
             {percentChange >= 0 ? <TrendingUp size={18} /> : <TrendingDown size={18} />}
             <span className="text-xl font-bold font-mono">{Math.abs(percentChange).toFixed(2)}%</span>
           </div>

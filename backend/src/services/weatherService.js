@@ -157,7 +157,7 @@ const assessAgriculturalImpact = (weather) => {
     description += 'Stormy weather may damage crops. ';
     recommendations.push('Take protective measures');
   } else if (condition.includes('cloud') || condition.includes('overcast')) {
-    impactScore += 0; // Neutral
+    // Neutral impact for cloudy conditions: no significant positive or negative effect on crops
     description += 'Cloudy conditions. ';
   }
 

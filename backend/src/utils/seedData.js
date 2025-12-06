@@ -109,6 +109,37 @@ function generateFactors(cropId) {
   }));
 }
 
+// Generate sample news
+function generateNews(cropId, cropName) {
+  const newsItems = [
+    {
+      title: `Record ${cropName} Production Expected`,
+      summary: `Experts predict a bumper harvest for ${cropName} this season due to favorable weather conditions.`,
+      source: 'AgriNews',
+      url: 'https://example.com/news/1'
+    },
+    {
+      title: `New Export Policy for ${cropName}`,
+      summary: `Government announces new export incentives for ${cropName} farmers to boost international trade.`,
+      source: 'FarmDaily',
+      url: 'https://example.com/news/2'
+    },
+    {
+      title: `Global ${cropName} Prices Surge`,
+      summary: `International demand for ${cropName} pushes prices to a 5-year high.`,
+      source: 'MarketWatch',
+      url: 'https://example.com/news/3'
+    }
+  ];
+
+  return newsItems.map(item => ({
+    crop_id: cropId,
+    ...item,
+    image_url: `https://source.unsplash.com/400x300/?${cropName},farm`,
+    published_date: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString()
+  }));
+}
+
 async function seedDatabase() {
   try {
     console.log('🌱 Starting database seeding...');
@@ -153,6 +184,15 @@ async function seedDatabase() {
       const { error } = await supabase.from('factors').insert(factors);
       if (error) throw error;
       console.log(`  ✅ Generated ${factors.length} factors for ${crop.name}`);
+    }
+
+    // Insert news
+    console.log('Generating news...');
+    for (const crop of insertedCrops) {
+      const news = generateNews(crop.id, crop.name);
+      const { error } = await supabase.from('news').insert(news);
+      if (error) throw error;
+      console.log(`  ✅ Generated ${news.length} news items for ${crop.name}`);
     }
 
     console.log('🎉 Database seeding completed successfully!');

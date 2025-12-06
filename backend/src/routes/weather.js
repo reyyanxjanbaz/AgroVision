@@ -20,7 +20,10 @@ router.get('/current', async (req, res) => {
       fallback: {
         temperature: null,
         condition: 'Unavailable',
-        description: 'Weather data temporarily unavailable'
+        description: 'Weather data temporarily unavailable',
+        impact: {
+          description: 'Impact data unavailable due to weather data error'
+        }
       }
     });
   }

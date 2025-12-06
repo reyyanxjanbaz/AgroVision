@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { TrendingUp, TrendingDown, Minus, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useSettings } from '../context/SettingsContext';
 
 const getCropImage = (name) => {
   const lower = name.toLowerCase();
@@ -13,6 +14,7 @@ const getCropImage = (name) => {
 
 const CropCard = ({ crop }) => {
   const { role } = useAuth();
+  const { t } = useSettings();
   const change = crop.price_change_24h || 0;
   const isPositive = change > 0;
   const isNeutral = change === 0;
@@ -24,20 +26,19 @@ const CropCard = ({ crop }) => {
     let price = crop.current_price || 0;
     let unit = crop.unit || 'Quintal';
     let label = 'MARKET PRICE';
-
     if (role === 'customer') {
       // Convert Quintal to Kg and add 20% retail markup
       price = (price / 100) * 1.20;
       unit = 'Kg';
-      label = 'RETAIL';
+      label = t('retail');
     } else if (role === 'merchant') {
       // Wholesale price (same as base for now)
       unit = 'Quintal';
-      label = 'WHOLESALE';
+      label = t('wholesale');
     } else {
       // Farmer price (Mandi price)
       unit = 'Quintal';
-      label = 'MARKET PRICE';
+      label = t('marketPrice');
     }
 
     return {
@@ -72,7 +73,7 @@ const CropCard = ({ crop }) => {
             </div>
             <div>
               <h3 className="text-lg font-bold text-text-primary font-display tracking-tight group-hover:text-primary transition-colors">
-                {crop.name}
+                {t(crop.name.toLowerCase()) || crop.name}
               </h3>
               <p className="text-xs text-text-secondary font-mono uppercase tracking-wider">{crop.category}</p>
             </div>

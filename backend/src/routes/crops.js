@@ -67,7 +67,7 @@ router.get('/:id/prediction', async (req, res) => {
 
     if (!priceHistory || priceHistory.length === 0) {
       return res.json({
-        nextWeek: null,
+        next3Days: null,
         nextMonth: null,
         confidence: 0
       });
@@ -87,14 +87,15 @@ router.get('/:id/prediction', async (req, res) => {
     const randomFactor = (Math.random() - 0.5) * volatility;
 
     // Predict
-    const nextWeekPrediction = recentPrice * (1 + trend + randomFactor);
+    // Trend is weekly, so scale for 3 days (approx 0.43 of a week)
+    const next3DaysPrediction = recentPrice * (1 + (trend * (3/7)) + randomFactor);
     const nextMonthPrediction = recentPrice * (1 + trend * 2 + randomFactor * 1.5);
 
     // Calculate confidence (based on data availability)
     const confidence = Math.min(95, 60 + (priceHistory.length / 30) * 35);
 
     res.json({
-      nextWeek: parseFloat(nextWeekPrediction.toFixed(2)),
+      next3Days: parseFloat(next3DaysPrediction.toFixed(2)),
       nextMonth: parseFloat(nextMonthPrediction.toFixed(2)),
       confidence: Math.round(confidence),
       trend: trend > 0 ? 'upward' : 'downward'
