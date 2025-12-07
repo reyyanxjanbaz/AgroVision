@@ -30,7 +30,8 @@ const getCurrentWeather = async (region = 'default') => {
         key: WEATHER_API_KEY,
         q: location.query,
         aqi: 'no'
-      }
+      },
+      timeout: 5000 // 5 seconds timeout
     });
 
     const data = response.data;
@@ -78,7 +79,8 @@ const getWeatherForecast = async (region = 'default') => {
         days: 5,
         aqi: 'no',
         alerts: 'no'
-      }
+      },
+      timeout: 5000 // 5 seconds timeout
     });
 
     const data = response.data;

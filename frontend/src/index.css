@@ -17,15 +17,15 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-white border border-gray-200 shadow-card rounded-xl;
+    @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-card rounded-xl transition-colors duration-300;
   }
   
   .glass-panel-hover {
-    @apply hover:border-primary/50 hover:shadow-glow-green transition-all duration-300;
+    @apply hover:border-primary/50 hover:shadow-glow-green dark:hover:border-primary/50 transition-all duration-300;
   }
 
   .tech-border {
-    @apply border border-gray-200 relative;
+    @apply border border-gray-200 dark:border-gray-700 relative;
   }
   
   .tech-border::before {
@@ -44,7 +44,7 @@
   }
   
   .btn-ghost {
-    @apply bg-transparent hover:bg-gray-100 text-text-secondary hover:text-text-primary 
+    @apply bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-text-secondary dark:text-gray-400 hover:text-text-primary dark:hover:text-white
     px-4 py-2 rounded-lg transition-colors duration-200;
   }
 
@@ -60,9 +60,9 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  @apply bg-gray-100 dark:bg-gray-900;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full hover:bg-primary/50 transition-colors;
+  @apply bg-gray-300 dark:bg-gray-700 rounded-full hover:bg-primary/50 transition-colors;
 }

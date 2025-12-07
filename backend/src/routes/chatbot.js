@@ -12,11 +12,37 @@ const openai = new OpenAI({
 router.post('/', async (req, res) => {
   try {
     const { message, context } = req.body;
-    const language = context?.language || 'en';
-
-    if (!message) {
-      return res.status(400).json({ error: 'Message is required' });
+    
+    // Input validation and sanitization
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'Message is required and must be a string' });
     }
+    
+    if (message.length > 1000) {
+      return res.status(400).json({ error: 'Message is too long' });
+    }
+
+    // Sanitize context
+    const sanitizedContext = {};
+    if (context && typeof context === 'object') {
+      if (context.language && typeof context.language === 'string') {
+        sanitizedContext.language = context.language.slice(0, 10);
+      } else {
+        sanitizedContext.language = 'en';
+      }
+      
+      if (context.role && typeof context.role === 'string') {
+        sanitizedContext.role = context.role.slice(0, 20);
+      } else {
+        sanitizedContext.role = 'farmer';
+      }
+      
+      if (context.page && typeof context.page === 'string') {
+        sanitizedContext.page = context.page.slice(0, 100);
+      }
+    }
+
+    const language = sanitizedContext.language;
 
     // Fetch real-time crop data
     let cropContext = "Current Market Data:\n";
@@ -60,7 +86,7 @@ router.post('/', async (req, res) => {
       liveCropMap.forEach(live => mergedCrops.push(live));
 
       // Apply role-based pricing logic
-      const userRole = context?.role || 'farmer';
+      const userRole = sanitizedContext.role;
       adjustedCrops = mergedCrops.map(c => {
         let price = c.current_price;
         let unit = c.unit || 'Quintal';
@@ -95,8 +121,8 @@ router.post('/', async (req, res) => {
 
     // Determine active crop from page context
     let activeCropContext = "";
-    if (context?.page && context.page.startsWith('/crop/')) {
-        const cropId = context.page.split('/crop/')[1];
+    if (sanitizedContext.page && sanitizedContext.page.startsWith('/crop/')) {
+        const cropId = sanitizedContext.page.split('/crop/')[1];
         // Find crop by ID
         const activeCrop = adjustedCrops.find(c => String(c.id) === String(cropId));
         if (activeCrop) {
@@ -165,8 +191,8 @@ General Market Knowledge:
 - "Bullish" means prices are rising; "Bearish" means prices are falling.
 
 Current User Context:
-- User is on page: ${context?.page || 'unknown'}
-- User role: ${context?.role || 'farmer'}
+- User is on page: ${sanitizedContext.page || 'unknown'}
+- User role: ${sanitizedContext.role}
 
 Instructions:
 - If asked about a specific crop's price, ALWAYS use the "Current Market Data" provided above. Do not make up prices.

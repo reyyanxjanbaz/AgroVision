@@ -265,7 +265,7 @@ const PriceChart = ({ data, prediction, onRefresh, unit = 'Quintal' }) => {
       </div>
 
       {/* Footer Summary */}
-      <div className="bg-green-50/50 dark:bg-green-900/10 border-t border-green-100 dark:border-green-900/30 px-6 py-4 grid grid-cols-3 gap-4">
+      <div className="bg-green-50/50 dark:bg-green-900/10 border-t border-green-100 dark:border-green-900/30 px-6 py-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
           <p className="text-xs text-text-secondary dark:text-gray-400 uppercase font-mono mb-1">{t('currentPrice')}</p>
           <p className="text-xl font-bold text-text-primary dark:text-white font-mono">
@@ -273,7 +273,7 @@ const PriceChart = ({ data, prediction, onRefresh, unit = 'Quintal' }) => {
           </p>
         </div>
         
-        <div className="border-l border-green-200 dark:border-green-800 pl-4">
+        <div className="border-t sm:border-t-0 sm:border-l border-green-200 dark:border-green-800 pt-4 sm:pt-0 sm:pl-4">
           <p className="text-xs text-text-secondary dark:text-gray-400 uppercase font-mono mb-1">{t('predicted7d')}</p>
           <div className="flex items-center gap-2">
             <p className="text-xl font-bold text-amber-600 dark:text-amber-500 font-mono">
@@ -283,7 +283,7 @@ const PriceChart = ({ data, prediction, onRefresh, unit = 'Quintal' }) => {
           </div>
         </div>
 
-        <div className="border-l border-green-200 dark:border-green-800 pl-4">
+        <div className="border-t sm:border-t-0 sm:border-l border-green-200 dark:border-green-800 pt-4 sm:pt-0 sm:pl-4">
           <p className="text-xs text-text-secondary dark:text-gray-400 uppercase font-mono mb-1">{t('expectedChange')}</p>
           <div className={`flex items-center gap-1 ${percentChange >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
             {percentChange >= 0 ? <TrendingUp size={18} /> : <TrendingDown size={18} />}

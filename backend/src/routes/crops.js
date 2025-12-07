@@ -19,7 +19,17 @@ router.get('/', async (req, res) => {
 // GET single crop
 router.get('/:id', async (req, res) => {
   try {
-    const data = await Crop.getById(req.params.id);
+    const { id } = req.params;
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    
+    if (!uuidRegex.test(id)) {
+      return res.status(400).json({ error: 'Invalid crop ID format' });
+    }
+
+    const data = await Crop.getById(id);
+    if (!data) {
+      return res.status(404).json({ error: 'Crop not found' });
+    }
     res.json(data);
   } catch (error) {
     console.error('Error fetching crop:', error);
@@ -30,12 +40,19 @@ router.get('/:id', async (req, res) => {
 // GET price history
 router.get('/:id/prices', async (req, res) => {
   try {
+    const { id } = req.params;
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    
+    if (!uuidRegex.test(id)) {
+      return res.status(400).json({ error: 'Invalid crop ID format' });
+    }
+
     const { region } = req.query;
     
     let query = supabase
       .from('price_history')
       .select('*')
-      .eq('crop_id', req.params.id)
+      .eq('crop_id', id)
       .order('date', { ascending: true });
 
     if (region && region !== 'all') {
@@ -55,11 +72,18 @@ router.get('/:id/prices', async (req, res) => {
 // GET prediction
 router.get('/:id/prediction', async (req, res) => {
   try {
+    const { id } = req.params;
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    
+    if (!uuidRegex.test(id)) {
+      return res.status(400).json({ error: 'Invalid crop ID format' });
+    }
+
     // Fetch recent price history
     const { data: priceHistory, error } = await supabase
       .from('price_history')
       .select('price, date')
-      .eq('crop_id', req.params.id)
+      .eq('crop_id', id)
       .order('date', { ascending: false })
       .limit(30);
 
@@ -109,10 +133,17 @@ router.get('/:id/prediction', async (req, res) => {
 // GET factors
 router.get('/:id/factors', async (req, res) => {
   try {
+    const { id } = req.params;
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    
+    if (!uuidRegex.test(id)) {
+      return res.status(400).json({ error: 'Invalid crop ID format' });
+    }
+
     const { data, error } = await supabase
       .from('factors')
       .select('*')
-      .eq('crop_id', req.params.id)
+      .eq('crop_id', id)
       .order('date', { ascending: false })
       .limit(6);
 
@@ -170,31 +201,55 @@ router.get('/:id/factors', async (req, res) => {
 
 // GET news
 router.get('/:id/news', async (req, res) => {
-  console.log(`Fetching news for crop ID: ${req.params.id}`);
+  const { id } = req.params;
+  console.log(`Fetching news for crop ID: ${id}`);
+  
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(id)) {
+    return res.status(400).json({ error: 'Invalid crop ID format' });
+  }
+
+  // Helper to get fallback image based on crop name
+  const getFallbackImage = (name) => {
+    if (!name) return 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=80';
+    const lower = name.toLowerCase();
+    if (lower.includes('cotton')) return 'https://cdn.britannica.com/18/156618-050-39339EA2/cotton-harvest-field-Texas.jpg';
+    if (lower.includes('sugarcane')) return 'https://4.imimg.com/data4/QX/AP/MY-8729085/sugarcane-plant-1000x1000.jpg';
+    if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqnl0mDa36Zsd2B2rCkZ2ZGhvhcqV2hqU_2g&s';
+    if (lower.includes('wheat')) return 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80';
+    if (lower.includes('rice')) return 'https://images.unsplash.com/photo-1536617621572-1d5f1e6269a0?auto=format&fit=crop&w=800&q=80';
+    if (lower.includes('corn') || lower.includes('maize')) return 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=800&q=80';
+    if (lower.includes('potato')) return 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=800&q=80';
+    if (lower.includes('tomato')) return 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=800&q=80';
+    return 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=80'; // Generic agriculture
+  };
+
   try {
-    // First check if we have news in DB
-    const { data: dbNews } = await supabase
+    // 1. Try to get fresh news (last 24h) from DB
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { data: freshNews } = await supabase
       .from('news')
       .select('*')
-      .eq('crop_id', req.params.id)
+      .eq('crop_id', id)
+      .gte('published_date', twentyFourHoursAgo)
       .order('published_date', { ascending: false })
       .limit(10);
 
-    if (dbNews && dbNews.length > 0) {
-      console.log('Returning news from DB');
-      return res.json(dbNews);
+    if (freshNews && freshNews.length > 0) {
+      console.log('Returning fresh news from DB');
+      return res.json(freshNews);
     }
 
     // Fetch crop name for search
     console.log('Fetching crop details for news search...');
-    const crop = await Crop.getById(req.params.id);
+    const crop = await Crop.getById(id);
 
     if (!crop) {
       console.log('Crop not found, returning empty array');
       return res.json([]);
     }
 
-    // Fetch from NewsAPI
+    // 2. Fetch from NewsAPI
     const newsApiKey = process.env.NEWS_API_KEY;
     let articles = [];
 
@@ -203,7 +258,7 @@ router.get('/:id/news', async (req, res) => {
         console.log(`Fetching news from API for: ${crop.name}`);
         const response = await axios.get('https://newsapi.org/v2/everything', {
           params: {
-            q: `"${crop.name}" AND (agriculture OR farming OR harvest OR commodity)`,
+            q: `"${crop.name}" AND (agriculture OR farming OR harvest OR "crop prices" OR "agronomy")`,
             searchIn: 'title,description',
             language: 'en',
             sortBy: 'publishedAt',
@@ -212,14 +267,18 @@ router.get('/:id/news', async (req, res) => {
           }
         });
 
-        articles = response.data.articles.map(article => ({
-          title: article.title,
-          summary: article.description,
-          url: article.url,
-          image_url: article.urlToImage,
-          published_date: article.publishedAt,
-          source: article.source.name
-        }));
+        articles = response.data.articles
+          .filter(article => article.title && article.description) // Filter out empty articles
+          .map(article => ({
+            crop_id: id,
+            title: article.title,
+            summary: article.description,
+            url: article.url,
+            image_url: article.urlToImage || getFallbackImage(crop.name),
+            source: article.source.name,
+            published_date: article.publishedAt
+          }));
+          
       } catch (apiError) {
         console.error('News API Error:', apiError.message);
         // Continue to fallback
@@ -229,36 +288,51 @@ router.get('/:id/news', async (req, res) => {
     }
 
     if (articles.length > 0) {
-      console.log(`Found ${articles.length} articles from API`);
+      console.log(`Found ${articles.length} articles from API. Saving to DB...`);
+      
+      // Save to DB
+      const { error: insertError } = await supabase
+        .from('news')
+        .insert(articles);
+        
+      if (insertError) {
+        console.error('Error saving news to DB:', insertError);
+      }
+      
       return res.json(articles);
     }
 
-    // Fallback sample news
+    // 3. If API failed, try to get ANY news from DB (even if old)
+    const { data: anyNews } = await supabase
+      .from('news')
+      .select('*')
+      .eq('crop_id', id)
+      .order('published_date', { ascending: false })
+      .limit(10);
+
+    if (anyNews && anyNews.length > 0) {
+      console.log('Returning older news from DB as fallback');
+      return res.json(anyNews);
+    }
+
+    // 4. Fallback sample news
     console.log('Returning sample news fallback');
     res.json([
       {
-        title: 'Agricultural markets show positive trends',
-        summary: 'Recent reports indicate favorable conditions for crop prices. Farmers are optimistic about the upcoming harvest season as weather patterns stabilize.',
+        title: `Market outlook for ${crop.name} remains positive`,
+        summary: `Recent analysis shows steady demand for ${crop.name} in both local and international markets. Farmers are advised to monitor weather conditions closely.`,
         url: '#',
-        image_url: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80',
-        source: 'Agriculture Today',
+        image_url: getFallbackImage(crop.name),
+        source: 'AgroVision Insights',
         published_date: new Date().toISOString()
       },
       {
-        title: 'New sustainable farming techniques gain popularity',
-        summary: 'Farmers across the region are adopting new sustainable practices to improve soil health and increase yield while reducing environmental impact.',
+        title: 'Sustainable farming practices boost yield',
+        summary: 'New studies confirm that crop rotation and organic fertilizers can significantly improve soil health and long-term productivity.',
         url: '#',
         image_url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1932&q=80',
         source: 'Farming Weekly',
         published_date: new Date(Date.now() - 86400000 * 2).toISOString()
-      },
-      {
-        title: 'Global demand for organic produce rises',
-        summary: 'Export markets are seeing a surge in demand for organically grown produce, presenting new opportunities for local farmers.',
-        url: '#',
-        image_url: 'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80',
-        source: 'Global Trade News',
-        published_date: new Date(Date.now() - 86400000 * 5).toISOString()
       }
     ]);
   } catch (error) {

@@ -273,7 +273,7 @@ const CropDetail = () => {
                   </div>
               </div>
 
-              <div className="w-full h-[500px]">
+              <div className="w-full h-[300px] md:h-[500px]">
                   {adjustedHistory.length > 0 ? (
                   <PriceChart data={adjustedHistory} prediction={adjustedPrediction} unit={displayUnit} onRefresh={loadCropData} />
                   ) : (

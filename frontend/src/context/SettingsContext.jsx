@@ -56,7 +56,7 @@ export const SettingsProvider = ({ children }) => {
   // Translation helper
   const t = (key) => {
     const langData = translations[language] || translations['en'];
-    return langData[key] || key;
+    return langData[key] || translations['en'][key] || key;
   };
 
   const value = {

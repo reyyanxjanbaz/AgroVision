@@ -15,8 +15,9 @@ router.get('/current', async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching current weather:', error);
+    const message = process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message;
     res.status(500).json({ 
-      error: error.message,
+      error: message,
       fallback: {
         temperature: null,
         condition: 'Unavailable',
@@ -38,8 +39,9 @@ router.get('/forecast', async (req, res) => {
     res.json(forecast);
   } catch (error) {
     console.error('Error fetching weather forecast:', error);
+    const message = process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message;
     res.status(500).json({ 
-      error: error.message,
+      error: message,
       forecasts: []
     });
   }
