@@ -17,39 +17,44 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-card rounded-xl transition-colors duration-300;
+    @apply bg-white/80 backdrop-blur-xl border border-white/20 shadow-soft rounded-3xl transition-all duration-500;
   }
   
   .glass-panel-hover {
-    @apply hover:border-primary/50 hover:shadow-glow-green dark:hover:border-primary/50 transition-all duration-300;
+    @apply hover:shadow-lift hover:-translate-y-1 hover:scale-[1.01] transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)];
   }
 
   .tech-border {
-    @apply border border-gray-200 dark:border-gray-700 relative;
+    @apply border border-gray-100 dark:border-gray-800 relative overflow-hidden;
   }
   
   .tech-border::before {
     content: '';
-    @apply absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-primary opacity-0 transition-opacity duration-300;
+    @apply absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full transition-transform duration-1000;
   }
   
   .tech-border:hover::before {
-    @apply opacity-100;
+    @apply translate-x-full;
   }
 
   .btn-primary {
-    @apply bg-primary hover:bg-primary/90 text-white font-medium px-6 py-3 rounded-lg 
-    shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-0.5 
-    transition-all duration-200 flex items-center justify-center gap-2;
+    @apply bg-primary text-white font-display font-medium tracking-wide px-8 py-4 rounded-2xl 
+    shadow-lg shadow-primary/20 hover:shadow-glow-green hover:-translate-y-1 hover:scale-105
+    transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] flex items-center justify-center gap-3;
   }
   
   .btn-ghost {
-    @apply bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-text-secondary dark:text-gray-400 hover:text-text-primary dark:hover:text-white
-    px-4 py-2 rounded-lg transition-colors duration-200;
+    @apply bg-transparent hover:bg-surfaceHighlight text-text-secondary hover:text-text-primary
+    px-6 py-3 rounded-xl transition-all duration-300 font-medium;
   }
 
   .data-value {
     font-family: 'JetBrains Mono', monospace;
+    @apply tracking-tight;
+  }
+  
+  .bento-grid {
+    @apply grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[minmax(180px,auto)];
   }
 }
 

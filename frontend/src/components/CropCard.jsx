@@ -12,7 +12,7 @@ const getCropImage = (name) => {
   return null;
 };
 
-const CropCard = ({ crop }) => {
+const CropCard = ({ crop, featured }) => {
   const { role } = useAuth();
   const { t } = useSettings();
   const change = crop.price_change_24h || 0;
@@ -52,9 +52,9 @@ const CropCard = ({ crop }) => {
 
   return (
     <Link to={`/crop/${crop.id}`} className="block h-full">
-      <div className="glass-panel glass-panel-hover p-5 rounded-xl h-full flex flex-col justify-between group relative overflow-hidden">
+      <div className={`glass-panel glass-panel-hover p-6 rounded-3xl h-full flex flex-col justify-between group relative overflow-hidden ${featured ? 'bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900' : ''}`}>
         {/* Tech decoration */}
-        <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-full" />
         
         {/* Header */}
         <div className="flex items-start justify-between mb-6 relative z-10">
@@ -63,22 +63,22 @@ const CropCard = ({ crop }) => {
               <img
                 src={crop.image_url || getCropImage(crop.name) || `https://loremflickr.com/200/200/${crop.name},agriculture/all`}
                 alt={crop.name}
-                className="w-12 h-12 rounded-lg object-cover border border-gray-200 group-hover:border-primary/50 transition-colors"
+                className={`${featured ? 'w-16 h-16' : 'w-12 h-12'} rounded-2xl object-cover shadow-sm group-hover:scale-105 transition-transform duration-500`}
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = `https://ui-avatars.com/api/?name=${crop.name}&background=random&size=200`;
                 }}
               />
-              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-secondary rounded-full border-2 border-white" />
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-secondary rounded-full border-2 border-white dark:border-gray-800" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-text-primary font-display tracking-tight group-hover:text-primary transition-colors">
+              <h3 className={`${featured ? 'text-2xl' : 'text-lg'} font-bold text-text-primary dark:text-white font-display tracking-tight group-hover:text-primary transition-colors`}>
                 {t(crop.name.toLowerCase()) || crop.name}
               </h3>
-              <p className="text-xs text-text-secondary font-mono uppercase tracking-wider">{crop.category}</p>
+              <p className="text-xs text-text-secondary dark:text-gray-400 font-mono uppercase tracking-wider">{crop.category}</p>
             </div>
           </div>
-          <div className={`flex items-center gap-1 px-2 py-1 rounded bg-gray-100 border border-gray-200 ${trendColor}`}>
+          <div className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-700 ${trendColor}`}>
             <TrendIcon size={14} />
             <span className="text-xs font-mono font-bold">{Math.abs(change).toFixed(2)}%</span>
           </div>
@@ -87,25 +87,25 @@ const CropCard = ({ crop }) => {
         {/* Price Section */}
         <div className="space-y-1 mb-6 relative z-10">
           <div className="flex items-baseline gap-1">
-            <span className="text-sm text-text-secondary font-mono">₹</span>
-            <span className="text-3xl font-bold text-text-primary font-mono tracking-tight">
+            <span className="text-sm text-text-secondary dark:text-gray-400 font-mono">₹</span>
+            <span className={`${featured ? 'text-5xl' : 'text-3xl'} font-bold text-text-primary dark:text-white font-mono tracking-tighter`}>
               {displayPrice}
             </span>
           </div>
-          <p className="text-xs text-text-muted font-mono">{displayLabel} PER {displayUnit}</p>
+          <p className="text-[10px] text-text-muted uppercase tracking-widest font-mono">{displayLabel} PER {displayUnit}</p>
         </div>
 
         {/* Footer / Action */}
-        <div className="pt-4 border-t border-gray-100 flex items-center justify-between relative z-10">
+        <div className="pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between relative z-10">
           <div className="flex flex-col">
-            <span className="text-[10px] text-text-muted uppercase tracking-wider">7D Trend</span>
-            <span className={`text-xs font-mono ${crop.price_change_7d >= 0 ? 'text-secondary' : 'text-danger'}`}>
+            <span className="text-[10px] text-text-muted uppercase tracking-wider mb-0.5">7D Trend</span>
+            <span className={`text-xs font-mono font-medium ${crop.price_change_7d >= 0 ? 'text-secondary' : 'text-danger'}`}>
               {crop.price_change_7d >= 0 ? '+' : ''}{crop.price_change_7d?.toFixed(2)}%
             </span>
           </div>
           
-          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-text-secondary group-hover:bg-primary group-hover:text-white transition-all duration-300 transform group-hover:translate-x-1">
-            <ArrowRight size={14} />
+          <div className={`rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center text-text-secondary dark:text-gray-400 group-hover:bg-primary group-hover:text-white transition-all duration-500 transform group-hover:translate-x-1 ${featured ? 'w-12 h-12' : 'w-10 h-10'}`}>
+            <ArrowRight size={featured ? 20 : 16} />
           </div>
         </div>
       </div>

@@ -110,11 +110,13 @@ const Chatbot = () => {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-glow-green hover:scale-110 transition-all duration-300 flex items-center justify-center z-50 group border border-white/20"
+            className="fixed bottom-24 right-6 md:bottom-8 md:right-8 w-16 h-16 bg-primary text-white rounded-full shadow-glow-green flex items-center justify-center z-50 group border border-white/20 backdrop-blur-sm"
           >
-            <Bot size={24} className="group-hover:rotate-12 transition-transform" />
-            <span className="absolute top-0 right-0 w-3 h-3 bg-secondary rounded-full border-2 border-white animate-pulse"></span>
+            <Bot size={28} className="group-hover:rotate-12 transition-transform duration-500" />
+            <span className="absolute top-0 right-0 w-4 h-4 bg-secondary rounded-full border-2 border-white animate-pulse"></span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -123,56 +125,59 @@ const Chatbot = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            initial={{ opacity: 0, y: 100, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed bottom-0 right-0 w-full h-[100dvh] md:bottom-6 md:right-6 md:w-96 md:h-[600px] md:max-h-[80vh] glass-panel flex flex-col shadow-2xl z-50 md:rounded-2xl overflow-hidden border-t md:border border-primary/30"
+            exit={{ opacity: 0, y: 100, scale: 0.9 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="fixed bottom-0 right-0 w-full h-[100dvh] md:bottom-8 md:right-8 md:w-[400px] md:h-[650px] md:max-h-[85vh] glass-panel flex flex-col shadow-2xl z-50 md:rounded-3xl overflow-hidden border border-white/40 dark:border-gray-700/50"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white/90 backdrop-blur-xl">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
-                  <Sparkles className="text-primary" size={16} />
+            <div className="flex items-center justify-between p-5 border-b border-gray-100/50 dark:border-gray-700/50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/20">
+                  <Sparkles className="text-white" size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm text-text-primary font-display tracking-wide">AI ASSISTANT</h3>
-                  <div className="flex items-center gap-1.5">
+                  <h3 className="font-bold text-base text-text-primary dark:text-white font-display tracking-wide">Agro AI</h3>
+                  <div className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
-                    <p className="text-[10px] text-text-secondary font-mono uppercase">Online • {role.toUpperCase()}</p>
+                    <p className="text-[10px] text-text-secondary dark:text-gray-400 font-mono uppercase tracking-wider">Online • {role}</p>
                   </div>
                 </div>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-text-secondary hover:text-primary"
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-text-secondary"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+            <div className="flex-1 overflow-y-auto p-5 space-y-6 bg-gray-50/50 dark:bg-gray-900/50">
               {messages.map((msg, idx) => (
-                <div 
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
                   key={idx} 
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className={`max-w-[85%] p-3 rounded-2xl text-sm ${
+                  <div className={`max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${
                     msg.role === 'user' 
-                      ? 'bg-primary text-white rounded-br-none shadow-lg shadow-primary/20' 
-                      : 'bg-white border border-gray-200 text-text-primary rounded-bl-none shadow-sm'
+                      ? 'bg-primary text-white rounded-br-none shadow-primary/20' 
+                      : 'bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-text-primary dark:text-gray-200 rounded-bl-none'
                   }`}> 
                     <MessageContent content={msg.content} />
                   </div>
-                </div>
+                </motion.div>
               ))}
               {loading && (
                 <div className="flex justify-start">
-                  <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-bl-none shadow-sm">
+                  <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-4 rounded-2xl rounded-bl-none shadow-sm">
                     <div className="flex gap-1.5">
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"></div>
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                     </div>
                   </div>
                 </div>
@@ -182,12 +187,12 @@ const Chatbot = () => {
 
             {/* Quick Actions */}
             {messages.length <= 1 && (
-              <div className="px-4 py-2 flex flex-wrap gap-2 bg-gray-50">
+              <div className="px-5 py-3 flex flex-wrap gap-2 bg-gray-50/50 dark:bg-gray-900/50 border-t border-gray-100/50 dark:border-gray-700/50">
                 {quickActions.map((action, idx) => (
                   <button
                     key={idx}
                     onClick={() => handleQuickAction(action)}
-                    className="text-[10px] px-3 py-1.5 bg-white border border-gray-200 text-text-secondary hover:text-primary hover:border-primary/30 rounded-full transition-all font-mono uppercase tracking-wide shadow-sm"
+                    className="text-[10px] px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-text-secondary dark:text-gray-400 hover:text-primary hover:border-primary/30 rounded-full transition-all font-mono uppercase tracking-wide shadow-sm hover:shadow-md"
                   >
                     {action}
                   </button>
@@ -196,23 +201,23 @@ const Chatbot = () => {
             )}
 
             {/* Input */}
-            <div className="p-4 border-t border-gray-200 bg-white/90 backdrop-blur-xl">
-              <div className="flex gap-2">
+            <div className="p-5 border-t border-gray-100 dark:border-gray-700 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl">
+              <div className="flex gap-3">
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="Enter command..."
+                  placeholder="Ask about crops, prices..."
                   disabled={loading}
-                  className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-text-primary placeholder-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all disabled:opacity-50 font-mono"
+                  className="flex-1 px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-text-primary dark:text-white placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all disabled:opacity-50 font-medium"
                 />
                 <button 
                   onClick={handleSend} 
                   disabled={!input.trim() || loading}
-                  className="bg-primary hover:bg-primary/90 text-white p-2.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg shadow-primary/20"
+                  className="bg-primary hover:bg-primary-dark text-white p-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0"
                 >
-                  <Send size={18} />
+                  <Send size={20} />
                 </button>
               </div>
             </div>

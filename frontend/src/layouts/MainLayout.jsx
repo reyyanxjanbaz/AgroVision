@@ -13,7 +13,7 @@ const MainLayout = ({ children }) => {
           <div className="fixed inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none z-0"></div>
           
           <Navbar />
-          <main className="container mx-auto px-4 py-4 md:py-8 max-w-7xl relative z-10">
+          <main className="container mx-auto px-4 pt-24 pb-8 md:pt-32 max-w-7xl relative z-10">
             {children}
           </main>
           <Chatbot />

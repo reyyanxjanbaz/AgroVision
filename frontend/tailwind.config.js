@@ -7,19 +7,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Light & Green "Eco-Vision" Palette
-        background: '#F9FAFB', // Gray 50 - Clean, high visibility
-        surface: '#FFFFFF',    // Pure White
-        surfaceHighlight: '#F3F4F6', // Gray 100
-        primary: '#16A34A',    // Green 600 - Vibrant Nature Green
-        primaryGlow: '#4ADE80', // Green 400
-        secondary: '#059669',  // Emerald 600 - Deep Green
-        accent: '#D97706',     // Amber 600 - Earthy Orange
-        danger: '#DC2626',     // Red 600
+        // "Agro-Diamond" Palette
+        background: '#FAFAFA', // Zinc 50
+        surface: '#FFFFFF',
+        surfaceHighlight: '#F4F4F5', // Zinc 100
+        primary: '#10B981',    // Emerald 500 - High Voltage
+        primaryGlow: '#34D399', // Emerald 400
+        secondary: '#059669',  // Emerald 600
+        accent: '#F59E0B',     // Amber 500
+        danger: '#EF4444',     // Red 500
         text: {
-          primary: '#111827',  // Gray 900 - High Contrast
-          secondary: '#4B5563', // Gray 600
-          muted: '#9CA3AF',    // Gray 400
+          primary: '#18181B',  // Zinc 900
+          secondary: '#71717A', // Zinc 500
+          muted: '#A1A1AA',    // Zinc 400
         }
       },
       fontFamily: {
@@ -27,16 +27,21 @@ module.exports = {
         display: ['Space Grotesk', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
+      borderRadius: {
+        '4xl': '2rem',
+        '5xl': '2.5rem',
+      },
       boxShadow: {
-        'glow-green': '0 0 20px -5px rgba(22, 163, 74, 0.3)',
-        'glow-emerald': '0 0 20px -5px rgba(5, 150, 105, 0.3)',
-        'glass': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
-        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        'soft': '0 8px 30px rgba(0,0,0,0.04)',
+        'lift': '0 20px 40px rgba(0,0,0,0.08)',
+        'glow-green': '0 0 40px -10px rgba(16, 185, 129, 0.4)',
+        'inner-light': 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.3)',
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-in-out',
-        'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fade-in': 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        'scale-in': 'scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+        'float': 'float 6s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -47,6 +52,14 @@ module.exports = {
           '0%': { transform: 'translateY(20px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
+        scaleIn: {
+          '0%': { transform: 'scale(0.9)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        }
       },
     },
   },
