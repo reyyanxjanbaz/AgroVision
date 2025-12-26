@@ -1,0 +1,403 @@
+\documentclass[12pt, a4paper]{report}
+
+% ==================== PACKAGES ====================
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}       % For handling images and logos
+\usepackage{geometry}       % For page margins
+\usepackage{setspace}       % For line spacing (1.5 spacing)
+\usepackage{times}          % Times New Roman font
+\usepackage{titlesec}       % To customize chapter titles
+\usepackage{tocloft}        % To customize Table of Contents
+\usepackage{array}          % For better table formatting
+\usepackage{hyperref}       % For clickable links in PDF
+\usepackage{fancyhdr}       % For headers and footers
+\usepackage{caption}        % For caption formatting
+\usepackage{indentfirst}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+
+% ==================== PAGE SETUP ====================
+% Standard thesis margins: Left 1.5in (for binding), others 1in
+\geometry{left=1.5in, right=1.0in, top=0.8in, bottom=0.8in}
+
+% 1.5 Line Spacing
+\onehalfspacing
+
+% Center Chapter Headings and reduce top margin for chapters
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\centering}
+  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-30pt}{20pt}
+
+% ==================== DOCUMENT DETAILS ====================
+% Replace these details with your actual project data
+\newcommand{\projectTitle}{[[ TITLE OF THE PROJECT ]]}
+\newcommand{\studentOne}{Vignesh (1BY22IS002)}
+\newcommand{\studentTwo}{Student Name 2 (USN)}
+\newcommand{\studentThree}{Student Name 3 (USN)}
+\newcommand{\studentFour}{Student Name 4 (USN)}
+\newcommand{\guideName}{[[GUIDE NAME]]}
+\newcommand{\guideDesignation}{[[GUIDE DESIGNATION]]}
+\newcommand{\clusterHeadName}{[[CLUSTER HEAD NAME]]}
+\newcommand{\clusterHeadDesignation}{[[CLUSTER HEAD DESIGNATION]]}
+\newcommand{\hodName}{Dr. Surekha K B}
+\newcommand{\principalName}{Dr. Sanjay H A}
+\newcommand{\deptName}{Department of Information Science and Engineering}
+\newcommand{\collegeName}{BMS INSTITUTE OF TECHNOLOGY AND MANAGEMENT}
+\newcommand{\collegeAddressA}{(Autonomous Institute under VTU, Belagavi, Karnataka - 590 018)}
+\newcommand{\collegeAddressB}{Yelahanka, Bengaluru, Karnataka - 560119}
+\newcommand{\academicYear}{2025-26}
+
+% ==================== BEGIN DOCUMENT ====================
+\begin{document}
+
+% --------------------------------------------------------
+% 1. COVER PAGE 
+% --------------------------------------------------------
+\begin{titlepage}
+
+% --- START OF BORDER CODE ---
+    \begin{tikzpicture}[remember picture, overlay]
+        \draw[line width=1.5pt] % Adjust thickness here (e.g., 2pt, 3pt)
+        ($(current page.north west) + (1.5cm,-1.5cm)$) % Top-left margin
+        rectangle
+        ($(current page.south east) + (-1.5cm,1.5cm)$); % Bottom-right margin
+    \end{tikzpicture}
+    % --- END OF BORDER CODE ---
+    
+    \begin{center}
+        \textbf{\large VISVESVARAYA TECHNOLOGICAL UNIVERSITY}\\[0.2cm]
+        \textbf{\small Jnana Sangama, Belagavi, Karnataka - 590018}\\[0.5cm]
+        
+        % VTU LOGO
+        \includegraphics[width=3.5cm]{vtu_logo.png} \\[0.5cm]
+        
+        \textbf{\large A Project Report on}\\[0.3cm]
+        \textbf{\Large \projectTitle}\\[0.5cm]
+        
+        \textit{Submitted in partial fulfilment of the requirements for the conferment of degree of}\\[0.3cm]
+        \textbf{\large BACHELOR OF ENGINEERING}\\[0.2cm]
+        \textit{in}\\[0.2cm]
+        \textbf{\large INFORMATION SCIENCE AND ENGINEERING}\\[0.5cm]
+        
+        \textit{by}\\[0.3cm]
+        \textbf{\studentOne}\\
+        \textbf{\studentTwo}\\
+        \textbf{\studentThree}\\
+        \textbf{\studentFour}\\[0.5cm]
+        
+        \textit{Under the Guidance of}\\[0.2cm]
+        \textbf{\guideName}\\
+        \textit{\guideDesignation}\\[0.5cm]
+        
+        \textbf{\deptName}\\[0.3cm]
+        
+        % COLLEGE LOGO
+        \includegraphics[width=3.5cm]{bmsit_logo.png} \\[0.3cm]
+        
+        \textbf{\large \collegeName}\\
+        \small \collegeAddressA\\
+        \small \collegeAddressB
+        
+    \end{center}
+\end{titlepage}
+
+% --------------------------------------------------------
+% 3. CERTIFICATE 
+% --------------------------------------------------------
+\newpage
+\thispagestyle{empty}
+\begin{center}
+    \textbf{\large \collegeName}\\
+    \small \collegeAddressA\\
+    \small \collegeAddressB \\[0.5cm]
+    \includegraphics[width=3cm]{bmsit_logo.png} \\[0.2cm]
+    \textbf{\Large CERTIFICATE}\\[0.5cm]
+\end{center}
+
+\noindent This is to certify that the project entitled \textbf{``\projectTitle''} is a Bonafide work carried out by \textbf{\studentOne, \studentTwo, \studentThree} and \textbf{\studentFour} in partial fulfilment for the award of ``BACHELOR OF ENGINEERING'' in ``Information Science and Engineering'' of the Visvesvaraya Technological University, Belagavi, during the year \academicYear. It is certified that all corrections /suggestions indicated for internal assessment have been incorporated in the report. The project report has been approved as it satisfies the academic requirements in respect to work for the BE degree.
+
+\vspace{1.0cm}
+
+% Signature Block
+
+\begin{table}[h!]
+    \centering
+    \setlength{\tabcolsep}{0pt} % Removes default column padding to use full width
+    \begin{tabular}{ p{0.45\textwidth} p{0.1\textwidth} p{0.45\textwidth} }
+        
+        % --- Row 1: Guide and Cluster Head ---
+        \centering
+        Signature of the Guide \\
+        \guideName \\
+        \guideDesignation \\
+        Department of ISE
+        & & % Middle empty column for spacing
+        \centering
+        Signature of the Cluster Head \\
+        \clusterHeadName \\
+        \clusterHeadDesignation \\
+        Department of ISE- Cluster
+        \tabularnewline[2.5cm] % Vertical space for signatures
+        
+        % --- Row 2: HoD and Principal ---
+        \centering
+        Signature of the HoD \\
+        Dr. Surekha K B \\
+        Professor and HoD \\
+        Department of ISE 
+        & & % Middle empty column for spacing
+        \centering
+        Signature of the Principal \\
+        Dr.SANJAY H A \\
+        Principal \\
+        BMSITM, Bengaluru
+        
+    \end{tabular}
+\end{table}
+
+\vspace{1.0cm}
+
+\textbf{Name of the Examiners} \hfill \textbf{Signature with Date} \\[0.5cm]
+1. .............................................................. \hfill .................................... \\[0.5cm]
+2. .............................................................. \hfill .................................... 
+
+% --------------------------------------------------------
+% 4. ACKNOWLEDGEMENT 
+% --------------------------------------------------------
+\newpage
+\chapter*{ACKNOWLEDGEMENT}
+\thispagestyle{empty}
+\addcontentsline{toc}{chapter}{Acknowledgement}
+
+\indent I would like to express my heartfelt gratitude to everyone who has contributed to make this project a memorable experience and has inspired this work in some way.
+
+Let me begin by expressing my gratitude to the Almighty God for the numerous blessings bestowed upon me. We are happy to present this project after completing it successfully.
+
+This project would not have been possible without the guidance, assistance, and suggestions of many individuals. We express our deep sense of gratitude and indebtedness to each and every one who has helped us make this project a success.
+
+We heartily thank \textbf{\principalName}, Principal, BMS Institute of Technology \& Management for constant encouragement and inspiration in taking up this project.
+
+We heartily thank \textbf{\hodName}, HoD, Department of Information Science and Engineering, BMS Institute of Technology \& Management for constant encouragement and inspiration in taking up this project.
+
+We heartily thank \textbf{\clusterHeadName}, Cluster Head, BMS Institute of Technology \& Management for constant encouragement and inspiration in taking up this project.
+
+We gratefully thank our project guide, \textbf{\guideName}, for guidance and support throughout the course of the project work.
+
+Special thanks to all the staff members of the Information Science Department for their help and kind co-operation. Lastly, we thank our parents and friends for their encouragement and support in helping us complete this work.
+
+\vspace{1cm}
+\begin{flushright}
+\textbf{\studentOne} \\
+\textbf{\studentTwo} \\
+\textbf{\studentThree} \\
+\textbf{\studentFour}
+\end{flushright}
+
+% --------------------------------------------------------
+% 5. DECLARATION 
+% --------------------------------------------------------
+\newpage
+\chapter*{DECLARATION}
+\addcontentsline{toc}{chapter}{Declaration}
+
+We, hereby declare that the project titled \textbf{``\projectTitle''} is a record of original project work under the guidance of \textbf{\guideName, \guideDesignation}, Department of Information Science and Engineering, BMS Institute of Technology \& Management, Autonomous Institute under Visvesvaraya Technological University, Belagavi during the Academic Year \academicYear.
+
+I also declare that this project report has not been submitted for the award of any degree, diploma, associateship, fellowship or other title anywhere else.
+
+\vspace{1cm}
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Name of the Student} & \textbf{USN} & \textbf{   Signature   } \\ \hline
+\rule{0pt}{3ex} Vignesh B & 1BY22IS002 &  \\ \hline
+\rule{0pt}{3ex} Name 2 & USN 2 &  \\ \hline
+\rule{0pt}{3ex} Name 3 & USN 3 &  \\ \hline
+\rule{0pt}{3ex} Name 4 & USN 4 &  \\ \hline
+\end{tabular}
+\end{table}
+
+% --------------------------------------------------------
+% 6. ABSTRACT 
+% --------------------------------------------------------
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Your abstract text goes here. It should summarize the problem, methodology, key results, and main conclusions in a single concise paragraph not exceeding 300 words.
+
+% --------------------------------------------------------
+% 7. TABLE OF CONTENTS 
+% --------------------------------------------------------
+\newpage
+\tableofcontents
+
+
+% --------------------------------------------------------
+% 8. LIST OF FIGURES & TABLES 
+% --------------------------------------------------------
+\newpage
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
+\newpage
+
+\listoftables
+\addcontentsline{toc}{chapter}{List of Tables}
+\newpage
+
+% Use Arabic numerals for chapter pages
+\pagenumbering{arabic}
+
+% --------------------------------------------------------
+% CHAPTER 1: INTRODUCTION 
+% --------------------------------------------------------
+\chapter{Introduction}
+
+\section{Background}
+Write the background of the project here.
+
+\section{Problem Statement}
+Write the problem statement here.
+
+\section{Objectives}
+List the objectives of the project here.
+
+\section{SDG Addressed}
+Mention the Sustainable Development Goals addressed by the project here.
+
+\vspace{1cm}
+\noindent \textbf{Note:} Attach the sheet solving complex engineering problems after this SDG addressed section. It should be signed by your guide.
+
+% --------------------------------------------------------
+% CHAPTER 2: LITERATURE REVIEW 
+% --------------------------------------------------------
+\chapter{Literature Review}
+
+\section{Analysis of the Literature}
+Present a critical analysis of relevant literature here.
+
+\section{Summary Table}
+Include a summary table of reviewed works here.
+% Example Table
+% \begin{table}[h]
+% \centering
+% \caption{Summary of Literature}
+% \begin{tabular}{|c|c|c|c|}
+% ...
+% \end{tabular}
+% \end{table}
+
+\section{Implication and Conclusion}
+Explain implications and conclude the literature review here.
+
+\section{Existing System}
+Describe the existing system here.
+
+% --------------------------------------------------------
+% CHAPTER 3: REQUIREMENTS ANALYSIS 
+% --------------------------------------------------------
+\chapter{Requirements Analysis}
+
+\section{Hardware Requirements}
+List and describe hardware requirements here.
+
+\section{Software Requirements}
+List and describe software requirements here.
+
+% --------------------------------------------------------
+% CHAPTER 4: DIAGRAMS AND ARCHITECTURE DESIGN 
+% --------------------------------------------------------
+\chapter{Diagrams and Architecture Design}
+
+\section{Architecture Diagram}
+Insert and describe the architecture diagram here.
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{arch_diagram.png}
+%     \caption{Architecture Diagram}
+% \end{figure}
+
+\section{Data Flow Diagram}
+Insert and describe data flow diagrams here.
+
+\section{Algorithm Diagram}
+Insert and describe algorithm diagrams or flowcharts here.
+
+% --------------------------------------------------------
+% CHAPTER 5: IMPLEMENTATION 
+% --------------------------------------------------------
+\chapter{Implementation}
+
+\section{Software Tools Used}
+Detail software tools used here.
+
+\section{Programming Languages Used}
+Mention programming languages and rationale here.
+
+\section{Technologies Used}
+Discuss technologies, frameworks, and platforms used here.
+
+\section{Algorithms Used}
+Detail algorithms with explanations and pseudo-code as needed.
+
+% --------------------------------------------------------
+% CHAPTER 6: TESTING AND RESULTS 
+% --------------------------------------------------------
+\chapter{Testing and Results}
+
+\section{Testing Metrics with Results}
+Present testing metrics and corresponding results here.
+
+\section{Example Table: Input/Output Validation}
+\begin{table}[]
+    \centering
+    \begin{tabular}{c|c}
+         abc & def \\
+         ghi & jkl
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:placeholder}
+\end{table}
+
+% --------------------------------------------------------
+% CHAPTER 7: RESULTS 
+% --------------------------------------------------------
+\chapter{Results}
+
+Present and interpret the main project results here.
+
+% --------------------------------------------------------
+% CHAPTER 8: CONCLUSION AND FUTURE WORK 
+% --------------------------------------------------------
+\chapter{Conclusion and Future Work}
+
+\section{Summary}
+Summarize the entire project work here.
+
+\section{Limitations}
+State limitations of the current work here.
+
+\section{Improvements}
+Suggest possible improvements and future enhancements here.
+
+% --------------------------------------------------------
+% REFERENCES 
+% --------------------------------------------------------
+\renewcommand{\bibname}{References}
+% You can use a .bib file or manual bibitem
+\begin{thebibliography}{99}
+    \bibitem{ref1}
+    Author, A. A., \& Author, B. B. (Year). Title of the article. \textit{Title of the Journal}, volume number(issue number), page range. https://doi.org/xx.xxx/yyyy
+\end{thebibliography}
+
+% --------------------------------------------------------
+% PLAGIARISM REPORT 
+% --------------------------------------------------------
+\chapter*{Plagiarism Report}
+\addcontentsline{toc}{chapter}{Plagiarism Report}
+
+Attach the scanned copy of the plagiarism report generated using Turnitin (or equivalent tool) with a similarity index less than 15\%.
+% \includegraphics[width=\textwidth]{turnitin_report.pdf}
+
+\end{document}

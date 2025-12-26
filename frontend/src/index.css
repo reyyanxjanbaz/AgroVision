@@ -17,7 +17,7 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-white/80 backdrop-blur-xl border border-white/20 shadow-soft rounded-3xl transition-all duration-500;
+    @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-soft rounded-3xl transition-all duration-500;
   }
   
   .glass-panel-hover {
@@ -44,7 +44,7 @@
   }
   
   .btn-ghost {
-    @apply bg-transparent hover:bg-surfaceHighlight text-text-secondary hover:text-text-primary
+    @apply bg-transparent hover:bg-surfaceHighlight dark:hover:bg-white/10 text-text-secondary hover:text-text-primary dark:text-gray-400 dark:hover:text-white
     px-6 py-3 rounded-xl transition-all duration-300 font-medium;
   }
 
