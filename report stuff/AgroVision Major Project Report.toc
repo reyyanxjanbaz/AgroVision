@@ -1,0 +1,178 @@
+\contentsline {chapter}{Acknowledgement}{2}{chapter*.2}%
+\contentsline {chapter}{Declaration}{3}{chapter*.3}%
+\contentsline {chapter}{Abstract}{4}{chapter*.5}%
+\contentsline {chapter}{List of Figures}{12}{chapter*.5}%
+\contentsline {chapter}{List of Tables}{13}{chapter*.5}%
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Background}{1}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}The Indian Agricultural Context}{1}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Information Asymmetry in Agricultural Markets}{2}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}The Role of Technology in Agricultural Transformation}{2}{subsection.1.1.3}%
+\contentsline {section}{\numberline {1.2}Literature Survey}{3}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Government and Institutional Platforms}{3}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Academic Research on Price Prediction}{3}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Gaps in Existing Solutions}{4}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}Comparative Analysis}{4}{subsection.1.2.4}%
+\contentsline {section}{\numberline {1.3}Motivation}{5}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}For Farmers}{5}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}For Merchants}{5}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}For Consumers}{5}{subsection.1.3.3}%
+\contentsline {section}{\numberline {1.4}Problem Statement}{5}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Aim and Objectives}{6}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}Aim}{6}{subsection.1.5.1}%
+\contentsline {subsection}{\numberline {1.5.2}Objectives}{6}{subsection.1.5.2}%
+\contentsline {section}{\numberline {1.6}Scope}{6}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Challenges}{7}{section.1.7}%
+\contentsline {chapter}{\numberline {2}Overview}{9}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Core System Components}{9}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Price Dashboard Module}{9}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Detailed Analytics Module}{10}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Prediction Engine Module}{10}{subsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.1.4}Factor Analysis Module}{10}{subsection.2.1.4}%
+\contentsline {section}{\numberline {2.2}Multi-Role Architecture}{10}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Farmer-Centric View}{11}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Merchant-Centric View}{11}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Consumer-Centric View}{11}{subsection.2.2.3}%
+\contentsline {section}{\numberline {2.3}Technical Architecture}{11}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Intelligent Chatbot Integration}{12}{section.2.4}%
+\contentsline {chapter}{\numberline {3}Requirement Specification}{13}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Functional Requirements}{13}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Role Selection}{13}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Dashboard Display}{13}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Crop Details Page}{14}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.4}Historical Data Visualization}{14}{subsection.3.1.4}%
+\contentsline {subsection}{\numberline {3.1.5}AI-Based Price Prediction}{14}{subsection.3.1.5}%
+\contentsline {subsection}{\numberline {3.1.6}Influencing Factors Display}{14}{subsection.3.1.6}%
+\contentsline {subsection}{\numberline {3.1.7}News Integration}{14}{subsection.3.1.7}%
+\contentsline {subsection}{\numberline {3.1.8}AI Chatbot Assistance}{15}{subsection.3.1.8}%
+\contentsline {subsection}{\numberline {3.1.9}Search and Filtering}{15}{subsection.3.1.9}%
+\contentsline {section}{\numberline {3.2}Non-Functional Requirements}{15}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Performance}{15}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Usability}{15}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Reliability}{15}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Security}{16}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Scalability}{16}{subsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.2.6}Compatibility}{16}{subsection.3.2.6}%
+\contentsline {subsection}{\numberline {3.2.7}Maintainability}{16}{subsection.3.2.7}%
+\contentsline {section}{\numberline {3.3}Software Requirements}{16}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Development Tools}{16}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Libraries and Technologies}{17}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Hardware Requirements}{17}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Development Machine}{17}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Deployment}{17}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}System Requirements}{17}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Constraints}{18}{section.3.6}%
+\contentsline {chapter}{\numberline {4}Detailed Design}{19}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Introduction to System Design}{19}{section.4.1}%
+\contentsline {section}{\numberline {4.2}System Architecture}{19}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Architectural Layers}{20}{subsection.4.2.1}%
+\contentsline {subsubsection}{Presentation Layer (Frontend UI)}{20}{subsubsection*.8}%
+\contentsline {subsubsection}{Application Layer (Backend / API Layer)}{20}{subsubsection*.9}%
+\contentsline {subsubsection}{Data Layer (Database + External Integrations)}{21}{subsubsection*.10}%
+\contentsline {section}{\numberline {4.3}Use Case Design}{21}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Actors}{22}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Major Use Cases}{22}{subsection.4.3.2}%
+\contentsline {subsubsection}{Use Case 1: View Dashboard}{22}{subsubsection*.13}%
+\contentsline {subsubsection}{Use Case 2: View Crop Details}{22}{subsubsection*.14}%
+\contentsline {subsubsection}{Use Case 3: Change Region}{22}{subsubsection*.15}%
+\contentsline {subsubsection}{Use Case 4: AI Chatbot Interaction}{22}{subsubsection*.16}%
+\contentsline {subsubsection}{Use Case 5: Fetch Predicted Price}{22}{subsubsection*.17}%
+\contentsline {section}{\numberline {4.4}Data Flow Diagrams (DFD)}{24}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Level-0 DFD (Context Diagram)}{24}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Level-1 DFD}{25}{subsection.4.4.2}%
+\contentsline {section}{\numberline {4.5}Flowcharts}{26}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Flowchart for Viewing Crop Details}{27}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Flowchart for AI Chatbot}{27}{subsection.4.5.2}%
+\contentsline {section}{\numberline {4.6}Database Design}{27}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Crops Table}{28}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Price History Table}{28}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Factors Table}{28}{subsection.4.6.3}%
+\contentsline {subsection}{\numberline {4.6.4}News Table}{29}{subsection.4.6.4}%
+\contentsline {section}{\numberline {4.7}Component and Module Design}{29}{section.4.7}%
+\contentsline {subsection}{\numberline {4.7.1}Dashboard Module}{29}{subsection.4.7.1}%
+\contentsline {subsection}{\numberline {4.7.2}Crop Detail Module}{29}{subsection.4.7.2}%
+\contentsline {subsection}{\numberline {4.7.3}AI Prediction Module}{30}{subsection.4.7.3}%
+\contentsline {subsection}{\numberline {4.7.4}Chatbot Module}{30}{subsection.4.7.4}%
+\contentsline {section}{\numberline {4.8}User Interface Design (UI/UX)}{30}{section.4.8}%
+\contentsline {subsection}{\numberline {4.8.1}Dashboard UI}{30}{subsection.4.8.1}%
+\contentsline {subsection}{\numberline {4.8.2}Crop Detail UI}{31}{subsection.4.8.2}%
+\contentsline {subsection}{\numberline {4.8.3}Chatbot UI}{31}{subsection.4.8.3}%
+\contentsline {section}{\numberline {4.9}Summary}{31}{section.4.9}%
+\contentsline {chapter}{\numberline {5}Implementation}{32}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Implementation Overview}{32}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Frontend}{32}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Backend}{33}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Database}{33}{subsection.5.1.3}%
+\contentsline {subsection}{\numberline {5.1.4}AI/ML}{33}{subsection.5.1.4}%
+\contentsline {subsection}{\numberline {5.1.5}Deployment}{33}{subsection.5.1.5}%
+\contentsline {section}{\numberline {5.2}Frontend Implementation}{33}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Folder Structure}{33}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Dashboard Module Implementation}{35}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Crop Details Page}{36}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Prediction Panel Implementation}{37}{subsection.5.2.4}%
+\contentsline {subsection}{\numberline {5.2.5}Chatbot Implementation}{38}{subsection.5.2.5}%
+\contentsline {section}{\numberline {5.3}Backend Implementation}{41}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Backend Folder Structure}{41}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Core API Endpoints}{41}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}AI Price Prediction Implementation}{42}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Theoretical Foundation}{42}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}Prediction Algorithm (Simplified)}{42}{subsection.5.4.2}%
+\contentsline {subsection}{\numberline {5.4.3}Linear Regression Component}{43}{subsection.5.4.3}%
+\contentsline {subsection}{\numberline {5.4.4}Seasonal Adjustment Component}{43}{subsection.5.4.4}%
+\contentsline {subsection}{\numberline {5.4.5}External Factor Integration}{43}{subsection.5.4.5}%
+\contentsline {subsection}{\numberline {5.4.6}Confidence Scoring}{44}{subsection.5.4.6}%
+\contentsline {section}{\numberline {5.5}Database Implementation}{44}{section.5.5}%
+\contentsline {section}{\numberline {5.6}External API Integration}{46}{section.5.6}%
+\contentsline {subsection}{\numberline {5.6.1}Weather API Integration}{46}{subsection.5.6.1}%
+\contentsline {subsection}{\numberline {5.6.2}News API Integration}{46}{subsection.5.6.2}%
+\contentsline {subsection}{\numberline {5.6.3}Chatbot API Integration}{46}{subsection.5.6.3}%
+\contentsline {section}{\numberline {5.7}Deployment}{46}{section.5.7}%
+\contentsline {subsection}{\numberline {5.7.1}Frontend Deployment}{46}{subsection.5.7.1}%
+\contentsline {subsection}{\numberline {5.7.2}Backend Deployment}{46}{subsection.5.7.2}%
+\contentsline {subsection}{\numberline {5.7.3}Database Deployment}{46}{subsection.5.7.3}%
+\contentsline {section}{\numberline {5.8}Testing During Implementation}{47}{section.5.8}%
+\contentsline {chapter}{\numberline {6}Testing}{48}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Types of Testing Performed}{48}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Unit Testing}{48}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Integration Testing}{49}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}System Testing}{49}{subsection.6.1.3}%
+\contentsline {subsection}{\numberline {6.1.4}Performance Testing}{49}{subsection.6.1.4}%
+\contentsline {subsection}{\numberline {6.1.5}Usability Testing}{50}{subsection.6.1.5}%
+\contentsline {subsection}{\numberline {6.1.6}API Testing}{50}{subsection.6.1.6}%
+\contentsline {subsection}{\numberline {6.1.7}Compatibility Testing}{50}{subsection.6.1.7}%
+\contentsline {section}{\numberline {6.2}Test Cases}{51}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Detailed Test Scenarios}{51}{subsection.6.2.1}%
+\contentsline {subsubsection}{Scenario 1: First-Time User Experience}{51}{subsubsection*.35}%
+\contentsline {subsubsection}{Scenario 2: Regional Price Comparison}{52}{subsubsection*.36}%
+\contentsline {subsubsection}{Scenario 3: Prediction Under Volatile Conditions}{52}{subsubsection*.37}%
+\contentsline {subsubsection}{Scenario 4: Chatbot Context Awareness}{53}{subsubsection*.38}%
+\contentsline {subsubsection}{Scenario 5: Mobile Responsiveness Under Poor Connectivity}{53}{subsubsection*.39}%
+\contentsline {section}{\numberline {6.3}Bug Fixes}{53}{section.6.3}%
+\contentsline {chapter}{\numberline {7}Experimental Results}{55}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Dashboard Performance}{55}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Historical Chart Visualization}{57}{section.7.2}%
+\contentsline {section}{\numberline {7.3}AI Prediction Results}{58}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Influencing Factors Display}{59}{section.7.4}%
+\contentsline {section}{\numberline {7.5}News Integration Results}{60}{section.7.5}%
+\contentsline {section}{\numberline {7.6}Chatbot Performance}{61}{section.7.6}%
+\contentsline {section}{\numberline {7.7}Cross-Device and Browser Testing}{62}{section.7.7}%
+\contentsline {chapter}{\numberline {8}Conclusion}{63}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Achievement of Objectives}{63}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Technical Accomplishments}{63}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Impact and Significance}{64}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Lessons Learned}{64}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Future Directions}{65}{section.8.5}%
+\contentsline {section}{\numberline {8.6}Closing Remarks}{65}{section.8.6}%
+\contentsline {chapter}{\numberline {9}Summary and Future Scope}{66}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Summary of Work}{66}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Scope for Future Work}{67}{section.9.2}%
+\contentsline {subsection}{\numberline {9.2.1}Real-Time Data Integration}{67}{subsection.9.2.1}%
+\contentsline {subsection}{\numberline {9.2.2}Advanced ML Models}{67}{subsection.9.2.2}%
+\contentsline {subsection}{\numberline {9.2.3}Multi-Language Support}{67}{subsection.9.2.3}%
+\contentsline {subsection}{\numberline {9.2.4}Mobile Application}{67}{subsection.9.2.4}%
+\contentsline {subsection}{\numberline {9.2.5}Marketplace Features}{67}{subsection.9.2.5}%
+\contentsline {subsection}{\numberline {9.2.6}IoT Integration}{67}{subsection.9.2.6}%
+\contentsline {subsection}{\numberline {9.2.7}Government Portal Integration}{67}{subsection.9.2.7}%
+\contentsline {subsection}{\numberline {9.2.8}Offline Mode}{67}{subsection.9.2.8}%
+\contentsline {subsection}{\numberline {9.2.9}Analytics Dashboard}{68}{subsection.9.2.9}%
+\contentsline {subsection}{\numberline {9.2.10}Community Features}{68}{subsection.9.2.10}%
