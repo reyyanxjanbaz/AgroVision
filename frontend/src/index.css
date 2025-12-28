@@ -17,11 +17,11 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-soft rounded-3xl transition-all duration-500;
+    @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-soft rounded-3xl transition-all duration-200;
   }
   
   .glass-panel-hover {
-    @apply hover:shadow-lift hover:-translate-y-1 hover:scale-[1.01] transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)];
+    @apply hover:shadow-lift hover:-translate-y-1 transition-all duration-200;
   }
 
   .tech-border {
@@ -30,7 +30,7 @@
   
   .tech-border::before {
     content: '';
-    @apply absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full transition-transform duration-1000;
+    @apply absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full transition-transform duration-500;
   }
   
   .tech-border:hover::before {
@@ -39,13 +39,13 @@
 
   .btn-primary {
     @apply bg-primary text-white font-display font-medium tracking-wide px-8 py-4 rounded-2xl 
-    shadow-lg shadow-primary/20 hover:shadow-glow-green hover:-translate-y-1 hover:scale-105
-    transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] flex items-center justify-center gap-3;
+    shadow-lg shadow-primary/20 hover:shadow-glow-green hover:-translate-y-1
+    transition-all duration-200 flex items-center justify-center gap-3;
   }
   
   .btn-ghost {
     @apply bg-transparent hover:bg-surfaceHighlight dark:hover:bg-white/10 text-text-secondary hover:text-text-primary dark:text-gray-400 dark:hover:text-white
-    px-6 py-3 rounded-xl transition-all duration-300 font-medium;
+    px-6 py-3 rounded-xl transition-all duration-200 font-medium;
   }
 
   .data-value {
@@ -70,4 +70,28 @@
 
 ::-webkit-scrollbar-thumb {
   @apply bg-gray-300 dark:bg-gray-700 rounded-full hover:bg-primary/50 transition-colors;
+}
+
+/* Simple fade-in animation for chatbot */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeInUp 0.2s ease-out forwards;
+}
+
+.fade-in {
+  opacity: 0;
+}
+
+.slide-in-from-bottom-4 {
+  transform: translateY(16px);
 }

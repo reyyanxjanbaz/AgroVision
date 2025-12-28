@@ -40,8 +40,15 @@ export const fetchCropDetails = async (cropId) => {
   return response.data;
 };
 
-export const fetchPriceHistory = async (cropId, params) => {
+export const fetchPriceHistory = async (cropId, params = {}) => {
   const response = await api.get(`/crops/${cropId}/prices`, { params });
+  return response.data;
+};
+
+export const refreshPriceHistory = async (cropId, region = 'all') => {
+  const response = await api.get(`/crops/${cropId}/prices`, { 
+    params: { region, refresh: 'true' } 
+  });
   return response.data;
 };
 

@@ -1,0 +1,1108 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage[a4paper, top=0.75in, bottom=0.75in, left=1.25in, right=1in, headheight=15pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+% Define Rupee symbol
+\newcommand{\rupee}{Rs.}
+
+% Disable automatic hyphenation
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{xtab,booktabs}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amssymb}  % For checkmark symbol
+\usepackage{times}    % Times New Roman font
+\usepackage{indentfirst}
+\usepackage{tikz}
+\usepackage{enumitem} % For compact lists in tables
+\usetikzlibrary{calc}
+
+% Graphics path for images
+\graphicspath{{Media/}}
+
+
+% Define bold checkmark for better visibility in print
+\newcommand{\bcheckmark}{\textbf{\large$\checkmark$}}
+
+% Handle missing images gracefully
+\usepackage{ifthen}
+\newcommand{\includelogo}[2]{%
+  \IfFileExists{#1}{\includegraphics[width=#2]{#1}}{\fbox{\parbox{#2}{\centering\vspace{0.5cm}\textit{Logo Placeholder}\vspace{0.5cm}}}}%
+}
+
+% Line spacing - 1.5 as per guidelines
+\setstretch{1.5}
+
+% Allow small overfull boxes without warnings (up to 25pt)
+\hfuzz=25pt
+
+% Chapter and section formatting as per guidelines
+% Chapter title: 16pt, Chapter name: 18pt centered
+\titleformat{\chapter}[display]
+{\normalfont\fontsize{18}{22}\bfseries\centering}
+{\chaptertitlename\ \thechapter}{18pt}{\fontsize{18}{22}\bfseries}
+\titlespacing*{\chapter}{0pt}{-20pt}{30pt}
+
+% Reduce space after TOC/LOF/LOT titles
+\renewcommand{\cfttoctitlefont}{\hfill\huge\bfseries}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cftloftitlefont}{\hfill\huge\bfseries}
+\renewcommand{\cftafterloftitle}{\hfill}
+\renewcommand{\cftlottitlefont}{\hfill\huge\bfseries}
+\renewcommand{\cftafterlottitle}{\hfill}
+\setlength{\cftaftertoctitleskip}{20pt}
+\setlength{\cftafterloftitleskip}{20pt}
+\setlength{\cftafterlottitleskip}{20pt}
+
+% Section: 16pt, Subsection: 14pt
+\titleformat{\section}{\normalfont\fontsize{16}{20}\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\fontsize{14}{18}\bfseries}{\thesubsection}{1em}{}
+
+% Header/Footer setup
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Hyperlink setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,
+    urlcolor=black,
+    citecolor=black
+}
+
+% ==================== DOCUMENT DETAILS ====================
+% Replace these details with your actual project data
+\newcommand{\projectTitle}{AGRO VISION: Agricultural Intelligence System for Predictive Price Analytics}
+\newcommand{\studentOne}{Rakshitha L N (1BY22CS142)}
+\newcommand{\studentTwo}{Reyyan Aleem Janbaz (1BY22CS146)}
+\newcommand{\studentThree}{Sarika S Sura (1BY22CS162)}
+\newcommand{\studentFour}{Swithin Fernandes (1BY22CS184)}
+\newcommand{\guideName}{Prof. Tanishq Nanda}
+\newcommand{\guideDesignation}{Assistant Professor}
+\newcommand{\clusterHeadName}{Dr. Radhika K R}
+\newcommand{\clusterHeadDesignation}{Associate Professor \& Associate Head}
+\newcommand{\hodName}{Dr. Satish Kumar T}
+\newcommand{\principalName}{Dr. Sanjay H A}
+\newcommand{\deptName}{Department of Computer Science and Engineering}
+\newcommand{\collegeName}{BMS INSTITUTE OF TECHNOLOGY AND MANAGEMENT}
+\newcommand{\collegeAddressA}{(Autonomous Institute under VTU, Belagavi, Karnataka - 590 018)}
+\newcommand{\collegeAddressB}{Yelahanka, Bengaluru, Karnataka - 560119}
+\newcommand{\academicYear}{2025-26}
+
+% ==================== BEGIN DOCUMENT ====================
+\begin{document}
+
+% --------------------------------------------------------
+% 1. COVER PAGE 
+% --------------------------------------------------------
+\begin{titlepage}
+
+% Border around title page
+\begin{tikzpicture}[remember picture, overlay]
+    \draw[line width=1.5pt]
+    ($(current page.north west) + (1.5cm,-1.5cm)$)
+    rectangle
+    ($(current page.south east) + (-1.5cm,1.5cm)$);
+\end{tikzpicture}
+
+\begin{center}
+\textbf{\large VISVESVARAYA TECHNOLOGICAL UNIVERSITY}\\
+\textbf{\small Jnana Sangama, Belagavi, Karnataka - 590018}\\[0.3cm]
+
+\includelogo{Media/vtu_logo.jpg}{2.2cm}\\[0.3cm]
+
+\textbf{\large A Project Report on}\\[0.2cm]
+\textbf{\Large ``\projectTitle''}\\[0.3cm]
+
+\textit{Submitted in partial fulfilment of the requirements for the conferment of degree of}\\[0.2cm]
+\textbf{\large BACHELOR OF ENGINEERING}\\
+\textit{in}\\
+\textbf{\large COMPUTER SCIENCE AND ENGINEERING}\\[0.3cm]
+
+\textit{by}\\[0.2cm]
+\textbf{\studentOne}\\
+\textbf{\studentTwo}\\
+\textbf{\studentThree}\\
+\textbf{\studentFour}\\[0.3cm]
+
+\textit{Under the Guidance of}\\[0.15cm]
+\textbf{\guideName}\\
+\textit{\guideDesignation}\\[0.3cm]
+
+\textbf{\deptName}\\[0.15cm]
+
+\includelogo{Media/bmsit_logo.png}{2.2cm}\\[0.15cm]
+
+\textbf{\large \collegeName}\\
+\small \collegeAddressA\\
+\small \collegeAddressB\\[0.3cm]
+
+\textbf{\academicYear}
+
+\end{center}
+\end{titlepage}
+
+% Start Roman numeral page numbering for front matter
+\pagenumbering{roman}
+
+% ============================================
+% CERTIFICATE PAGE
+% ============================================
+\newpage
+\thispagestyle{empty}
+\begin{center}
+\textbf{\large \collegeName}\\
+\small \collegeAddressA\\
+\small \collegeAddressB\\[0.5cm]
+
+\includelogo{Media/bmsit_logo.png}{2.5cm}\\[0.3cm]
+
+\textbf{\Large CERTIFICATE}\\[0.5cm]
+\end{center}
+
+\noindent This is to certify that the project entitled \textbf{``\projectTitle''} is a bona fide work carried out by \textbf{\studentOne}, \textbf{\studentTwo}, \textbf{\studentThree}, and \textbf{\studentFour} in partial fulfilment for the award of ``BACHELOR OF ENGINEERING'' in ``Computer Science and Engineering'' of the Visvesvaraya Technological University, Belagavi, during the year \academicYear. It is certified that all corrections and suggestions indicated for internal assessment have been incorporated in the report. The project report has been approved as it satisfies the academic requirements in respect to work for the BE degree.
+
+\vspace{0.8cm}
+
+% Row 1: Guide and Cluster Head
+\noindent
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\textbf{\guideName}\\
+\guideDesignation\\
+Department of CSE
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\textbf{\clusterHeadName}\\
+\clusterHeadDesignation\\
+Department of CSE-3
+\end{minipage}
+
+\vspace{1.2cm}
+
+% Row 2: HOD and Principal
+\noindent
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\textbf{\hodName}\\
+Professor and HoD\\
+Department of CSE
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\textbf{\principalName}\\
+Principal\\
+BMSIT\&M
+\end{minipage}
+
+\vspace{0.8cm}
+
+\noindent\textbf{Name of the Examiners} \hfill \textbf{Signature with Date}\\[0.5cm]
+1. .............................................................. \hfill ....................................\\[0.5cm]
+2. .............................................................. \hfill .................................... 
+
+% ============================================
+% ACKNOWLEDGEMENT
+% ============================================
+\newpage
+\pagenumbering{roman}
+\setcounter{page}{1}
+\chapter*{ACKNOWLEDGEMENT}
+\thispagestyle{empty}
+\addcontentsline{toc}{chapter}{Acknowledgement}
+
+\indent We would like to express our heartfelt gratitude to everyone who has contributed to make this project a memorable experience and has inspired this work in some way.
+
+Let us begin by expressing our gratitude to the Almighty God for the numerous blessings bestowed upon us. We are happy to present this project after completing it successfully.
+
+This project would not have been possible without the guidance, assistance, and suggestions of many individuals. We express our deep sense of gratitude and indebtedness to each and every one who has helped us make this project a success.
+
+We heartily thank \textbf{\principalName}, Principal, BMS Institute of Technology \& Management for constant encouragement and inspiration in taking up this project.
+
+We heartily thank \textbf{\hodName}, Head of Department, Department of Computer Science and Engineering, BMS Institute of Technology \& Management for constant encouragement and inspiration in taking up this project.
+
+We heartily thank \textbf{\clusterHeadName}, Associate Head, Cluster 3, BMS Institute of Technology \& Management for constant encouragement and inspiration in taking up this project.
+
+We gratefully thank our project guide, \textbf{\guideName}, for guidance and support throughout the course of the project work.
+
+Special thanks to all the staff members of the Computer Science and Engineering Department for their help and kind co-operation. Lastly, we thank our parents and friends for their encouragement and support in helping us complete this work.
+
+\vspace{1cm}
+
+\begin{flushright}
+\textbf{\studentOne}\\
+\textbf{\studentTwo}\\
+\textbf{\studentThree}\\
+\textbf{\studentFour}
+\end{flushright}
+
+% ============================================
+% DECLARATION
+% ============================================
+\newpage
+\setcounter{page}{3}
+\addcontentsline{toc}{chapter}{Declaration}
+\begin{center}
+\textbf{\Large DECLARATION}\\[1cm]
+\end{center}
+
+\noindent We hereby declare that the project titled \textbf{``\projectTitle''} is a record of original project work under the guidance of \textbf{\guideName} (\guideDesignation), BMS Institute of Technology \& Management, Autonomous Institute under Visvesvaraya Technological University, Belagavi, during the Academic Year \academicYear.
+
+We also declare that this project report has not been submitted for the award of any degree, diploma, associateship, fellowship or other title anywhere else.
+
+\vspace{1cm}
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Name of the Student} & \textbf{USN} & \textbf{Signature} \\ \hline
+\rule{0pt}{3ex} Rakshitha L N & 1BY22CS142 &  \\ \hline
+\rule{0pt}{3ex} Reyyan Aleem Janbaz & 1BY22CS146 &  \\ \hline
+\rule{0pt}{3ex} Sarika S Sura & 1BY22CS162 &  \\ \hline
+\rule{0pt}{3ex} Swithin Fernandes & 1BY22CS184 &  \\ \hline
+\end{tabular}
+\end{table}
+
+% ============================================
+% ABSTRACT
+% ============================================
+\newpage
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Agro Vision is an agricultural intelligence platform designed to provide real-time crop price insights, historical trend analysis, and AI-driven price predictions for farmers, merchants, and consumers. The agricultural sector in India faces challenges related to information asymmetry and market unpredictability, with farmers lacking access to timely price information and merchants struggling to identify regional opportunities.
+
+This project addresses these challenges through a comprehensive web-based platform that transforms agricultural market data into actionable insights. The system features interactive dashboards with region-based filtering, historical price charts, and a lightweight prediction model for informed decision-making. An AI-powered chatbot provides contextual guidance, while role-based views tailor information presentation to farmers, merchants, and consumers.
+
+The platform is built using React JS, Node.js, PostgreSQL, and integrates external APIs for weather data and news. The prediction engine combines trend analysis with seasonal adjustment factors to generate forecasts with confidence scoring. Testing confirmed reliable performance across all modules, with the system successfully bridging the information gap in agricultural pricing.
+
+% --------------------------------------------------------
+% 7. TABLE OF CONTENTS 
+% --------------------------------------------------------
+\newpage
+\tableofcontents
+
+
+% --------------------------------------------------------
+% 8. LIST OF FIGURES & TABLES 
+% --------------------------------------------------------
+\newpage
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
+\newpage
+
+\listoftables
+\addcontentsline{toc}{chapter}{List of Tables}
+\newpage
+
+% Use Arabic numerals for chapter pages
+\pagenumbering{arabic}
+
+% --------------------------------------------------------
+% CHAPTER 1: INTRODUCTION 
+% --------------------------------------------------------
+\chapter{Introduction}
+\label{chap:introduction}
+
+\section{Background}
+\label{sec:background}
+
+Agricultural markets are influenced by multiple interdependent factors, including seasonal variations, weather patterns, pest outbreaks, transportation costs, government policies, import-export regulations, and global commodity prices. This complexity makes it difficult for stakeholders to accurately estimate the value of a crop at any given time. Traditionally, farmers access market price information through local traders, informal networks, or outdated reports. This lack of reliable, real-time data often leads to poor pricing decisions, forcing farmers to sell below the fair market rate. Merchants face a different challenge---they need to understand price variations across regions to optimize procurement and distribution strategies. Consumers, meanwhile, experience fluctuating retail prices and have limited knowledge of the reasons behind these changes.
+
+With the evolution of cloud computing platforms, mobile applications, and AI-based forecasting models, it has now become possible to centralize large amounts of agricultural data and present them in user-friendly formats. Modern technologies make it feasible to show market behavior in the same way financial platforms visualize stock price trends. The widespread adoption of smartphones, even in rural areas, has created an opportunity to deliver sophisticated market intelligence directly to farmers and other stakeholders. AgroVision uses this technological shift to bring sophistication and intelligence to agricultural commerce, democratizing access to market insights that were previously available only to well-resourced market participants.
+
+\section{Problem Statement}
+\label{sec:problem_statement}
+
+The agricultural market in India continues to operate with limited transparency, leaving farmers, merchants, and consumers without reliable information to make informed decisions. Farmers often depend on middlemen or fragmented sources for price updates, leading to financial losses and poor timing in the sale of their produce. Merchants struggle to analyze regional price variations and plan procurement effectively, while consumers remain unaware of the factors influencing daily price fluctuations. Although several platforms offer basic price listings, none provide an integrated system that combines real-time market insights, historical trend visualization, predictive price analytics, and contextual guidance through an intelligent assistant. There is a clear need for a unified, accessible, and data-driven solution that simplifies agricultural decision-making for all stakeholders.
+
+\section{Problem Description}
+\label{sec:problem_description}
+
+Understanding and predicting agricultural prices requires a combination of data analysis skills, domain knowledge, and access to multiple information sources. Users often struggle with interpreting raw price data, understanding seasonal patterns, identifying factors that influence price changes, and making timely selling or buying decisions. For many farmers, traders, and working professionals, these tasks become overwhelming---especially when reliable tools are not available or when they lack experience with digital platforms.
+
+Although several agricultural information tools exist, most of them still rely heavily on manual data lookup. They do not offer an automated way to visualize historical trends, predict future prices, or explain the factors behind price movements. Users must search for information across multiple sources and interpret data themselves. This gap creates a strong need for an AI-powered solution that can instantly provide structured insights, relevant visualizations, and intelligent guidance. AgroVision aims to fill this gap by providing a comprehensive platform that simplifies the entire agricultural market analysis process and significantly reduces the user's workload.
+
+\section{Objectives}
+\label{sec:objectives}
+
+AgroVision is an AI-powered agricultural platform that provides real-time crop price insights, historical trend analysis, and intelligent predictions. It simplifies the entire market analysis process by producing structured visualizations, clear price indicators, and relevant factor explanations within seconds. The system combines React JS, Node.js, Supabase, and AI services to deliver a fast and seamless agricultural intelligence experience. The objectives of this project include:
+
+\begin{itemize}
+    \item To provide real-time crop price information through an intuitive dashboard interface.
+    \item To enable historical price trend visualization with interactive charts and regional filtering.
+    \item To integrate AI-based price prediction with confidence scoring for informed decision-making.
+    \item To display factors influencing price changes including weather, supply-demand, and seasonal patterns.
+    \item To provide an AI chatbot assistant for contextual guidance and query support.
+\end{itemize}
+
+\section{WPs and SDG Addressed}
+
+\subsection{Washington Accord WPs Mapping}
+
+\begin{center}
+\textbf{\underline{Solving Complex Engineering Problems Incorporating Sustainability Goals}}\\[0.3cm]
+Mapping of Complex Engineering Problems with Washington Accord WPs (WP1--WP7)
+\end{center}
+
+\begin{longtable}{|c|p{3cm}|p{7.5cm}|c|}
+\caption{Washington Accord WPs Competency Mapping}\\
+\hline
+\textbf{WP Code} & \textbf{Description} & \textbf{Competencies} & \textbf{Applicable (\checkmark)}\\
+\hline
+\endfirsthead
+\caption{Washington Accord WPs Competency Mapping (continued)}\\
+\hline
+\textbf{WP Code} & \textbf{Description} & \textbf{Competencies} & \textbf{Applicable (\checkmark)}\\
+\hline
+\endhead
+\hline
+\endfoot
+WP1 & In-Depth Engineering Knowledge & Uses standard web development patterns & \checkmark \\
+\cline{3-4}
+ &  & Works with relational data structures & \checkmark \\
+\cline{3-4}
+ &  & Applies domain knowledge in AI integration & \checkmark \\
+\cline{3-4}
+ &  & Uses industry-standard tools and platforms & \checkmark \\
+\cline{3-4}
+ &  & Combines knowledge from multiple CSE fields &  \\
+\cline{3-4}
+ &  & Follows best practices for web applications &  \\
+\cline{3-4}
+ &  & Refers to research papers or standards &  \\
+\hline
+WP2 & Wide-Ranging or Conflicting Technical \& Non-Technical Issues & Balances security with performance &  \\
+\cline{3-4}
+ &  & Evaluates resource limitations & \checkmark \\
+\cline{3-4}
+ &  & Considers user experience needs & \checkmark \\
+\cline{3-4}
+ &  & Follows privacy and security rules & \checkmark \\
+\cline{3-4}
+ &  & Chooses solutions that scale and are easy to maintain &  \\
+\cline{3-4}
+ &  & Identifies and manages risks &  \\
+\cline{3-4}
+ &  & Considers ethical impacts &  \\
+\hline
+WP3 & Abstract Thinking \& Originality & Designs new algorithms or models &  \\
+\cline{3-4}
+ &  & Creates original system designs & \checkmark \\
+\cline{3-4}
+ &  & Introduces innovations in machine learning models &  \\
+\cline{3-4}
+ &  & Uses strong abstract thinking & \checkmark \\
+\cline{3-4}
+ &  & Develops improved optimization methods &  \\
+\cline{3-4}
+ &  & Experiments with new ways of representing data & \checkmark \\
+\cline{3-4}
+ &  & Adds original ideas not taken from standard tutorials &  \\
+\hline
+WP4 & Design and development of solutions & Solves real-world problems that don't have ready-made code & \checkmark \\
+\cline{3-4}
+ &  & Modifies existing tools or frameworks in advanced ways & \checkmark \\
+\cline{3-4}
+ &  & Uses cutting-edge or emerging technologies & \checkmark \\
+\cline{3-4}
+ &  & Implements algorithms or protocols from scratch &  \\
+\cline{3-4}
+ &  & Handles messy or incomplete data effectively &  \\
+\cline{3-4}
+ &  & Designs custom workflows for networking, security, or ML &  \\
+\cline{3-4}
+ &  & Builds non-default configurations in cloud, IoT, or distributed systems &  \\
+\hline
+WP5 & Use of modern tools & Builds custom security mechanisms &  \\
+\cline{3-4}
+ &  & Creates new database techniques &  \\
+\cline{3-4}
+ &  & Proposes original design or coding standards & \checkmark \\
+\cline{3-4}
+ &  & Improves standard algorithms &  \\
+\cline{3-4}
+ &  & Defines new performance benchmarks & \checkmark \\
+\cline{3-4}
+ &  & Explains why standard workflows need changes & \checkmark \\
+\cline{3-4}
+ &  & Builds custom testing or validation tools &  \\
+\hline
+WP6 & Nature of problem: uncertainty, ambiguity & Collects requirements from different types of users & \checkmark \\
+\cline{3-4}
+ &  & Designs role-based access and permissions & \checkmark \\
+\cline{3-4}
+ &  & Manages conflicting requirements & \checkmark \\
+\cline{3-4}
+ &  & Builds interfaces tailored to each stakeholder &  \\
+\cline{3-4}
+ &  & Uses proper modeling techniques &  \\
+\cline{3-4}
+ &  & Ensures secure data handling for all roles &  \\
+\cline{3-4}
+ &  & Validates the system with user testing &  \\
+\hline
+WP7 & Interdependence and multidisciplinary factors & Breaks the system into clear layers & \checkmark \\
+\cline{3-4}
+ &  & Designs and connects multiple interacting modules & \checkmark \\
+\cline{3-4}
+ &  & Integrates hardware and software components &  \\
+\cline{3-4}
+ &  & Handles advanced system constraints &  \\
+\cline{3-4}
+ &  & Uses DevOps tools and automation & \checkmark \\
+\cline{3-4}
+ &  & Tests for performance and reliability &  \\
+\cline{3-4}
+ &  & Ensures different technologies work together &  \\
+\hline
+\end{longtable}
+
+\vspace{0.5cm}
+
+\begin{table}[H]
+\centering
+\caption{WP Competency Mapping Summary}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{WP Code} & \textbf{No. of Competencies Mapping} & \textbf{Low/Moderate/High}\\
+\hline
+WP1 & 4 & MODERATE\\
+\hline
+WP2 & 3 & MODERATE\\
+\hline
+WP3 & 3 & MODERATE\\
+\hline
+WP4 & 3 & MODERATE\\
+\hline
+WP5 & 3 & MODERATE\\
+\hline
+WP6 & 3 & MODERATE\\
+\hline
+WP7 & 3 & MODERATE\\
+\hline
+\end{tabular}
+\label{table:wp_summary}
+\end{table}
+
+\vspace{0.5cm}
+
+\begin{table}[H]
+\centering
+\caption{Complex Engineering Project Classification Criteria}
+\begin{tabular}{|p{6cm}|p{6cm}|}
+\hline
+\textbf{Note: Scale for mapping:} & \textbf{Complex Engineering Project}\\
+\hline
+\begin{minipage}[t]{5.8cm}
+\vspace{4pt}
+\begin{itemize}[leftmargin=*, nosep, topsep=0pt]
+\item Low: 1--2 competencies matched
+\item Moderate: 3--4 competencies
+\item High: 5 or more
+\end{itemize}
+\vspace{4pt}
+\end{minipage}
+&
+\begin{minipage}[t]{5.8cm}
+\vspace{4pt}
+A project is considered complex if:\\[6pt]
+\textbf{Condition A:}\\[4pt]
+At least 2 out of WP1--WP7 are High\\[6pt]
+AND\\[6pt]
+\textbf{Condition B:}\\[4pt]
+At least 5 out of WP1--WP7 are Moderate or High\\[6pt]
+This project meets Condition B but not Condition A.
+\vspace{4pt}
+\end{minipage}
+\tabularnewline
+\hline
+\end{tabular}
+\end{table}
+
+\noindent \textbf{Conclusion:} Based on the above key indicators, this project does not qualify as a \textbf{Complex Engineering Project} as it does not meet Condition A (no WPs rated High). However, the project demonstrates moderate complexity across all WP categories, reflecting a well-rounded engineering implementation.
+
+\subsection{Mapping of Project with SDG Goals, Targets, and Indicators}
+
+\begin{table}[H]
+\centering
+\caption{SDG Goals Mapping}
+\begin{tabular}{|p{2.5cm}|p{3cm}|p{3.5cm}|p{2.5cm}|c|}
+\hline
+\textbf{SDG Goal Addressed} & \textbf{Target Description} & \textbf{Justification / Mapping Explanation} & \textbf{Expected Impact / Outcome} & \textbf{Level}\\
+\hline
+SDG 2: Zero Hunger & Increase agricultural productivity and incomes of small-scale farmers & Provides timely price intelligence to help farmers make better selling decisions & Improves farmer incomes through better market access & Moderate\\
+\hline
+SDG 8: Decent Work and Economic Growth & Promote sustained, inclusive economic growth and productive employment & Enables farmers and merchants to optimize trade decisions, improving livelihoods & Supports economic empowerment of agricultural workers & Moderate\\
+\hline
+SDG 9: Industry Innovation and Infrastructure & Enhance scientific research and upgrade technological capabilities & Promotes innovation through web-based analytics platform with AI integration & Encourages adoption of digital tools among agricultural stakeholders & Moderate\\
+\hline
+SDG 12: Responsible Consumption and Production & Ensure sustainable consumption and production patterns & Helps reduce food waste by enabling better supply-demand matching & Promotes efficient resource utilization in food supply chain & Moderate\\
+\hline
+SDG 17: Partnerships for the Goals & Strengthen means of implementation through technology transfer & Facilitates knowledge sharing between farmers, merchants, and consumers & Builds collaborative ecosystem for agricultural intelligence & Moderate\\
+\hline
+\end{tabular}
+\label{table:sdg_mapping}
+\end{table}
+
+
+% ============================================
+% CHAPTER 2: LITERATURE REVIEW
+% ============================================
+\chapter{Literature Review}
+
+\section{Analysis}
+
+With the rapid development in AI, NLP, and ML, agricultural information systems have undergone significant transformation, especially regarding price forecasting and market analytics. Various researchers have presented intelligent systems that claim to make the task of understanding agricultural prices easier and more accessible. This section covers a critical analysis of major research works related to agricultural price prediction and market information systems.
+
+Theofilou \textit{et al.} \cite{ref1} conducted a comprehensive systematic review on predicting prices of staple crops using machine learning, covering studies on wheat, corn, and rice. Their analysis provides a foundational understanding of ML applications in agricultural price prediction. Nayak \textit{et al.} \cite{ref2} demonstrated exogenous variable driven deep learning models for improved price forecasting of TOP crops in India, achieving significant accuracy improvements over traditional methods.
+
+Sari \textit{et al.} \cite{ref3} explored various optimized machine learning techniques to predict agricultural commodity prices, comparing multiple algorithms and their effectiveness. Manogna \textit{et al.} \cite{ref4} enhanced agricultural commodity price forecasting using deep learning approaches, demonstrating the potential of neural networks in capturing complex price patterns.
+
+Singh and Sindhu \cite{ref5} presented crop price prediction using machine learning, focusing on practical implementation aspects. Mahmud \textit{et al.} \cite{ref6} proposed predicting crop prices using machine learning algorithms for sustainable agriculture at the IEEE TENSYMP conference. Badshah \textit{et al.} \cite{ref7} developed crop classification and yield prediction using robust machine learning models for agricultural sustainability.
+
+Jaiswal \textit{et al.} \cite{ref8} implemented deep long short-term memory based models for agricultural price forecasting, demonstrating LSTM's effectiveness in capturing temporal dependencies. Brignoli \textit{et al.} \cite{ref9} applied machine learning to predict grains futures prices, extending prediction capabilities to commodity markets.
+
+Government platforms such as e-NAM, Agmarknet \cite{ref13}, and Kisan Suvidha provide daily agricultural prices through web portals and mobile applications. While these platforms offer official data with nationwide coverage, they are limited by text-based interfaces, lack of interactive visualizations, absence of predictive analytics, and no role-based customization.
+
+\section{Summary of the Review}
+
+The reviewed literature covers diverse approaches to agricultural price information and prediction systems. Government platforms provide static price reporting without analytical insights. Academic research demonstrates effective prediction methods but implementations remain confined to research environments without user-friendly interfaces. Existing applications focus on either data display or prediction but do not integrate both with contextual guidance. None of the existing systems offer interactive dashboards, role-specific views, or AI-powered assistants to explain market conditions.
+
+\section{Gap Analysis}
+
+Based on the comprehensive review of existing literature, several critical gaps have been identified:
+
+\textbf{Gap 1: Lack of Interactive Visualization.} Existing platforms like e-NAM and Agmarknet provide text-based price listings without interactive charts or trend analysis capabilities \cite{ref13}.
+
+\textbf{Gap 2: Absence of User-Friendly Prediction Tools.} Academic prediction models \cite{ref1,ref2,ref3} are not deployed as accessible web applications that farmers and traders can actually use.
+
+\textbf{Gap 3: No Contextual Guidance.} None of the reviewed systems offer an AI assistant that can explain market data, summarize trends, or answer user questions in natural language.
+
+\textbf{Gap 4: Missing Role-Based Views.} Existing platforms present the same interface to all users without tailoring information to the specific needs of farmers, merchants, or consumers.
+
+\textbf{Proposed Solution:} The AgroVision system addresses these gaps by providing: (i) interactive dashboards with historical price charts, (ii) simple trend-based prediction with confidence scoring, (iii) an AI chatbot for contextual guidance, and (iv) role-based views for different stakeholder groups.
+
+% ============================================
+% CHAPTER 3: SYSTEM DESIGN
+% ============================================
+\chapter{System Design}
+
+This chapter presents the comprehensive system design of AgroVision, including the overall architecture, component interactions, data flow patterns, and database schema. The design follows industry-standard practices for building scalable, maintainable web applications.
+
+\section{Architecture Diagram}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{system_architecture_overview.png}
+\caption[System Architecture Diagram]{System Architecture Diagram}
+\label{fig:architecture}
+\end{figure}
+
+Figure \ref{fig:architecture} illustrates the high-level system architecture of AgroVision, showing the three-tier architecture with Client Layer (browser/mobile devices), Application Layer (Frontend Server with React Router, Recharts; Backend API with Node.js/Express), and Data Layer (Supabase PostgreSQL database with crops, price\_history, factors, and news tables). External APIs include NewsAPI, OpenWeatherMap, and Claude AI for chatbot functionality.
+
+The architecture follows a three-tier model consisting of:
+
+\begin{itemize}
+    \item \textbf{Presentation Layer (Frontend):} Built using React JS with Tailwind CSS for responsive styling. This layer handles all user interactions, renders the dashboard and detail views, manages client-side state, and communicates with the backend through RESTful API calls. The frontend is deployed on Vercel for optimal performance and global CDN distribution.
+    \item \textbf{Application Layer (Backend):} Implemented using Node.js with Express framework. This layer contains all business logic, API endpoints, data processing algorithms, and external service integrations. It handles authentication, request validation, and coordinates between the frontend and data layer.
+    \item \textbf{Data Layer:} PostgreSQL database hosted on Supabase provides persistent storage for crop data, price history, user preferences, and cached external data. Supabase also provides real-time subscription capabilities for live data updates.
+\end{itemize}
+
+External services integrated into the system include the Weather API for environmental data that influences crop prices, News API for fetching relevant agricultural market news, and OpenAI API for powering the intelligent chatbot assistant.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{three_tier_overview.jpg}
+\caption[Three-Tier Architecture Overview]{Three-Tier Architecture Overview showing Client Layer (browser/mobile with React and Tailwind CSS), Application Layer (Backend API with Node.js/Express and ML Engine), and Data Layer (Supabase PostgreSQL and External APIs)}
+\label{fig:three_tier}
+\end{figure}
+
+Figure \ref{fig:three_tier} provides an alternative view of the system architecture, emphasizing the three-tier design with clear separation between the Client Layer (top tier), Application Layer (middle tier), and Data Layer (bottom tier). The diagram shows how user requests flow from the frontend through the backend API to the database and external services.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{detailed_system_architecture.png}
+\caption[Detailed Component Architecture]{Detailed Component Architecture}
+\label{fig:architecture2}
+\end{figure}
+
+Figure \ref{fig:architecture2} presents the detailed component breakdown showing the five-layer system design: User Interface (React Web Application with Dashboard, Crop Detail Page, Price Chart, AI Chatbot Modal, Role Selector), Frontend Services (API Service with Axios, Supabase Client, State Management with React Hooks), Backend API (Express.js Server with REST endpoints), ML/AI Layer (Prophet ML Model, Time Series Analysis, Seasonal Pattern Detection), and Data Sources (Supabase PostgreSQL, External APIs including Anthropic Claude, NewsAPI.org, and OpenWeatherMap).
+
+\textbf{Frontend Components:}
+\begin{itemize}
+    \item \textbf{UI Components:} React-based reusable components including CropCard, PriceChart, PredictionCard, FactorsList, and Navbar
+    \item \textbf{Styling:} Tailwind CSS utility classes for responsive design and consistent theming
+    \item \textbf{Charts:} Recharts library for interactive data visualization with area charts, line charts, and tooltips
+    \item \textbf{State Management:} React Context API for global state including user role, selected region, and theme preferences
+    \item \textbf{Chatbot Interface:} Floating chat widget with message history and context awareness
+\end{itemize}
+
+\textbf{Backend Components:}
+\begin{itemize}
+    \item \textbf{API Routes:} Express routers for /crops, /prices, /prediction, /factors, /news, and /chatbot endpoints
+    \item \textbf{Services:} Business logic modules for weather integration, news fetching, and AI prediction
+    \item \textbf{Middleware:} Request logging, error handling, and CORS configuration
+    \item \textbf{External API Integration:} Axios-based clients for Weather API, News API, and OpenAI API
+\end{itemize}
+
+\section{Data Flow Diagram}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{dfd_level0_context.png}
+\caption[Context Diagram (Level-0 DFD)]{Context Diagram (Level-0 DFD)}
+\label{fig:dfd}
+\end{figure}
+
+Figure \ref{fig:dfd} illustrates the context-level data flow diagram showing the AgroVision Agricultural Intelligence System as the central process with external entities. Farmer entity sends crop queries and receives price predictions, charts, and selling recommendations. Merchant entity sends market analysis requests and region filters, receiving supply analytics and price trends. Customer entity sends retail price inquiries and receives retail price information. External systems include News API, Weather API, and Claude AI for processing queries.
+
+\subsection{Level-1 Data Flow Diagram}
+
+The system processes data through the following detailed flows:
+
+\begin{itemize}
+    \item \textbf{Dashboard Flow:} When a user opens the dashboard, the frontend sends a GET request to /api/crops. The backend queries the database for all crops with their current prices, calculates 24-hour price changes, and returns the data. The frontend renders crop cards with images, prices, and trend indicators.
+    
+    \item \textbf{Detail View Flow:} When a user selects a crop, multiple parallel API calls are made: /api/prices/{cropId} for historical data, /api/prediction/{cropId} for price forecast, /api/factors/{cropId} for influencing factors, and /api/news/{cropId} for related articles. The frontend assembles this data into an interactive detail page.
+    
+    \item \textbf{Chatbot Flow:} User messages are sent via POST to /api/chatbot along with page context (current crop, visible data). The backend constructs a prompt with this context and sends it to OpenAI API. The AI response is parsed and returned to the frontend for display.
+    
+    \item \textbf{Filter Flow:} When a user changes region or time filters, the frontend updates local state and re-fetches relevant data with new query parameters. Charts and statistics are re-rendered with filtered data.
+\end{itemize}
+
+\section{Use Case Diagram}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{use_case_diagram.png}
+\caption[Use Case Diagram]{Use Case Diagram}
+\label{fig:usecase}
+\end{figure}
+
+Figure \ref{fig:usecase} depicts the use case diagram for AgroVision with four primary actors: Farmer (accessing selling recommendations, viewing crop prices, getting price predictions), Merchant/Trader (viewing supply analytics, comparing crop prices), End Consumer (checking retail prices, viewing historical charts), and Administrator. Common use cases include Chat with AI Assistant, Read Market News, View Influencing Factors, Switch User Role, and Filter by Region. External system dependencies include News API, Weather Data Provider, ML Prediction Engine, and Database System.
+
+\section{Level-1 Data Flow Diagram}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{dfd_level1_detailed.png}
+\caption[Level-1 Data Flow Diagram]{Level-1 Data Flow Diagram}
+\label{fig:dfd_level1}
+\end{figure}
+
+Figure \ref{fig:dfd_level1} shows the detailed decomposition of AgroVision into five major processes: 1.0 User Authentication \& Authorization, 2.0 Data Collection \& Integration, 3.0 Price Analysis \& Prediction, 4.0 Data Visualization \& Reporting, and 5.0 AI Chatbot Service. Data stores include D1: Users, D2: Crops DB, D3: Price History DB, D4: ML Models, and D5: News Cache.
+
+\section{Four-Tier Architecture}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{four_tier_architecture.png}
+\caption[Four-Tier Architecture]{Four-Tier Architecture of AgroVision}
+\label{fig:four_tier}
+\end{figure}
+
+Figure \ref{fig:four_tier} presents the four-tier architecture: Tier 1 (Presentation Layer) with React 18.2 Web Application supporting Farmer, Merchant, and Customer views; Tier 2 (Application Layer) with API Gateway using Node.js/Express and ML/AI Engine achieving 85\% prediction accuracy; Tier 3 (Data Layer) with Supabase PostgreSQL storing crops, price\_history, and factors; Tier 4 (External Services) including NewsAPI, OpenWeatherMap, Anthropic Claude, and Vercel CDN.
+
+\section{Sequence Diagrams}
+
+\subsection{Dashboard Loading Sequence}
+
+The dashboard loading sequence involves the following steps:
+\begin{enumerate}
+    \item User navigates to dashboard URL
+    \item React App component mounts and triggers useEffect hook
+    \item API service sends GET request to /api/crops
+    \item Express router forwards request to CropController
+    \item Controller queries Supabase for crop data with current prices
+    \item Database returns result set
+    \item Controller formats response and sends JSON to frontend
+    \item React updates state with crop data
+    \item CropCard components render with price information
+\end{enumerate}
+
+\subsection{Chatbot Interaction Sequence}
+
+The chatbot interaction follows this sequence:
+\begin{enumerate}
+    \item User types message in chatbot input
+    \item Frontend collects current page context (crop name, visible data summary)
+    \item POST request sent to /api/chatbot with message and context
+    \item Backend constructs system prompt with context
+    \item OpenAI API called with constructed prompt
+    \item AI generates contextual response
+    \item Response parsed and sent back to frontend
+    \item Chat interface displays response with typing animation
+\end{enumerate}
+
+\section{Database Schema}
+
+The database design follows normalization principles to minimize redundancy while maintaining query efficiency. The schema consists of the following tables:
+
+\begin{table}[H]
+\centering
+\caption{Database Tables Overview}
+\label{table:db_schema}
+\begin{tabular}{|l|l|p{6cm}|}
+\hline
+\textbf{Table Name} & \textbf{Primary Key} & \textbf{Description}\\
+\hline
+crops & id (UUID) & Stores crop metadata including name, image URL, category, and description\\
+\hline
+price\_history & id (UUID) & Historical price records with crop\_id, region, date, and price value\\
+\hline
+factors & id (UUID) & Price-influencing factors with type, description, and impact score\\
+\hline
+news & id (UUID) & Cached news articles with title, summary, source, and publication date\\
+\hline
+\end{tabular}
+\end{table}
+
+Indexes are created on frequently queried columns (crop\_id, region, date) to optimize performance for dashboard loading and historical data retrieval operations.
+
+% ============================================
+% CHAPTER 4: IMPLEMENTATION
+% ============================================
+\chapter{Implementation}
+
+This chapter describes the implementation details of the AgroVision platform, covering the development environment, technology stack, code organization, key algorithms, and the deployment process.
+
+\section{Development Environment and Tools}
+
+The AgroVision platform was developed using a modern full-stack technology stack optimized for rapid development and production deployment. Table \ref{table:tech_stack} summarizes the key technologies employed.
+
+\begin{table}[H]
+\centering
+\caption{Technology Stack Overview}
+\label{table:tech_stack}
+\small
+\begin{tabular}{|l|l|p{5.5cm}|}
+\hline
+\textbf{Category} & \textbf{Technology} & \textbf{Purpose}\\
+\hline
+Frontend & React JS 18 & User interface and component architecture\\
+\hline
+Styling & Tailwind CSS 3.0 & Responsive styling and design system\\
+\hline
+Charts & Recharts 2.x & Interactive data visualization\\
+\hline
+Backend & Node.js 18, Express 4 & REST API server and business logic\\
+\hline
+Database & PostgreSQL 15, Supabase & Data persistence and cloud hosting\\
+\hline
+AI Services & OpenAI GPT-3.5 API & Chatbot and natural language processing\\
+\hline
+External APIs & OpenWeatherMap, NewsAPI & Environmental data and market news\\
+\hline
+Deployment & Vercel, Render & Frontend and backend hosting\\
+\hline
+Version Control & Git, GitHub & Source code management\\
+\hline
+IDE & VS Code & Development environment\\
+\hline
+\end{tabular}
+\end{table}
+
+
+\section{Application Architecture}
+
+The application follows a modular three-tier architecture with clear separation of concerns. The frontend communicates with the backend through REST API calls using Axios, with consistent error handling and loading states.
+
+\subsection{Project Structure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{code_project_structure.png}
+\caption[Frontend Project Structure]{Frontend Project Structure showing the organized directory layout with components, pages, services, and styles folders}
+\label{fig:frontend_structure}
+\end{figure}
+
+The project follows a well-organized directory structure for both frontend and backend codebases. Figure \ref{fig:frontend_structure} shows the React frontend structure with separate directories for reusable components (Dashboard, CropCard, PriceChart, PredictionPanel, FactorsList, NewsSection, Chatbot), pages (Home, CropDetails), services (API layer), and styles. The backend follows a similar modular organization with routes handling API endpoints, controllers managing request processing, models defining data structures, and services containing business logic.
+
+\subsection{Frontend Architecture}
+
+The frontend is built using React 18 with functional components and hooks. The component hierarchy follows the pattern App $\rightarrow$ MainLayout $\rightarrow$ Pages $\rightarrow$ Feature Components $\rightarrow$ UI Components, ensuring clean separation and reusability. State management is handled through React Context API for global state including AuthContext for user authentication and SettingsContext for user preferences. React Router v6 handles client-side routing with lazy loading enabled for code splitting and improved initial load performance. The API layer uses a centralized service with Axios interceptors for authentication token injection and standardized error handling across all requests.
+
+\subsection{Backend Architecture}
+
+The backend follows the MVC (Model-View-Controller) pattern implemented with Express.js. Routes define API endpoints and handle request validation using middleware. Controllers process incoming requests, coordinate with services, and format responses. Services contain the core business logic and manage integrations with external APIs including weather, news, and AI services. Models define database schemas and encapsulate all database queries, providing a clean abstraction over the PostgreSQL database.
+
+\section{Key Implementation Details}
+
+\subsection{Dashboard Implementation}
+
+The Dashboard page serves as the primary entry point for users, fetching all crop data from the backend on component mount using the useEffect hook. Each crop is displayed in a responsive card grid layout that adapts to different screen sizes. Crop cards display the crop image, name, current price in Indian Rupees, and a 24-hour price change indicator that appears green for price increases and red for decreases. A sparkline mini-chart shows the 7-day price trend for quick visual assessment. The search functionality provides real-time filtering of crops by name using controlled input components. Users can switch between Farmer, Merchant, and Consumer views using the role selector dropdown, which adjusts the displayed insights accordingly. The region filter allows selection from major Indian states to view region-specific prices and trends.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{code_useeffect_crops.png}
+\caption[Dashboard Data Fetching]{React useEffect hook implementation for fetching crop data from the API on component mount}
+\label{fig:code_useeffect}
+\end{figure}
+
+Figure \ref{fig:code_useeffect} shows the React useEffect hook that triggers the API call to fetch all crops when the Dashboard component mounts. The empty dependency array ensures this runs only once during initial load.
+
+\subsection{Price Chart Implementation}
+
+The interactive price chart is built using the Recharts library, providing rich visualization capabilities for historical price data. The implementation uses a ComposedChart that combines an AreaChart for displaying historical prices with a gradient fill and a LineChart with dashed stroke for showing predicted future prices. Time frame selector buttons allow users to toggle between 1W (one week), 1M (one month), 6M (six months), and 1Y (one year) views. Interactive tooltips appear on hover, displaying the exact price and date for any data point. The chart uses ResponsiveContainer to ensure appropriate resizing across all device sizes from mobile phones to desktop monitors. The backend handles data processing by aggregating daily prices and calculating moving averages for smoother visualization.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{code_linechart_component.png}
+\caption[LineChart Component Implementation]{Recharts LineChart component structure with XAxis, YAxis, Tooltip, and Line elements for price trend visualization}
+\label{fig:code_linechart}
+\end{figure}
+
+Figure \ref{fig:code_linechart} demonstrates the Recharts component structure used for rendering price history. The LineChart wraps data with configurable axes, tooltips for interactivity, and a monotone line type for smooth curve rendering.
+
+\subsection{Prediction Engine Implementation}
+
+The prediction module employs a hybrid approach combining multiple statistical methods for improved accuracy. Trend analysis uses linear regression on recent price data to determine the overall price direction. The system calculates both 7-day and 30-day moving averages to smooth out short-term volatility while capturing longer-term trends. Historical seasonal patterns are applied as adjustment factors, accounting for predictable variations in crop prices throughout the year. Confidence scoring is computed based on data availability (more historical data yields higher confidence), price stability (lower variance indicates higher confidence), and alignment with seasonal patterns. The algorithm outputs a predicted price range with upper and lower bounds, along with a confidence percentage that is prominently displayed to help users assess the reliability of the forecast.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{code_prediction_fetcher.png}
+\caption[Prediction API Integration]{Frontend code for fetching crop price predictions from the backend API and updating component state}
+\label{fig:code_prediction}
+\end{figure}
+
+Figure \ref{fig:code_prediction} shows the API integration for retrieving price predictions. The frontend calls the prediction endpoint with the crop ID and updates the React state with the returned forecast data.
+
+\subsection{Chatbot Implementation}
+
+The AI-powered chatbot provides contextual assistance using the Claude AI model through Anthropic's API. Context awareness is achieved by including current page context with each message, such as the crop name, current price, recent trend data, and visible factors. The system prompt instructs the AI to act as an agricultural market expert familiar with Indian crop markets, ensuring relevant and domain-specific responses. AI responses are parsed for markdown formatting and rendered with proper styling including headers, lists, and emphasis. The last five messages are maintained in conversation history to provide context continuity across the chat session. Graceful error handling ensures users receive fallback messages when the API is temporarily unavailable.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{code_chatbot_api.png}
+\caption[Chatbot API Integration]{Frontend implementation for sending user queries to the chatbot API with context and handling the AI-generated response}
+\label{fig:code_chatbot}
+\end{figure}
+
+Figure \ref{fig:code_chatbot} illustrates the chatbot API integration. User queries are sent via POST request along with page context, and the AI response is appended to the message history for display in the chat interface.
+
+\subsection{Database Implementation}
+
+The PostgreSQL database is hosted on Supabase with an optimized schema designed for the application's query patterns. The crops table stores crop metadata including id, name, image\_url, category, description, and created\_at timestamp. The price\_history table maintains historical price records with crop\_id as a foreign key, along with region, date, price value, and created\_at fields. The factors table stores price-influencing factors with factor\_type, description, and impact\_score for each crop. The news table caches agricultural news articles with title, summary, source\_url, and published\_at fields. Composite indexes on (crop\_id, region, date) enable efficient queries for historical data retrieval and dashboard loading. Supabase Row Level Security (RLS) policies ensure appropriate data access control.
+
+\section{Testing}
+
+The system underwent comprehensive testing across multiple dimensions. Unit testing covered individual functions using Jest, while integration testing verified API endpoints using Supertest. UI testing employed React Testing Library for component-level verification. Manual testing ensured end-to-end user flows worked correctly. Cross-browser testing confirmed compatibility with Chrome, Firefox, Safari, and Edge. Mobile testing validated responsive design on both iOS and Android devices.
+
+\section{Screenshots}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{dashboard_screenshot.jpg}
+\caption[AgroVision Dashboard Interface]{AgroVision Dashboard - Farm Management View}
+\label{fig:dashboard_screenshot}
+\end{figure}
+
+Figure \ref{fig:dashboard_screenshot} displays the main dashboard interface of AgroVision (Farm Management view) with system status indicators showing 6 active crops, Bullish market trends, and current weather (24$^{\circ}$C Clear). The Live Market Data section presents crop cards for Corn (Rs.1,890.75, +3.80\%), Cotton (Rs.5,680.00, +2.10\%), Rice (Rs.3,250.00, +1.20\%), Soybeans (Rs.4,520.00, +1.50\%), Sugarcane (Rs.350.00, +0.50\%), and Wheat (Rs.2,145.50, +2.50\%). Each card shows market price per quintal, 7-day trend percentage, and navigation arrows. The header includes role selector (Farmer view), search functionality, and guest user identification. The layout presents a grid of crop cards with color-coded indicators (green for price increase, red for decrease).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{crop_detail_page.jpg}
+\caption[Crop Detail Page]{Crop Detail Page - Rice Market Analysis}
+\label{fig:detail_screenshot}
+\end{figure}
+
+Figure \ref{fig:detail_screenshot} shows the Crop Detail Page for Rice with comprehensive market analysis. The header displays Rice at Rs.3,250.00 per quintal with -1.20\% 24-hour change. Market Summary panel shows 7-Day Trend (+8.80\%), Volume (High), and Volatility (Medium). AI Forecast panel predicts Rs.3,453.85 (+2.4\%) with 95\% confidence score. The Price Analysis chart displays historical price movements from August to December with time frame selectors (1W, 1M, 3M, 6M, 1Y) and region filter. Current price (Rs.3,534.98), predicted price (Rs.3,453.85), and expected change (+2.30\%) are highlighted below the chart. Market Drivers section shows Weather (+4.4\%) and Demand (+3.4\%) impact factors. The Factors section displays cards for Weather Impact, Supply-Demand Balance, and Seasonal Patterns with impact scores.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{chatbot_interface.jpg}
+\caption[AI Assistant Chatbot Interface]{AI Assistant Chatbot Interface}
+\label{fig:chatbot_screenshot2}
+\end{figure}
+
+Figure \ref{fig:chatbot_screenshot2} presents the AI-powered chatbot interface showing a contextual conversation. The header displays ``AI ASSISTANT'' with online status and current role (Farmer). The system initialization message welcomes the user: ``I am your AgroVision AI assistant. How can I help you with your harvest today?'' User's quick action button ``Market Summary'' triggers a detailed response explaining the current page context, including overview of recent price trends, demand factors, and suggestions for making better selling decisions and planning harvest or storage strategies. The chatbot appears as a floating widget that expands into a modal dialog when clicked, with alternating user messages (aligned right) and AI responses (aligned left).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{market_intelligence_news.jpg}
+\caption[Market Intelligence News Section]{Market Intelligence - Agricultural News Feed}
+\label{fig:market_intelligence}
+\end{figure}
+
+Figure \ref{fig:market_intelligence} displays the Market Intelligence section with curated agricultural news articles relevant to the selected crop (Rice). Each article card shows the source domain, publication date, headline, article summary excerpt, and ``Read Analysis'' link. Featured articles include: ``Tightened Trade Controls Push Mong Nai's Rice Sector to the Brink'' (shannews.org), ``Japan Expects 7.47 Million Tons of Rice Harvest, Up 10\% From Last Year'' (newsonjapan.com), ``Bacolod: NegOcc rice supply sufficient despite P158M lost to typhoon'' (rpnradio.com), ``Rice production in Far-west province rises despite shrinking cultivation area'' (dineshkhabar.com), and ``Ministry guarantees stable rice price ahead of year-end holidays'' (antaranews.com).
+
+\section{Process Flowcharts}
+
+This section presents detailed flowcharts illustrating the key processes within the AgroVision system.
+
+\subsection{View Crop Details Process}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{flowchart_crop_details.png}
+\caption[View Crop Details Flowchart]{Flowchart - View Crop Details Process}
+\label{fig:flowchart_crop}
+\end{figure}
+
+Figure \ref{fig:flowchart_crop} depicts the View Crop Details process flowchart. The flow begins when user clicks a crop card from dashboard, navigating to /crop/:id route. The system extracts crop ID from URL parameters and validates it (showing 404 page if invalid). Upon validation, a loading spinner is displayed while the crop details API call is made. Error handling covers Network Error (``Connection failed'' + Retry button), 404 Error (``Crop not found'' + Back to dashboard), and 500 Error (``Server error'' + Retry button). On success, parallel async operations fetch price history, prediction, factors, and news data. The page renders sections including Header with price, Chart component, Time filters, Prediction panel, Factors section, and News section. Users can interact with Time filter, Region filter, or Client type changes, triggering data re-fetch with debounced 300ms delay. Background processes include auto-refresh every 30 seconds, ``time ago'' label updates every minute, lazy loading of news images, and preloading related crops data.
+
+\subsection{AI Chatbot Interaction Process}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{flowchart_chatbot.png}
+\caption[AI Chatbot Interaction Flowchart]{Flowchart - AI Chatbot Interaction Process}
+\label{fig:flowchart_chatbot}
+\end{figure}
+
+Figure \ref{fig:flowchart_chatbot} illustrates the AI Chatbot Interaction process. The flow starts when user sees the floating chatbot button (FAB) and clicks to open the chatbot modal with slide-up animation. A welcome message is displayed: ``Hi! I'm your AgroVision AI assistant...'' along with quick action chips (``Summarize this page'', ``Explain factors'', ``What affects prices?''). When user inputs text, if empty the send button is disabled; otherwise the message is added to chat history with typing indicator shown. The system gathers context (current page URL, user role, visible crop data, recent interactions) and calls backend API POST /api/chatbot. Backend calls Anthropic Claude API (Claude Sonnet 4 model, max 1024 tokens, typical 2-4 second response). On success, response is returned to frontend, typing indicator hidden, assistant message added to React state, chat scrolls to bottom with smooth animation. Error handling includes Network Timeout, API Rate Limit (with countdown timer), and Invalid Response scenarios. Fallback responses are provided for keywords: ``price'' shows generic price explanation, ``help'' shows app navigation, ``predict'' explains prediction methodology.
+
+% ============================================
+% CHAPTER 5: CONCLUSION AND FUTURE SCOPE
+% ============================================
+\chapter{Conclusion and Future Scope}
+
+\section{Conclusion}
+
+The development of AgroVision represents a meaningful step toward improving transparency and accessibility in the agricultural market ecosystem. Throughout this project, the focus has been on creating a platform that not only displays crop prices but also empowers users to make informed decisions through analytics, prediction, and contextual insights. By combining real-time market data with historical trends, AI-based forecasting, relevant news updates, and an interactive chatbot, the system provides a comprehensive view of the factors that influence agricultural pricing.
+
+The project successfully achieved its objectives:
+\begin{itemize}
+    \item \textbf{Unified Dashboard:} A clean, intuitive interface presenting real-time crop prices in a visually appealing card-based layout, accessible across devices from smartphones to desktops.
+    \item \textbf{Interactive Analytics:} Historical price charts with regional filtering, time frame selection (1W, 1M, 6M, 1Y), and interactive tooltips enabling deep market exploration.
+    \item \textbf{Predictive Intelligence:} A trend-based prediction module generating forecasts with confidence scoring, helping users anticipate market movements.
+    \item \textbf{Factor Analysis:} Comprehensive display of price-influencing factors including weather conditions, supply-demand dynamics, and seasonal patterns with clear explanations.
+    \item \textbf{AI Assistant:} A context-aware chatbot providing personalized guidance, query responses, and market explanations in natural language.
+    \item \textbf{Role-Based Views:} Tailored information presentation for farmers (selling optimization), merchants (regional arbitrage), and consumers (seasonal awareness).
+\end{itemize}
+
+\subsection{Technical Accomplishments}
+
+From a technical perspective, the project demonstrates competence in full-stack web development, API integration, and AI implementation:
+
+\begin{itemize}
+    \item React-based frontend with modern component architecture and responsive design
+    \item Node.js backend implementing clean separation of concerns through modular routing
+    \item PostgreSQL database with normalized schema and optimized indexing
+    \item Integration of multiple external APIs with robust error handling
+    \item Cloud deployment on Vercel and Render for production-ready hosting
+\end{itemize}
+
+The system was built using modern web technologies including React JS, Node.js, PostgreSQL, and external API integrations. Testing confirmed that all modules performed reliably, with the dashboard loading in under 2 seconds, charts rendering accurately across all time frames, and the chatbot providing helpful contextual responses within 3 seconds.
+
+\subsection{Impact and Significance}
+
+AgroVision demonstrates how technology can simplify complex market behavior for farmers, merchants, and consumers. By presenting agricultural data in a visually intuitive format and providing intelligent assistance, the platform bridges the information gap that has traditionally disadvantaged small-scale agricultural stakeholders.
+
+In a broader context, AgroVision contributes to democratizing market intelligence in the agricultural sector. By making sophisticated analytics accessible to stakeholders who traditionally lacked such resources, the platform promotes fairer market outcomes and supports informed decision-making across the agricultural value chain.
+
+\section{Future Scope}
+
+Although the proposed system performed well, several improvements can further enhance its robustness, efficiency, and applicability:
+
+\subsection{Data Enhancement}
+\begin{itemize}
+    \item \textbf{Real-Time Data Integration:} Integrating live agricultural price feeds from government APIs (e-NAM, Agmarknet) for more accurate and timely information.
+    \item \textbf{Satellite Imagery:} Incorporating satellite-based crop monitoring for yield estimation and crop health assessment.
+    \item \textbf{IoT Integration:} Connecting with IoT sensors for real-time weather and soil data at farm level.
+\end{itemize}
+
+\subsection{AI/ML Improvements}
+\begin{itemize}
+    \item \textbf{Advanced ML Models:} Implementing deep learning models such as LSTM or Transformer architectures for improved prediction accuracy.
+    \item \textbf{Ensemble Methods:} Combining multiple prediction models for more robust forecasts.
+    \item \textbf{Anomaly Detection:} Identifying unusual price movements that may indicate market manipulation.
+\end{itemize}
+
+\subsection{User Experience}
+\begin{itemize}
+    \item \textbf{Multi-Language Support:} Adding support for regional languages (Hindi, Kannada, Tamil, Telugu) to improve accessibility.
+    \item \textbf{Mobile Application:} Developing dedicated Android and iOS applications for better rural accessibility.
+    \item \textbf{Offline Mode:} Implementing offline functionality with data synchronization for areas with poor connectivity.
+    \item \textbf{Voice Interface:} Adding voice-based queries for users less comfortable with typing.
+\end{itemize}
+
+\subsection{Platform Expansion}
+\begin{itemize}
+    \item \textbf{Marketplace Features:} Adding buyer-seller matching to transform into an agricultural e-commerce platform.
+    \item \textbf{Government Integration:} Linking with e-NAM, Agmarknet, and other government portals for official benchmarks.
+    \item \textbf{Community Features:} Farmer forums, expert Q\&A, and peer knowledge sharing.
+    \item \textbf{Analytics Dashboard:} Administrative tools for tracking platform usage and agricultural trends.
+\end{itemize}
+
+% --------------------------------------------------------
+% REFERENCES 
+% --------------------------------------------------------
+\renewcommand{\bibname}{References}
+\begin{thebibliography}{99}
+
+\bibitem{ref1}
+A. Theofilou, S. A. Nastis, A. Michailidis, T. Bournaris, and K. Mattas, ``Predicting prices of staple crops using machine learning: A systematic review of studies on wheat, corn, and rice,'' \textit{Sustainability}, vol. 17, no. 12, p. 5456, 2025. doi: 10.3390/su17125456
+
+\bibitem{ref2}
+G. H. H. Nayak, M. W. Alam, K. N. Singh, G. Avinash, A. Ray, and R. S. Kumar, ``Exogenous variable driven deep learning models for improved price forecasting of TOP crops in India,'' \textit{Scientific Reports}, vol. 14, p. 17229, 2024. doi: 10.1038/s41598-024-68040-3
+
+\bibitem{ref3}
+M. Sari, S. Duran, H. Kutlu, B. Guloglu, and Z. Atik, ``Various optimized machine learning techniques to predict agricultural commodity prices,'' \textit{Neural Computing and Applications}, vol. 36, pp. 11439--11459, 2024. doi: 10.1007/s00521-024-09679-x
+
+\bibitem{ref4}
+R. L. Manogna, V. Dharmaji, and S. Sarang, ``Enhancing agricultural commodity price forecasting with deep learning,'' \textit{Scientific Reports}, vol. 15, p. 5103, 2025. doi: 10.1038/s41598-025-05103-z
+
+\bibitem{ref5}
+N. Singh and R. Sindhu, ``Crop price prediction using machine learning,'' \textit{Electrical Systems}, vol. 20, no. 2, pp. 1--12, 2024.
+
+\bibitem{ref6}
+I. Mahmud, P. R. Das, and M. H. Rahman, ``Predicting crop prices using machine learning algorithms for sustainable agriculture,'' in \textit{Proc. IEEE Region 10 Symposium (TENSYMP)}, pp. 1--6, 2024. doi: 10.1109/TENSYMP61132.2024.10752263
+
+\bibitem{ref7}
+A. Badshah, B. Y. Alkazemi, F. Din, K. Z. Zamli, and A. Hussain, ``Crop classification and yield prediction using robust machine learning models for agricultural sustainability,'' \textit{IEEE Access}, vol. 12, pp. 153898--153910, 2024. doi: 10.1109/ACCESS.2024.3479868
+
+\bibitem{ref8}
+R. Jaiswal, G. K. Jha, R. R. Kumar, and K. Choudhary, ``Deep long short-term memory based model for agricultural price forecasting,'' \textit{Neural Computing and Applications}, vol. 34, pp. 4661--4676, 2022. doi: 10.1007/s00521-021-06621-3
+
+\bibitem{ref9}
+P. L. Brignoli, A. Varacca, C. Gardebroek, and P. Sckokai, ``Machine learning to predict grains futures prices,'' \textit{Agricultural Economics}, vol. 55, pp. 479--497, 2024. doi: 10.1111/agec.12828
+
+\bibitem{ref10}
+W. Ma, K. Nowocin, N. Marathe, and G. H. Chen, ``An interpretable produce price forecasting system for small and marginal farmers in India using collaborative filtering and adaptive nearest neighbors,'' in \textit{Proc. Int. Conf. Information and Communication Technologies and Development (ICTD)}, 2019. arXiv:1812.05173
+
+\bibitem{ref11}
+M. R. Bhardwaj, J. Pawar, A. Bhat, Deepanshu, I. Enaganti, K. Sagar, and Y. Narahari, ``An innovative deep learning based approach for accurate agricultural crop price prediction,'' arXiv:2304.09761, 2023.
+
+\bibitem{ref12}
+Z. Chen, H. S. Goh, K. L. Sin, K. Lim, N. K. H. Chung, and X. Y. Liew, ``Automated agriculture commodity price prediction system with machine learning techniques,'' \textit{Advances in Science, Technology and Engineering Systems Journal}, vol. 6, no. 4, pp. 171--177, 2021.
+
+\bibitem{ref13}
+Government of India, ``Agmarknet --- Agricultural Marketing Information Network,'' Directorate of Marketing and Inspection, Ministry of Agriculture, 2024. [Online]. Available: \url{https://agmarknet.gov.in}
+
+\bibitem{ref14}
+FAO, ``FAOSTAT --- Food and Agriculture Organization Statistical Database,'' Food and Agriculture Organization of the United Nations, 2024. [Online]. Available: \url{https://www.fao.org/faostat/}
+
+\bibitem{ref15}
+World Bank, ``Agriculture and Food Overview,'' World Bank Group, 2024. [Online]. Available: \url{https://www.worldbank.org/en/topic/agriculture/overview}
+
+\end{thebibliography}
+
+\end{document}

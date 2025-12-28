@@ -54,7 +54,7 @@ const CreativeStatCard = ({ icon: Icon, label, value, trend, color, subtext, onC
       onClick={onClick}
       className={`
         relative overflow-hidden rounded-2xl border p-5 cursor-pointer transition-all duration-300
-        bg-gradient-to-br ${colorClasses[color]}
+        bg-white dark:bg-gray-800 bg-gradient-to-br ${colorClasses[color]}
         ${isActive ? 'ring-2 ring-offset-2 ring-primary shadow-lg dark:ring-offset-gray-900' : 'hover:shadow-md'}
       `}
     >
@@ -232,45 +232,26 @@ const Dashboard = () => {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 dark:border-gray-700 pb-8">
         <div>
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 mb-2"
-          >
+          <div className="flex items-center gap-2 mb-2">
             <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
             <span className="text-xs font-mono text-secondary uppercase tracking-widest">{t('systemOnline')} • {role.toUpperCase()} {t('view')}</span>
-          </motion.div>
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-bold text-text-primary dark:text-white mb-2"
-          >
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-text-primary dark:text-white mb-2">
             {currentConfig.title}
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-text-secondary dark:text-gray-400 max-w-xl"
-          >
+          </h1>
+          <p className="text-text-secondary dark:text-gray-400 max-w-xl">
             {currentConfig.subtitle}
-          </motion.p>
+          </p>
         </div>
         
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
-          className="flex gap-3"
-        >
+        <div className="flex gap-3">
           <div className="text-right">
             <div className="text-xs text-text-secondary dark:text-gray-400 font-mono">{t('lastUpdate')}</div>
             <div className="text-sm font-medium text-text-primary dark:text-white font-mono">
               {new Date().toLocaleTimeString()}
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Stats Grid - Redesigned */}
@@ -379,15 +360,8 @@ const Dashboard = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCrops.map((crop, index) => (
-              <motion.div
-                key={crop.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <CropCard crop={crop} />
-              </motion.div>
+            {filteredCrops.map((crop) => (
+              <CropCard key={crop.id} crop={crop} />
             ))}
           </div>
         )}

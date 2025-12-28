@@ -6,8 +6,8 @@ const NotFound = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center">
       <div className="relative mb-8">
-        <div className="absolute inset-0 bg-danger/20 blur-3xl rounded-full"></div>
-        <div className="relative w-24 h-24 rounded-2xl bg-surface border border-danger/30 flex items-center justify-center shadow-lg shadow-danger/10">
+        <div className="absolute inset-0 bg-danger/80 blur-3xl rounded-full"></div>
+        <div className="relative w-24 h-24 rounded-2xl bg-surface border border-danger flex items-center justify-center shadow-lg shadow-danger/50">
           <AlertTriangle size={48} className="text-danger" />
         </div>
       </div>

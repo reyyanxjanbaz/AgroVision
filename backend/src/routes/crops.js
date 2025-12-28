@@ -47,7 +47,38 @@ router.get('/:id/prices', async (req, res) => {
       return res.status(400).json({ error: 'Invalid crop ID format' });
     }
 
-    const { region } = req.query;
+    const { region, refresh } = req.query;
+    
+    // If refresh is requested, generate fresh simulated data
+    if (refresh === 'true') {
+      // Get crop details first
+      const crop = await Crop.getById(id);
+      if (!crop) {
+        return res.status(404).json({ error: 'Crop not found' });
+      }
+
+      // Generate 90 days of price data up to today
+      const priceData = [];
+      const basePrice = crop.current_price || 2000;
+      let currentPrice = basePrice * 0.9;
+      
+      for (let i = 90; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        
+        // Add realistic price movement
+        const dailyChange = (Math.random() - 0.48) * (basePrice * 0.02); // Slight upward bias
+        currentPrice = Math.max(basePrice * 0.7, Math.min(basePrice * 1.3, currentPrice + dailyChange));
+        
+        priceData.push({
+          date: date.toISOString().split('T')[0],
+          price: parseFloat(currentPrice.toFixed(2)),
+          region: region || 'all'
+        });
+      }
+      
+      return res.json(priceData);
+    }
     
     let query = supabase
       .from('price_history')
@@ -61,6 +92,60 @@ router.get('/:id/prices', async (req, res) => {
 
     const { data, error } = await query;
     if (error) throw error;
+
+    // If no data in DB, generate sample data
+    if (!data || data.length === 0) {
+      const crop = await Crop.getById(id);
+      const basePrice = crop?.current_price || 2000;
+      const priceData = [];
+      let currentPrice = basePrice * 0.9;
+      
+      for (let i = 90; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        
+        const dailyChange = (Math.random() - 0.48) * (basePrice * 0.02);
+        currentPrice = Math.max(basePrice * 0.7, Math.min(basePrice * 1.3, currentPrice + dailyChange));
+        
+        priceData.push({
+          date: date.toISOString().split('T')[0],
+          price: parseFloat(currentPrice.toFixed(2)),
+          region: 'all'
+        });
+      }
+      
+      return res.json(priceData);
+    }
+
+    // Extend data to today if the last date in DB is older than today
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const lastDataDate = new Date(data[data.length - 1].date);
+    lastDataDate.setHours(0, 0, 0, 0);
+    
+    if (lastDataDate < today) {
+      // Generate additional data points from last date to today
+      const lastPrice = data[data.length - 1].price;
+      const crop = await Crop.getById(id);
+      const basePrice = crop?.current_price || lastPrice;
+      let currentPrice = lastPrice;
+      
+      const daysDiff = Math.ceil((today - lastDataDate) / (1000 * 60 * 60 * 24));
+      
+      for (let i = 1; i <= daysDiff; i++) {
+        const date = new Date(lastDataDate);
+        date.setDate(date.getDate() + i);
+        
+        const dailyChange = (Math.random() - 0.48) * (basePrice * 0.015);
+        currentPrice = Math.max(basePrice * 0.7, Math.min(basePrice * 1.3, currentPrice + dailyChange));
+        
+        data.push({
+          date: date.toISOString().split('T')[0],
+          price: parseFloat(currentPrice.toFixed(2)),
+          region: region || 'all'
+        });
+      }
+    }
 
     res.json(data);
   } catch (error) {

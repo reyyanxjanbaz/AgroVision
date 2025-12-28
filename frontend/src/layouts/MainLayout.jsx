@@ -8,25 +8,25 @@ import { SettingsProvider, useSettings } from '../context/SettingsContext';
 const MainLayoutContent = ({ children }) => {
   const { theme } = useSettings();
   
-  // Define colors based on theme
+  // Define colors based on theme - subtle background
   const squaresProps = theme === 'dark' 
     ? {
-        borderColor: 'rgba(255, 255, 255, 0.1)',
-        hoverFillColor: '#222',
-        backgroundColor: '#111827' // gray-900
+        borderColor: 'rgba(34, 197, 94, 0.15)', // Subtle green
+        hoverFillColor: 'rgba(34, 197, 94, 0.25)',
+        backgroundColor: '#060010' 
       }
     : {
-        borderColor: 'rgba(0, 0, 0, 0.1)',
-        hoverFillColor: '#eee',
-        backgroundColor: '#FAFAFA' // zinc-50
+        borderColor: 'rgba(34, 197, 94, 0.12)',
+        hoverFillColor: 'rgba(34, 197, 94, 0.2)',
+        backgroundColor: '#FAFAFA' 
       };
 
   return (
-    <div className="min-h-screen relative text-text-primary dark:text-gray-100 transition-colors duration-300 bg-background dark:bg-gray-900">
+    <div className="min-h-screen relative text-text-primary dark:text-gray-100 transition-colors duration-300">
       <div className="fixed inset-0 -z-10">
         <Squares 
-          speed={0.5} 
-          squareSize={40}
+          speed={0.1} 
+          squareSize={50}
           direction='diagonal' 
           {...squaresProps}
         />

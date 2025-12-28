@@ -6,7 +6,7 @@ import PriceChart from '../components/PriceChart';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PredictionCard from '../components/PredictionCard';
 import FactorsList from '../components/FactorsList';
-import { fetchCropDetails, fetchPriceHistory, fetchPrediction, fetchFactors, fetchNews } from '../services/api';
+import { fetchCropDetails, fetchPriceHistory, refreshPriceHistory, fetchPrediction, fetchFactors, fetchNews } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
 import { ArrowLeft, TrendingUp, TrendingDown, Calendar, ExternalLink, Activity, Layers } from 'lucide-react';
@@ -62,6 +62,20 @@ const CropDetail = () => {
       console.error('Error loading crop data:', err);
     } finally {
       setLoading(false);
+    }
+  }, [id, region]);
+
+  // Refresh price data with fresh simulated values
+  const handleRefreshPriceData = useCallback(async () => {
+    try {
+      const freshData = await refreshPriceHistory(id, region);
+      setPriceHistory(freshData);
+      
+      // Also refresh prediction based on new data
+      const newPrediction = await fetchPrediction(id);
+      setPrediction(newPrediction);
+    } catch (err) {
+      console.error('Error refreshing price data:', err);
     }
   }, [id, region]);
 
@@ -203,7 +217,7 @@ const CropDetail = () => {
                 <div className="flex justify-between items-start">
                   <div>
                       <h1 className="text-4xl font-bold text-text-primary dark:text-white font-display mb-2">{t(crop.name.toLowerCase()) || crop.name}</h1>
-                      <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-mono uppercase tracking-wide">
+                      <span className="px-3 py-1 rounded-full bg-primary/90 border border-primary text-white text-xs font-mono uppercase tracking-wide">
                       {crop.category}
                       </span>
                   </div>
@@ -224,8 +238,8 @@ const CropDetail = () => {
                 <div className="mt-6 flex items-center gap-4">
                    <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${
                     isPositive 
-                      ? 'bg-secondary/10 border-secondary/20 text-secondary dark:bg-secondary/20 dark:border-secondary/30' 
-                      : 'bg-danger/10 border-danger/20 text-danger dark:bg-danger/20 dark:border-danger/30'
+                      ? 'bg-secondary/90 border-secondary text-white dark:bg-secondary dark:border-secondary' 
+                      : 'bg-danger/90 border-danger text-white dark:bg-danger dark:border-danger'
                   }`}>
                     {isPositive ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
                     <span className="font-mono font-bold text-lg">{Math.abs(crop.price_change_24h).toFixed(2)}%</span>
@@ -275,7 +289,7 @@ const CropDetail = () => {
 
               <div className="w-full h-[300px] md:h-[500px]">
                   {adjustedHistory.length > 0 ? (
-                  <PriceChart data={adjustedHistory} prediction={adjustedPrediction} unit={displayUnit} onRefresh={loadCropData} />
+                  <PriceChart data={adjustedHistory} prediction={adjustedPrediction} unit={displayUnit} onRefresh={handleRefreshPriceData} />
                   ) : (
                   <div className="h-full flex items-center justify-center border border-dashed border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50/50 dark:bg-gray-800/50">
                       <p className="text-text-secondary dark:text-gray-400">{t('noPriceData')}</p>

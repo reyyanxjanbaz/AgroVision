@@ -13,8 +13,8 @@ const PredictionCard = ({ prediction, unit = 'Quintal' }) => {
       </div>
 
       <div className="flex items-center gap-2 mb-4 relative z-10">
-        <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 dark:bg-primary/20 dark:border-primary/30">
-          <Sparkles className="text-primary" size={20} />
+        <div className="p-2 rounded-lg bg-primary/90 border border-primary dark:bg-primary dark:border-primary">
+          <Sparkles className="text-white" size={20} />
         </div>
         <h2 className="text-lg font-bold text-text-primary dark:text-white font-display tracking-wide">{t('aiForecast')}</h2>
       </div>
@@ -26,7 +26,7 @@ const PredictionCard = ({ prediction, unit = 'Quintal' }) => {
             <p className="text-3xl font-bold text-text-primary dark:text-white font-mono tracking-tight">
               ₹{prediction.next3Days?.toFixed(2)} <span className="text-sm text-text-secondary dark:text-gray-400 font-normal">/{unit}</span>
             </p>
-            <span className="text-xs font-mono text-secondary bg-secondary/10 px-1.5 py-0.5 rounded border border-secondary/20 dark:bg-secondary/20 dark:border-secondary/30">
+            <span className="text-xs font-mono text-white bg-secondary/90 px-1.5 py-0.5 rounded border border-secondary dark:bg-secondary dark:border-secondary">
               +2.4%
             </span>
           </div>

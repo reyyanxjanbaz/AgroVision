@@ -104,33 +104,21 @@ const Chatbot = () => {
   return (
     <>
       {/* Floating Action Button */}
-      <AnimatePresence>
-        {!isOpen && (
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsOpen(true)}
-            className="fixed bottom-24 right-6 md:bottom-8 md:right-8 w-16 h-16 bg-primary text-white rounded-full shadow-glow-green flex items-center justify-center z-50 group border border-white/20 backdrop-blur-sm"
-          >
-            <Bot size={28} className="group-hover:rotate-12 transition-transform duration-500" />
-            <span className="absolute top-0 right-0 w-4 h-4 bg-secondary rounded-full border-2 border-white animate-pulse"></span>
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-24 right-6 md:bottom-8 md:right-8 w-16 h-16 bg-primary text-white rounded-full shadow-glow-green flex items-center justify-center z-50 group border border-white/20 backdrop-blur-sm hover:scale-105 active:scale-95 transition-transform duration-200"
+        >
+          <Bot size={28} className="group-hover:rotate-12 transition-transform duration-300" />
+          <span className="absolute top-0 right-0 w-4 h-4 bg-secondary rounded-full border-2 border-white animate-pulse"></span>
+        </button>
+      )}
 
       {/* Chat Window */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: 100, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 100, scale: 0.9 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-0 right-0 w-full h-[100dvh] md:bottom-8 md:right-8 md:w-[400px] md:h-[650px] md:max-h-[85vh] glass-panel flex flex-col shadow-2xl z-50 md:rounded-3xl overflow-hidden border border-white/40 dark:border-gray-700/50"
-          >
+      {isOpen && (
+        <div 
+          className="fixed bottom-0 right-0 w-full h-[100dvh] md:bottom-8 md:right-8 md:w-[400px] md:h-[650px] md:max-h-[85vh] glass-panel flex flex-col shadow-2xl z-50 md:rounded-3xl overflow-hidden border border-white/40 dark:border-gray-700/50 animate-in fade-in slide-in-from-bottom-4 duration-200"
+        >
             {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-gray-100/50 dark:border-gray-700/50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl">
               <div className="flex items-center gap-4">
@@ -156,9 +144,7 @@ const Chatbot = () => {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-5 space-y-6 bg-gray-50/50 dark:bg-gray-900/50">
               {messages.map((msg, idx) => (
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                <div 
                   key={idx} 
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
@@ -169,7 +155,7 @@ const Chatbot = () => {
                   }`}> 
                     <MessageContent content={msg.content} />
                   </div>
-                </motion.div>
+                </div>
               ))}
               {loading && (
                 <div className="flex justify-start">
@@ -221,11 +207,10 @@ const Chatbot = () => {
                 </button>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
-    </>
-  );
-};
+      </>
+    );
+  };
 
 export default Chatbot;
