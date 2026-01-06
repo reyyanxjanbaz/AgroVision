@@ -14,9 +14,9 @@ import { ArrowLeft, TrendingUp, TrendingDown, Calendar, ExternalLink, Activity, 
 
 const getCropImage = (name) => {
   const lower = name.toLowerCase();
-  if (lower.includes('cotton')) return 'https://cdn.britannica.com/18/156618-050-39339EA2/cotton-harvest-field-Texas.jpg';
-  if (lower.includes('sugarcane')) return 'https://4.imimg.com/data4/QX/AP/MY-8729085/sugarcane-plant-1000x1000.jpg';
-  if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqnl0mDa36Zsd2B2rCkZ2ZGhvhcqV2hqU_2g&s';
+  if (lower.includes('cotton')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Cotton_field_kv17.jpg/800px-Cotton_field_kv17.jpg';
+  if (lower.includes('sugarcane')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Sugarcane_field.jpg/800px-Sugarcane_field.jpg';
+  if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Soybean.JPG/800px-Soybean.JPG';
   return null;
 };
 

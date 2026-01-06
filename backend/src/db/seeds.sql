@@ -2,8 +2,8 @@
 INSERT INTO crops (name, category, current_price, price_change_24h, price_change_7d, unit, image_url) VALUES
 ('Wheat', 'Grains', 2150.00, 1.2, 3.5, 'per quintal', 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&q=80&w=400'),
 ('Rice (Basmati)', 'Grains', 4500.00, -0.5, 1.2, 'per quintal', 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=400'),
-('Cotton', 'Fibre', 6200.00, 2.1, 5.8, 'per quintal', 'https://images.unsplash.com/photo-1594315590298-3296052b32a1?auto=format&fit=crop&q=80&w=400'),
-('Sugarcane', 'Commercial', 315.00, 0.0, 0.5, 'per quintal', 'https://images.unsplash.com/photo-1596450537782-52c350e30741?auto=format&fit=crop&q=80&w=400'),
+('Cotton', 'Fibre', 6200.00, 2.1, 5.8, 'per quintal', 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Cotton_field_kv17.jpg/800px-Cotton_field_kv17.jpg'),
+('Sugarcane', 'Commercial', 315.00, 0.0, 0.5, 'per quintal', 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Sugarcane_field.jpg/800px-Sugarcane_field.jpg'),
 ('Potato', 'Vegetables', 1200.00, -1.5, -4.2, 'per quintal', 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&q=80&w=400'),
 ('Tomato', 'Vegetables', 2500.00, 5.4, 12.1, 'per quintal', 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=400');
 

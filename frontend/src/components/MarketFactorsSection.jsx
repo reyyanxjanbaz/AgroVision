@@ -111,7 +111,7 @@ const MarketFactorCard = ({ factor, index }) => {
   );
 };
 
-const MarketFactorsSection = () => {
+const MarketFactorsSection = ({ compact = false }) => {
   const { t } = useSettings();
   const [factors, setFactors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -238,7 +238,7 @@ const MarketFactorsSection = () => {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className={`grid gap-4 ${compact ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'}`}>
               {factors.map((factor, index) => (
                 <MarketFactorCard key={factor.id} factor={factor} index={index} />
               ))}
