@@ -63,6 +63,60 @@ const crops = [
     price_change_24h: 0.5,
     price_change_7d: 1.2,
     unit: '₹/ton'
+  },
+  {
+    name: 'Onion',
+    category: 'Vegetables',
+    image_url: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&q=80&w=400',
+    current_price: 1500.00,
+    price_change_24h: 3.2,
+    price_change_7d: 8.5,
+    unit: '₹/quintal'
+  },
+  {
+    name: 'Mustard',
+    category: 'Oilseeds',
+    image_url: 'https://cdn.pixabay.com/photo/2014/05/27/18/05/rape-355608_1280.jpg',
+    current_price: 5250.00,
+    price_change_24h: 1.1,
+    price_change_7d: 2.3,
+    unit: '₹/quintal'
+  },
+  {
+    name: 'Chickpea',
+    category: 'Pulses',
+    image_url: 'https://cdn.pixabay.com/photo/2015/10/02/13/46/chickpeas-968393_1280.jpg',
+    current_price: 4800.00,
+    price_change_24h: -0.8,
+    price_change_7d: -1.5,
+    unit: '₹/quintal'
+  },
+  {
+    name: 'Groundnut',
+    category: 'Oilseeds',
+    image_url: 'https://cdn.pixabay.com/photo/2016/08/25/11/49/peanuts-1619478_1280.jpg',
+    current_price: 5900.00,
+    price_change_24h: 0.5,
+    price_change_7d: 1.8,
+    unit: '₹/quintal'
+  },
+  {
+    name: 'Barley',
+    category: 'Grains',
+    image_url: 'https://cdn.pixabay.com/photo/2015/07/03/17/37/barley-830606_1280.jpg',
+    current_price: 1850.00,
+    price_change_24h: 0.2,
+    price_change_7d: 0.9,
+    unit: '₹/quintal'
+  },
+  {
+    name: 'Coffee',
+    category: 'Plantation',
+    image_url: 'https://cdn.pixabay.com/photo/2016/03/30/21/59/coffee-beans-1291656_1280.jpg',
+    current_price: 12500.00,
+    price_change_24h: 1.5,
+    price_change_7d: 4.2,
+    unit: '₹/quintal'
   }
 ];
 

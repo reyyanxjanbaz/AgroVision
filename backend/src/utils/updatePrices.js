@@ -68,7 +68,40 @@ async function updatePriceHistory() {
       const daysDiff = Math.ceil((today - lastDate) / (1000 * 60 * 60 * 24));
 
       if (daysDiff <= 0) {
-        console.log(`  ✅ ${crop.name} is already up to date`);
+        // Data is up to date for today, so let's simulate a LIVE intraday update
+        console.log(`  🔄 ${crop.name}: Simulating live price update...`);
+        
+        const basePrice = crop.current_price;
+        // Fluctuate by +/- 1.5%
+        const fluctuation = (Math.random() - 0.5) * (basePrice * 0.03);
+        const newPrice = parseFloat((basePrice + fluctuation).toFixed(2));
+        
+        // Calculate change vs yesterday's price (or 0 if no history)
+        // If we have history > 1 day, user 2nd to last as reference. 
+        // If not, use current variation.
+        const prevPrice = latestPrice.length > 1 ? latestPrice[1].price : (latestPrice[0].price * 0.98); 
+        const change = parseFloat(((newPrice - prevPrice) / prevPrice * 100).toFixed(2));
+
+        // Update Crops Table
+        const { error: liveUpdateError } = await supabase
+          .from('crops')
+          .update({ 
+            current_price: newPrice,
+            price_change_24h: change
+          })
+          .eq('id', crop.id);
+
+        if (liveUpdateError) throw liveUpdateError;
+
+        // Update today's history record to match
+        const { error: historyUpdateError } = await supabase
+          .from('price_history')
+          .update({ price: newPrice })
+          .eq('id', latestPrice[0].id);
+          
+        if (historyUpdateError) throw historyUpdateError;
+        
+        console.log(`  ✅ Updated ${crop.name} price to ₹${newPrice} (${change > 0 ? '+' : ''}${change}%)`);
         continue;
       }
 

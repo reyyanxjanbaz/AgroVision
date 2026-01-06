@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { subDays, format } from 'date-fns';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import PriceChart from '../components/PriceChart';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PredictionCard from '../components/PredictionCard';
@@ -10,14 +10,66 @@ import CropWeatherImpact from '../components/CropWeatherImpact';
 import { fetchCropDetails, fetchPriceHistory, refreshPriceHistory, fetchPrediction, fetchFactors, fetchNews } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
-import { ArrowLeft, TrendingUp, TrendingDown, Calendar, ExternalLink, Activity, Layers, CloudSun } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  TrendingUp, 
+  TrendingDown, 
+  Calendar, 
+  ExternalLink, 
+  Activity, 
+  Layers, 
+  Share2, 
+  MapPin, 
+  Info,
+  ChevronRight,
+  Newspaper,
+  CloudSun
+} from 'lucide-react';
 
 const getCropImage = (name) => {
   const lower = name.toLowerCase();
   if (lower.includes('cotton')) return 'https://cdn.pixabay.com/photo/2014/03/26/17/55/cotton-298925_1280.jpg';
   if (lower.includes('sugarcane')) return 'https://cdn.pixabay.com/photo/2016/10/25/12/26/sugar-cane-1768652_1280.jpg';
   if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://cdn.pixabay.com/photo/2016/09/19/20/09/soy-1681284_1280.jpg';
+  if (lower.includes('onion')) return 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&q=80&w=400';
+  if (lower.includes('mustard')) return 'https://cdn.pixabay.com/photo/2014/05/27/18/05/rape-355608_1280.jpg';
+  if (lower.includes('chickpea') || lower.includes('chana')) return 'https://cdn.pixabay.com/photo/2015/10/02/13/46/chickpeas-968393_1280.jpg';
+  if (lower.includes('groundnut') || lower.includes('peanut')) return 'https://cdn.pixabay.com/photo/2016/08/25/11/49/peanuts-1619478_1280.jpg';
+  if (lower.includes('barley')) return 'https://cdn.pixabay.com/photo/2015/07/03/17/37/barley-830606_1280.jpg';
+  if (lower.includes('coffee')) return 'https://cdn.pixabay.com/photo/2016/03/30/21/59/coffee-beans-1291656_1280.jpg';
   return null;
+};
+
+const MetricCard = ({ title, value, subValue, icon: Icon, trend, trendValue, color = "primary" }) => {
+  const getColorClasses = (c) => {
+    // Map of color names to tailwind classes if needed, or rely on simple interpolation for basics
+    const colors = {
+      primary: 'text-primary bg-primary/10',
+      secondary: 'text-secondary bg-secondary/10',
+      'amber-500': 'text-amber-500 bg-amber-500/10',
+      'blue-500': 'text-blue-500 bg-blue-500/10',
+    };
+    return colors[c] || colors.primary;
+  };
+
+  return (
+    <div className="glass-panel p-4 rounded-xl flex items-start justify-between relative overflow-hidden dark:bg-gray-800 dark:border-gray-700 hover:shadow-md transition-shadow">
+      <div className="relative z-10">
+        <p className="text-text-secondary dark:text-gray-400 text-xs font-mono uppercase tracking-wider mb-1">{title}</p>
+        <h3 className="text-2xl font-bold text-text-primary dark:text-white font-mono">{value}</h3>
+        {subValue && <p className="text-xs text-text-secondary dark:text-gray-500 mt-1">{subValue}</p>}
+      </div>
+      <div className={`p-2.5 rounded-lg ${getColorClasses(color)}`}>
+        <Icon size={20} />
+      </div>
+      {trend && (
+        <div className={`absolute bottom-4 right-4 flex items-center gap-1 text-xs font-bold ${trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+          {trend === 'up' ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
+          <span>{trendValue}</span>
+        </div>
+      )}
+    </div>
+  );
 };
 
 const CropDetail = () => {
@@ -44,8 +96,6 @@ const CropDetail = () => {
   const loadCropData = useCallback(async () => {
     try {
       setLoading(true);
-      
-      // Fetch all data in parallel
       const [cropData, historyData, predictionData, factorsData, newsData] = await Promise.all([
         fetchCropDetails(id),
         fetchPriceHistory(id, { region }),
@@ -66,13 +116,14 @@ const CropDetail = () => {
     }
   }, [id, region]);
 
-  // Refresh price data with fresh simulated values
+  useEffect(() => {
+    loadCropData();
+  }, [loadCropData]);
+
   const handleRefreshPriceData = useCallback(async () => {
     try {
       const freshData = await refreshPriceHistory(id, region);
       setPriceHistory(freshData);
-      
-      // Also refresh prediction based on new data
       const newPrediction = await fetchPrediction(id);
       setPrediction(newPrediction);
     } catch (err) {
@@ -80,362 +131,289 @@ const CropDetail = () => {
     }
   }, [id, region]);
 
-  useEffect(() => {
-    loadCropData();
-  }, [loadCropData]);
+  if (loading) return <LoadingSpinner message={t('accessingDatabase')} />;
 
+  if (!crop) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+        <Activity className="text-text-muted dark:text-gray-500 mb-4" size={48} />
+        <h2 className="text-xl font-bold text-text-primary dark:text-white mb-2">{t('dataNotFound')}</h2>
+        <Link to="/" className="btn-primary mt-4">{t('returnDashboard')}</Link>
+      </div>
+    );
+  }
+
+  // Data Processing
   const getFilteredData = () => {
     const period = periods.find(p => p.label === timePeriod);
     if (!period) return priceHistory;
-
     const cutoffDate = subDays(new Date(), period.days);
     return priceHistory.filter(item => new Date(item.date) >= cutoffDate);
   };
 
   const getPriceDisplay = () => {
-    if (!crop) return { price: '0.00', unit: '' };
-    
     let price = crop.current_price || 0;
     let unit = crop.unit || 'Quintal';
-
     if (role === 'customer') {
-      // Convert Quintal to Kg and add 20% retail markup
       price = (price / 100) * 1.20;
       unit = 'Kg';
-    } else if (role === 'merchant') {
-      // Wholesale price
-      unit = 'Quintal';
-    } else {
-      // Farmer price
-      unit = 'Quintal';
     }
-
     return {
       price: price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
       unit: unit.toUpperCase()
     };
   };
 
-  const getFilteredNews = () => {
-    if (!news.length) return [];
-    return news.filter(article => !article.audience || article.audience.includes(role));
-  };
-
-  const getAdjustedPrediction = () => {
-    if (!prediction) return null;
-    let next3Days = prediction.next3Days;
-
-    if (role === 'customer') {
-      // Convert Quintal to Kg and add 20% retail markup
-      next3Days = (next3Days / 100) * 1.20;
-    }
-
-    return {
-      ...prediction,
-      next3Days
-    };
-  };
-
-
-
-  if (loading) return <LoadingSpinner message={t('accessingDatabase')} />;
-
-  if (!crop) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
-          <Activity className="text-text-muted dark:text-gray-500" size={32} />
-        </div>
-        <h2 className="text-xl font-bold text-text-primary dark:text-white mb-2">{t('dataNotFound')}</h2>
-        <p className="text-text-secondary dark:text-gray-400 mb-6">{t('cropDataNotFound')}</p>
-        <Link to="/" className="btn-primary">
-          {t('returnDashboard')}
-        </Link>
-      </div>
-    );
-  }
-
-  const filteredData = getFilteredData();
-  const filteredNews = getFilteredNews();
   const { price: displayPrice, unit: displayUnit } = getPriceDisplay();
-  const adjustedPrediction = getAdjustedPrediction();
+  const filteredData = getFilteredData();
   const isPositive = crop.price_change_24h >= 0;
 
-  const adjustedHistory = filteredData.map(item => {
-    let price = item.price;
-    if (role === 'customer') {
-      price = (price / 100) * 1.20;
-    }
-    return {
-      ...item,
-      price
-    };
-  });
+  const adjustedHistory = filteredData.map(item => ({
+    ...item,
+    price: role === 'customer' ? (item.price / 100) * 1.20 : item.price
+  }));
+
+  const adjustedPrediction = prediction ? {
+    ...prediction,
+    next3Days: role === 'customer' ? (prediction.next3Days / 100) * 1.20 : prediction.next3Days
+  } : null;
 
   return (
-    <div className="space-y-6 pb-12">
-      {/* Breadcrumb */}
-      <Link to="/" className="inline-flex items-center gap-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors mb-4 group">
-        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-        <span className="text-sm font-mono uppercase tracking-wider">{t('backToDashboard')}</span>
-      </Link>
-
-      {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        
-        {/* LEFT COLUMN: Main Info + Chart + News */}
-        <div className="lg:col-span-2 space-y-6">
-          
-          {/* Combined Main Info + Chart */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="glass-panel p-6 rounded-xl relative overflow-hidden flex flex-col dark:bg-gray-800 dark:border-gray-700"
-          >
-             {/* Background Decoration */}
-             <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-              <Activity size={200} className="text-primary" />
-            </div>
-
-            {/* Header: Image & Info */}
-            <div className="flex flex-col sm:flex-row items-start gap-6 mb-8 relative z-10">
-              <div className="relative flex-shrink-0">
-                <img 
-                  src={crop.image_url || getCropImage(crop.name) || `https://loremflickr.com/400/400/${crop.name},agriculture/all`} 
-                  alt={crop.name} 
-                  className="w-32 h-32 rounded-2xl border border-gray-200 dark:border-gray-600 object-cover shadow-lg"
-                  onError={(e) => {
-                    e.target.onerror = null; 
-                    const fallback = getCropImage(crop.name);
-                    if (fallback && e.target.src !== fallback) {
-                      e.target.src = fallback;
-                    } else {
-                      e.target.src = `https://ui-avatars.com/api/?name=${crop.name}&background=random&size=400`;
-                    }
-                  }}
-                />
-                <div className="absolute -bottom-3 -right-3 bg-white dark:bg-gray-700 px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-600 text-xs font-mono text-primary shadow-sm">
-                  ID: {String(crop.id).substring(0, 4).toUpperCase()}
-                </div>
-              </div>
-              
-              <div className="flex-1 w-full">
-                <div className="flex justify-between items-start">
-                  <div>
-                      <h1 className="text-4xl font-bold text-text-primary dark:text-white font-display mb-2">{t(crop.name.toLowerCase()) || crop.name}</h1>
-                      <span className="px-3 py-1 rounded-full bg-primary/90 border border-primary text-white text-xs font-mono uppercase tracking-wide">
-                      {crop.category}
-                      </span>
-                  </div>
-                  {/* Price Display */}
-                  <div className="text-right">
-                      <div className="flex items-baseline justify-end gap-1">
-                          <span className="text-lg text-text-secondary dark:text-gray-400 font-mono">₹</span>
-                          <span className="text-4xl font-bold text-text-primary dark:text-white font-mono tracking-tight">
-                          {displayPrice}
-                          </span>
-                      </div>
-                      <p className="text-xs text-text-secondary dark:text-gray-400 font-mono mt-1">
-                          {role === 'customer' ? t('retail') : role === 'merchant' ? t('wholesale') : t('marketPrice')} PER {displayUnit}
-                      </p>
-                  </div>
-                </div>
-                
-                <div className="mt-6 flex items-center gap-4">
-                   <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${
-                    isPositive 
-                      ? 'bg-secondary/90 border-secondary text-white dark:bg-secondary dark:border-secondary' 
-                      : 'bg-danger/90 border-danger text-white dark:bg-danger dark:border-danger'
-                  }`}>
-                    {isPositive ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
-                    <span className="font-mono font-bold text-lg">{Math.abs(crop.price_change_24h).toFixed(2)}%</span>
-                    <span className="text-xs opacity-80 font-medium uppercase ml-1">{t('24hChange')}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Chart Section */}
-            <div className="border-t border-gray-100 dark:border-gray-700 pt-6 mt-6">
-              <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-                  <h3 className="text-lg font-bold text-text-primary dark:text-white flex items-center gap-2">
-                      <Activity size={18} className="text-primary" />
-                      {t('priceAnalysis')}
-                  </h3>
-                  
-                  <div className="flex gap-3">
-                      <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-                      {periods.map((period) => (
-                          <button
-                          key={period.label}
-                          onClick={() => setTimePeriod(period.label)}
-                          className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
-                              timePeriod === period.label
-                              ? 'bg-white dark:bg-gray-600 text-primary shadow-sm'
-                              : 'text-text-secondary dark:text-gray-400 hover:text-text-primary dark:hover:text-white'
-                          }`}
-                          >
-                          {period.label}
-                          </button>
-                      ))}
-                      </div>
-                      <select
-                          value={region}
-                          onChange={(e) => setRegion(e.target.value)}
-                          className="px-3 py-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs text-text-primary dark:text-white focus:border-primary/50 focus:outline-none"
-                      >
-                          <option value="all">{t('allRegions')}</option>
-                          <option value="north">{t('north')}</option>
-                          <option value="south">{t('south')}</option>
-                          <option value="east">{t('east')}</option>
-                          <option value="west">{t('west')}</option>
-                      </select>
-                  </div>
-              </div>
-
-              <div className="w-full h-[300px] md:h-[500px]">
-                  {adjustedHistory.length > 0 ? (
-                  <PriceChart data={adjustedHistory} prediction={adjustedPrediction} unit={displayUnit} onRefresh={handleRefreshPriceData} />
-                  ) : (
-                  <div className="h-full flex items-center justify-center border border-dashed border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50/50 dark:bg-gray-800/50">
-                      <p className="text-text-secondary dark:text-gray-400">{t('noPriceData')}</p>
-                  </div>
-                  )}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* News Feed */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-text-primary dark:text-white flex items-center gap-2">
-              <Calendar className="text-primary" size={20} />
-              {role === 'customer' ? t('consumerInsights') : t('marketIntelligence')}
-            </h2>
-            
-            {filteredNews.length > 0 ? (
-              <div className="grid gap-4">
-                {filteredNews.map((article, index) => (
-                  <motion.a
-                    key={index}
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="glass-panel p-0 rounded-xl overflow-hidden hover:shadow-lg transition-all group border border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row h-auto sm:h-40 dark:bg-gray-800"
-                  >
-                    {article.image_url && (
-                      <div className="sm:w-40 h-40 sm:h-full relative overflow-hidden flex-shrink-0">
-                          <img 
-                          src={article.image_url} 
-                          alt={article.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                      </div>
-                    )}
-                    <div className="flex-1 p-4 flex flex-col justify-center min-w-0">
-                      <div className="flex items-center gap-2 text-[10px] text-primary font-mono uppercase tracking-wider mb-1">
-                          <span className="truncate">{article.source}</span>
-                          <span>•</span>
-                          <span>{format(new Date(article.published_date), 'MMM d')}</span>
-                      </div>
-                      <h3 className="text-base font-bold text-text-primary dark:text-white mb-2 group-hover:text-primary transition-colors leading-tight line-clamp-2">
-                        {article.title}
-                      </h3>
-                      <p className="text-text-secondary dark:text-gray-400 text-xs line-clamp-2 mb-2 leading-relaxed">
-                          {article.summary}
-                      </p>
-                      <div className="flex items-center gap-1 text-xs font-medium text-primary mt-auto">
-                          {t('readAnalysis')} <ExternalLink size={12} />
-                      </div>
-                    </div>
-                  </motion.a>
-                ))}
-              </div>
-            ) : (
-              <div className="glass-panel p-8 text-center rounded-xl border-dashed border-2 border-gray-200 dark:border-gray-700 dark:bg-gray-800">
-                <p className="text-text-secondary dark:text-gray-400 text-sm">{t('noNews')}</p>
-              </div>
-            )}
+    <div className="space-y-8 pb-12 animate-in fade-in duration-500">
+      {/* 1. Header Section */}
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div>
+          <div className="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-400 mb-2">
+            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+            <ChevronRight size={14} />
+            <span className="text-text-primary dark:text-white font-medium">{crop.name}</span>
           </div>
-
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <img 
+                src={crop.image_url || getCropImage(crop.name)} 
+                alt={crop.name} 
+                className="w-16 h-16 rounded-xl object-cover border-2 border-white shadow-md"
+                onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${crop.name}&background=random` }}
+              />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-text-primary dark:text-white font-display leading-none">{t(crop.name.toLowerCase()) || crop.name}</h1>
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className="px-2 py-0.5 rounded text-xs font-bold bg-primary/10 text-primary border border-primary/20 uppercase tracking-wide">
+                  {crop.category}
+                </span>
+                <span className="text-text-secondary dark:text-gray-400 text-sm flex items-center gap-1">
+                  <MapPin size={12} /> {t('allRegions')}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* RIGHT COLUMN: Market Summary + Weather Impact + Drivers */}
-        <div className="space-y-6">
-          
-          {/* Weather Impact on this Crop */}
-          {role === 'farmer' && (
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.05 }}
-            >
-              <CropWeatherImpact cropName={crop.name} />
-            </motion.div>
-          )}
-          
-          {/* Market Summary (Compact) */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-            className="glass-panel p-5 rounded-xl flex flex-col dark:bg-gray-800 dark:border-gray-700"
+        <div className="flex items-center gap-3">
+          <select
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
+            className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:border-primary/50 focus:outline-none shadow-sm text-text-primary dark:text-white"
           >
-            <h3 className="text-text-secondary dark:text-gray-400 text-sm font-mono uppercase mb-4 flex items-center gap-2">
-              <Activity size={14} /> {t('marketSummary')}
-            </h3>
-            
-            <div className="space-y-4 flex-1">
-              <div className="p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600">
-                  <div className="flex justify-between items-center mb-2">
-                      <span className="text-text-muted dark:text-gray-400 text-sm">{t('7DayTrend')}</span>
-                      <span className={`font-mono font-bold ${crop.price_change_7d >= 0 ? 'text-secondary' : 'text-danger'}`}>
-                          {crop.price_change_7d >= 0 ? '+' : ''}{crop.price_change_7d?.toFixed(2)}%
-                      </span>
-                  </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-600 h-1.5 rounded-full overflow-hidden">
-                      <div 
-                          className={`h-full ${crop.price_change_7d >= 0 ? 'bg-secondary' : 'bg-danger'}`} 
-                          style={{ width: `${Math.min(Math.abs(crop.price_change_7d) * 10, 100)}%` }}
-                      />
-                  </div>
-              </div>
+            <option value="all">{t('allRegions')}</option>
+            <option value="north">{t('north')}</option>
+            <option value="south">{t('south')}</option>
+            <option value="east">{t('east')}</option>
+            <option value="west">{t('west')}</option>
+          </select>
+          <button className="p-2 text-text-secondary dark:text-gray-400 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors border border-transparent hover:border-primary/10">
+            <Share2 size={20} />
+          </button>
+        </div>
+      </header>
 
-              <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600">
-                      <span className="text-text-muted dark:text-gray-400 text-xs uppercase block mb-1">{t('volume')}</span>
-                      <span className="font-mono font-bold text-text-primary dark:text-white">{t('high')}</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600">
-                      <span className="text-text-muted dark:text-gray-400 text-xs uppercase block mb-1">{t('volatility')}</span>
-                      <span className="font-mono font-bold text-accent">{t('medium')}</span>
-                  </div>
-              </div>
+      {/* 2. Key Metrics Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <MetricCard 
+          title={t('currentPrice')}
+          value={`₹${displayPrice}`}
+          subValue={`Per ${displayUnit}`}
+          icon={Activity}
+          trend={isPositive ? 'up' : 'down'}
+          trendValue={`${Math.abs(crop.price_change_24h).toFixed(2)}%`}
+          color="primary"
+        />
+        <MetricCard 
+          title={t('forecast')}
+          value={`₹${adjustedPrediction?.next3Days?.toFixed(2) || '---'}`}
+          subValue={t('next3Days')}
+          icon={TrendingUp}
+          trend="up"
+          trendValue={`${prediction?.confidence || 0}% Conf.`}
+          color="secondary"
+        />
+        <MetricCard 
+          title={t('volatility')}
+          value={t('medium')}
+          subValue="Market Stability"
+          icon={Info}
+          color="amber-500"
+        />
+        {role === 'farmer' ? (
+          <MetricCard 
+            title={t('weatherImpact')}
+            value={t('favorable')}
+            subValue="Growing Conditions"
+            icon={CloudSun}
+            color="blue-500"
+          />
+        ) : (
+          <MetricCard 
+            title={t('demandSupply')}
+            value={t('balanced')}
+            subValue="Market Status"
+            icon={Layers}
+            color="blue-500"
+          />
+        )}
+      </div>
 
-              <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
-                  <PredictionCard prediction={adjustedPrediction} unit={displayUnit} />
+      {/* 3. Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* LEFT MAIN COLUMN */}
+        <div className="lg:col-span-2 space-y-8">
+          
+          {/* Chart Section */}
+          <div className="glass-panel p-6 rounded-2xl dark:bg-gray-800 dark:border-gray-700">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+              <div>
+                <h3 className="text-lg font-bold text-text-primary dark:text-white flex items-center gap-2">
+                  <Activity size={18} className="text-primary" />
+                  {t('priceAnalysis')}
+                </h3>
+                <p className="text-sm text-text-secondary dark:text-gray-400 mt-1">
+                  Historical price movements and prediction model
+                </p>
+              </div>
+              <div className="flex bg-gray-100 dark:bg-gray-700/50 rounded-lg p-1">
+                {periods.map((period) => (
+                  <button
+                    key={period.label}
+                    onClick={() => setTimePeriod(period.label)}
+                    className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+                      timePeriod === period.label
+                      ? 'bg-white dark:bg-gray-600 text-primary shadow-sm'
+                      : 'text-text-secondary dark:text-gray-400 hover:text-text-primary dark:hover:text-white'
+                    }`}
+                  >
+                    {period.label}
+                  </button>
+                ))}
               </div>
             </div>
-          </motion.div>
-
-          {/* Market Drivers - now with crop-specific impacts */}
-          <div className="space-y-4">
-              <h2 className="text-xl font-bold text-text-primary dark:text-white flex items-center gap-2">
-                  <Layers className="text-primary" size={20} />
-                  {t('marketDrivers')}
-              </h2>
-              <FactorsList factors={factors} cropName={crop.name} />
-              
-              {role === 'customer' && (
-                  <div className="glass-panel p-5 rounded-xl bg-gradient-to-br from-primary/5 to-transparent border-primary/10 dark:from-primary/10 dark:border-primary/20">
-                      <h3 className="font-bold text-base text-text-primary dark:text-white mb-2">{t('didYouKnow')}</h3>
-                      <p className="text-xs text-text-secondary dark:text-gray-400 leading-relaxed">
-                          {t('seasonalTip')}
-                      </p>
-                  </div>
+            
+            <div className="h-[400px]">
+              {adjustedHistory.length > 0 ? (
+                <PriceChart 
+                  data={adjustedHistory} 
+                  prediction={adjustedPrediction} 
+                  unit={displayUnit} 
+                  onRefresh={handleRefreshPriceData} 
+                />
+              ) : (
+                <div className="h-full flex items-center justify-center border-2 border-dashed border-gray-100 dark:border-gray-700 rounded-xl">
+                  <p className="text-text-secondary dark:text-gray-400 font-medium">{t('noPriceData')}</p>
+                </div>
               )}
+            </div>
+          </div>
+
+          {/* News Section */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-text-primary dark:text-white flex items-center gap-2">
+                <Newspaper size={20} className="text-primary" />
+                {t('latestNews')}
+              </h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {news.slice(0, 4).map((article, idx) => (
+                <a 
+                  key={idx} 
+                  href={article.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="group flex gap-4 p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all hover:border-primary/20"
+                >
+                  {article.image_url && (
+                    <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
+                      <img src={article.image_url} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                    </div>
+                  )}
+                  <div className="flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 text-[10px] text-text-secondary dark:text-gray-400 uppercase tracking-wider mb-1">
+                        <span className="font-bold text-primary">{article.source}</span>
+                        <span>•</span>
+                        <span>{format(new Date(article.published_date), 'MMM d')}</span>
+                      </div>
+                      <h4 className="font-bold text-text-primary dark:text-white text-sm line-clamp-2 leading-tight group-hover:text-primary transition-colors">
+                        {article.title}
+                      </h4>
+                    </div>
+                    <div className="flex items-center gap-1 text-xs font-medium text-primary mt-2 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 duration-300">
+                      {t('readAnalysis')} <ExternalLink size={12} />
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT SIDEBAR */}
+        <div className="space-y-6">
+          
+          {/* AI Prediction */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold text-text-secondary dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
+              <Layers size={14} /> {t('marketIntelligence')}
+            </h3>
+            <PredictionCard prediction={adjustedPrediction} unit={displayUnit} />
+          </div>
+
+          {/* Weather Impact (Farmer) */}
+          {role === 'farmer' && (
+            <div className="animate-in slide-in-from-right duration-500 delay-100">
+              <CropWeatherImpact cropName={crop.name} />
+            </div>
+          )}
+
+          {/* Market Drivers */}
+          <div className="space-y-4">
+             <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-text-secondary dark:text-gray-400 uppercase tracking-wider">
+                  {t('keyDrivers')}
+                </h3>
+             </div>
+             <FactorsList factors={factors} cropName={crop.name} />
+          </div>
+
+          {/* Tip Card */}
+          <div className="p-5 rounded-2xl bg-gradient-to-br from-primary/90 to-primary text-white shadow-lg shadow-primary/20">
+            <div className="flex items-start gap-3">
+              <div className="p-2 bg-white/20 rounded-lg">
+                <Info size={20} className="text-white" />
+              </div>
+              <div>
+                <h4 className="font-bold text-lg mb-1">{t('didYouKnow')}</h4>
+                <p className="text-sm text-white/90 leading-relaxed opacity-90">
+                  {role === 'farmer' 
+                    ? "Early sowing of this variety can prevent pest attacks by up to 15%."
+                    : "Prices typically drop 3-4 months post-harvest. Plan your bulk purchases accordingly."
+                  }
+                </p>
+              </div>
+            </div>
           </div>
 
         </div>

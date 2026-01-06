@@ -5,7 +5,13 @@ INSERT INTO crops (name, category, current_price, price_change_24h, price_change
 ('Cotton', 'Fibre', 6200.00, 2.1, 5.8, 'per quintal', 'https://cdn.pixabay.com/photo/2014/03/26/17/55/cotton-298925_1280.jpg'),
 ('Sugarcane', 'Commercial', 315.00, 0.0, 0.5, 'per quintal', 'https://cdn.pixabay.com/photo/2016/10/25/12/26/sugar-cane-1768652_1280.jpg'),
 ('Potato', 'Vegetables', 1200.00, -1.5, -4.2, 'per quintal', 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&q=80&w=400'),
-('Tomato', 'Vegetables', 2500.00, 5.4, 12.1, 'per quintal', 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=400');
+('Tomato', 'Vegetables', 2500.00, 5.4, 12.1, 'per quintal', 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=400'),
+('Onion', 'Vegetables', 1500.00, 3.2, 8.5, 'per quintal', 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&q=80&w=400'),
+('Mustard', 'Oilseeds', 5250.00, 1.1, 2.3, 'per quintal', 'https://cdn.pixabay.com/photo/2014/05/27/18/05/rape-355608_1280.jpg'),
+('Chickpea', 'Pulses', 4800.00, -0.8, -1.5, 'per quintal', 'https://cdn.pixabay.com/photo/2015/10/02/13/46/chickpeas-968393_1280.jpg'),
+('Groundnut', 'Oilseeds', 5900.00, 0.5, 1.8, 'per quintal', 'https://cdn.pixabay.com/photo/2016/08/25/11/49/peanuts-1619478_1280.jpg'),
+('Barley', 'Grains', 1850.00, 0.2, 0.9, 'per quintal', 'https://cdn.pixabay.com/photo/2015/07/03/17/37/barley-830606_1280.jpg'),
+('Coffee', 'Plantation', 12500.00, 1.5, 4.2, 'per quintal', 'https://cdn.pixabay.com/photo/2016/03/30/21/59/coffee-beans-1291656_1280.jpg');
 
 -- Insert Price History (Sample for Wheat)
 DO $$
