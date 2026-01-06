@@ -6,10 +6,11 @@ import PriceChart from '../components/PriceChart';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PredictionCard from '../components/PredictionCard';
 import FactorsList from '../components/FactorsList';
+import CropWeatherImpact from '../components/CropWeatherImpact';
 import { fetchCropDetails, fetchPriceHistory, refreshPriceHistory, fetchPrediction, fetchFactors, fetchNews } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
-import { ArrowLeft, TrendingUp, TrendingDown, Calendar, ExternalLink, Activity, Layers } from 'lucide-react';
+import { ArrowLeft, TrendingUp, TrendingDown, Calendar, ExternalLink, Activity, Layers, CloudSun } from 'lucide-react';
 
 const getCropImage = (name) => {
   const lower = name.toLowerCase();
@@ -356,8 +357,19 @@ const CropDetail = () => {
 
         </div>
 
-        {/* RIGHT COLUMN: Market Summary + Drivers */}
+        {/* RIGHT COLUMN: Market Summary + Weather Impact + Drivers */}
         <div className="space-y-6">
+          
+          {/* Weather Impact on this Crop */}
+          {role === 'farmer' && (
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.05 }}
+            >
+              <CropWeatherImpact cropName={crop.name} />
+            </motion.div>
+          )}
           
           {/* Market Summary (Compact) */}
           <motion.div 
@@ -403,13 +415,13 @@ const CropDetail = () => {
             </div>
           </motion.div>
 
-          {/* Market Drivers */}
+          {/* Market Drivers - now with crop-specific impacts */}
           <div className="space-y-4">
               <h2 className="text-xl font-bold text-text-primary dark:text-white flex items-center gap-2">
                   <Layers className="text-primary" size={20} />
                   {t('marketDrivers')}
               </h2>
-              <FactorsList factors={factors} />
+              <FactorsList factors={factors} cropName={crop.name} />
               
               {role === 'customer' && (
                   <div className="glass-panel p-5 rounded-xl bg-gradient-to-br from-primary/5 to-transparent border-primary/10 dark:from-primary/10 dark:border-primary/20">

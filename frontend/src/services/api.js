@@ -62,6 +62,11 @@ export const fetchFactors = async (cropId) => {
   return response.data;
 };
 
+export const fetchGlobalFactors = async () => {
+  const response = await api.get('/crops/factors/global');
+  return response.data;
+};
+
 export const fetchNews = async (cropId) => {
   const response = await api.get(`/crops/${cropId}/news`);
   return response.data;
@@ -79,6 +84,16 @@ export const fetchWeather = async (region = 'default') => {
 
 export const fetchWeatherForecast = async (region = 'default') => {
   const response = await api.get('/weather/forecast', { params: { region } });
+  return response.data;
+};
+
+export const fetchWeatherRecommendations = async (region = 'default') => {
+  const response = await api.get('/weather/recommendations', { params: { region } });
+  return response.data;
+};
+
+export const fetchCropWeatherImpact = async (cropName, region = 'default') => {
+  const response = await api.get(`/weather/impact/${encodeURIComponent(cropName)}`, { params: { region } });
   return response.data;
 };
 

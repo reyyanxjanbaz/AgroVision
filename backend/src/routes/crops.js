@@ -3,6 +3,7 @@ const router = express.Router();
 const Crop = require('../models/Crop');
 const supabase = require('../config/supabase'); // Keep for other queries if needed
 const axios = require('axios');
+const { calculateWeatherImpact, adjustFactorImpact, getCropRecommendations } = require('../config/cropSensitivities');
 
 // GET all crops
 router.get('/', async (req, res) => {
@@ -12,6 +13,113 @@ router.get('/', async (req, res) => {
     res.json(data);
   } catch (error) {
     console.error('Error fetching crops:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET global market factors (for dashboard)
+router.get('/factors/global', async (req, res) => {
+  try {
+    const weatherService = require('../services/weatherService');
+    let currentWeather = null;
+    
+    try {
+      currentWeather = await weatherService.getCurrentWeather('default');
+    } catch (err) {
+      console.error('Weather service unavailable:', err.message);
+    }
+
+    // Generate comprehensive market factors
+    const factors = [];
+
+    // Weather factor
+    if (currentWeather) {
+      const baseImpact = weatherService.assessAgriculturalImpact(currentWeather);
+      factors.push({
+        id: 'weather-global',
+        factor_type: 'weather',
+        title: `${currentWeather.condition} Weather Conditions`,
+        description: baseImpact.description,
+        impact_score: baseImpact.impactScore,
+        date: new Date().toISOString(),
+        details: {
+          temperature: currentWeather.temperature,
+          humidity: currentWeather.humidity,
+          condition: currentWeather.condition
+        }
+      });
+    }
+
+    // Market demand factors
+    factors.push({
+      id: 'demand-export',
+      factor_type: 'demand',
+      title: 'Export Market Demand Rising',
+      description: 'International buyers showing increased interest in Indian agricultural commodities. Export orders up 15% compared to last quarter.',
+      impact_score: 12.5,
+      date: new Date().toISOString()
+    });
+
+    factors.push({
+      id: 'demand-domestic',
+      factor_type: 'demand',
+      title: 'Festival Season Approaching',
+      description: 'Upcoming festivals expected to drive domestic demand for staple crops. Retail buyers stocking up in anticipation.',
+      impact_score: 8.3,
+      date: new Date().toISOString()
+    });
+
+    // Supply factors
+    factors.push({
+      id: 'supply-sowing',
+      factor_type: 'supply',
+      title: 'Sowing Area Updates',
+      description: 'Mixed reports on sowing area - some regions report lower acreage due to delayed monsoons while others show normal coverage.',
+      impact_score: -5.2,
+      date: new Date().toISOString()
+    });
+
+    factors.push({
+      id: 'supply-storage',
+      factor_type: 'supply',
+      title: 'Cold Storage Capacity',
+      description: 'Government initiatives expanding cold storage facilities, helping reduce post-harvest losses and stabilize supply.',
+      impact_score: 4.1,
+      date: new Date().toISOString()
+    });
+
+    // Policy factors
+    factors.push({
+      id: 'policy-msp',
+      factor_type: 'policy',
+      title: 'MSP Revision Expected',
+      description: 'Government considering revision of Minimum Support Price for major crops. Announcement expected within the coming weeks.',
+      impact_score: 15.0,
+      date: new Date().toISOString()
+    });
+
+    factors.push({
+      id: 'policy-subsidy',
+      factor_type: 'policy',
+      title: 'Fertilizer Subsidy Update',
+      description: 'New fertilizer subsidy scheme to reduce input costs for farmers. Expected to benefit small and marginal farmers significantly.',
+      impact_score: 10.2,
+      date: new Date().toISOString()
+    });
+
+    // Economic factors
+    factors.push({
+      id: 'economic-fuel',
+      factor_type: 'economic',
+      title: 'Fuel Price Impact',
+      description: 'Recent fuel price fluctuations affecting transportation costs. Logistics expenses showing slight increase across supply chains.',
+      impact_score: -3.8,
+      date: new Date().toISOString()
+    });
+
+    res.json(factors);
+  } catch (error) {
+    console.error('Error fetching global factors:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -225,6 +333,10 @@ router.get('/:id/factors', async (req, res) => {
       return res.status(400).json({ error: 'Invalid crop ID format' });
     }
 
+    // Fetch crop details to get crop name for sensitivity calculations
+    const crop = await Crop.getById(id);
+    const cropName = crop?.name || 'default';
+
     const { data, error } = await supabase
       .from('factors')
       .select('*')
@@ -234,50 +346,113 @@ router.get('/:id/factors', async (req, res) => {
 
     if (error) throw error;
 
-    // If no factors in DB, generate sample ones
+    // Fetch current weather for weather-based factor adjustments
+    const weatherService = require('../services/weatherService');
+    let currentWeather = null;
+    try {
+      currentWeather = await weatherService.getCurrentWeather('default');
+    } catch (err) {
+      console.error('Weather service unavailable:', err.message);
+    }
+
+    // If no factors in DB, generate sample ones with crop-specific impacts
     if (!data || data.length === 0) {
-      // Fetch real weather data to generate weather factor
-      const weatherService = require('../services/weatherService');
       let weatherFactor = {
         factor_type: 'weather',
         description: 'Weather data unavailable',
-        impact_score: 0
+        impact_score: 0,
+        crop_specific_impact: null
       };
 
-      try {
-        const weather = await weatherService.getCurrentWeather('default');
-        const impact = weatherService.assessAgriculturalImpact(weather);
+      if (currentWeather) {
+        const weatherImpact = calculateWeatherImpact(cropName, currentWeather);
+        const baseImpact = weatherService.assessAgriculturalImpact(currentWeather);
+        
         weatherFactor = {
           factor_type: 'weather',
-          description: `${weather.condition} conditions: ${impact.description}`,
-          impact_score: impact.impactScore
+          description: `${currentWeather.condition} conditions: ${weatherImpact.details[0] || baseImpact.description}`,
+          impact_score: baseImpact.impactScore,
+          crop_specific_impact: {
+            adjusted_score: weatherImpact.impactScore,
+            sentiment: weatherImpact.sentiment,
+            is_beneficial: weatherImpact.impactScore > 0,
+            crop_message: weatherImpact.details[0],
+            recommendations: weatherImpact.recommendations,
+            vulnerabilities: weatherImpact.vulnerabilities
+          }
         };
-      } catch (err) {
-        console.error('Weather service unavailable for factors:', err.message);
       }
+
+      // Create sample factors with crop-specific adjustments
+      const demandImpact = adjustFactorImpact(cropName, 'demand', 12.3);
+      const supplyImpact = adjustFactorImpact(cropName, 'supply', -7.2);
+      const policyImpact = adjustFactorImpact(cropName, 'policy', 15.0);
 
       const sampleFactors = [
         weatherFactor,
         {
           factor_type: 'demand',
           description: 'Increased demand from export markets',
-          impact_score: 12.3
+          impact_score: 12.3,
+          crop_specific_impact: {
+            adjusted_score: demandImpact.adjustedScore,
+            sentiment: demandImpact.sentiment,
+            is_beneficial: demandImpact.adjustedScore > 0,
+            crop_message: demandImpact.description || `${cropName} has ${demandImpact.adjustedScore > 8 ? 'high' : 'moderate'} demand sensitivity`
+          }
         },
         {
           factor_type: 'supply',
           description: 'Lower supply due to reduced sowing area',
-          impact_score: -7.2
+          impact_score: -7.2,
+          crop_specific_impact: {
+            adjusted_score: supplyImpact.adjustedScore,
+            sentiment: supplyImpact.sentiment,
+            is_beneficial: supplyImpact.adjustedScore > 0,
+            crop_message: supplyImpact.description || `Supply constraints ${Math.abs(supplyImpact.adjustedScore) > 5 ? 'significantly' : 'moderately'} affect ${cropName}`
+          }
         },
         {
           factor_type: 'policy',
           description: 'Government announces minimum support price increase',
-          impact_score: 15.0
+          impact_score: 15.0,
+          crop_specific_impact: {
+            adjusted_score: policyImpact.adjustedScore,
+            sentiment: policyImpact.sentiment,
+            is_beneficial: policyImpact.adjustedScore > 0,
+            crop_message: policyImpact.description
+          }
         }
       ];
       return res.json(sampleFactors);
     }
 
-    res.json(data);
+    // Enhance existing factors with crop-specific impacts
+    const enhancedFactors = data.map(factor => {
+      const context = factor.factor_type === 'weather' && currentWeather 
+        ? { weather: currentWeather } 
+        : {};
+      
+      const adjustment = adjustFactorImpact(
+        cropName, 
+        factor.factor_type, 
+        factor.impact_score,
+        context
+      );
+
+      return {
+        ...factor,
+        crop_specific_impact: {
+          adjusted_score: adjustment.adjustedScore,
+          sentiment: adjustment.sentiment,
+          is_beneficial: adjustment.adjustedScore > 0,
+          crop_message: adjustment.description,
+          recommendations: adjustment.recommendations
+        }
+      };
+    });
+
+    res.json(enhancedFactors);
   } catch (error) {
     console.error('Error fetching factors:', error);
     res.status(500).json({ error: error.message });

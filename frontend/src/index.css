@@ -24,6 +24,33 @@
     @apply hover:shadow-lift hover:-translate-y-1 transition-all duration-200;
   }
 
+  /* Green outline on hover for clickable white components */
+  a .glass-panel,
+  button.glass-panel,
+  a.glass-panel,
+  .glass-panel:is(a, button),
+  a > .glass-panel,
+  button > .glass-panel {
+    @apply hover:outline hover:outline-2 hover:outline-primary hover:outline-offset-2;
+  }
+
+  /* Clickable white cards and buttons */
+  a[class*="bg-white"],
+  button[class*="bg-white"],
+  a [class*="bg-white"]:not(input),
+  button [class*="bg-white"]:not(input),
+  a.bg-gray-50,
+  button.bg-gray-50,
+  a .bg-gray-50:not(input),
+  button .bg-gray-50:not(input) {
+    @apply hover:outline hover:outline-2 hover:outline-primary hover:outline-offset-2 transition-all duration-200;
+  }
+
+  /* Interactive white/light elements */
+  .clickable-card {
+    @apply hover:outline hover:outline-2 hover:outline-primary hover:outline-offset-2 transition-all duration-200;
+  }
+
   .tech-border {
     @apply border border-gray-100 dark:border-gray-800 relative overflow-hidden;
   }
@@ -56,6 +83,45 @@
   .bento-grid {
     @apply grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[minmax(180px,auto)];
   }
+}
+
+/* Green outline on hover for all clickable white/light components */
+a:hover .glass-panel,
+a.glass-panel:hover,
+button.glass-panel:hover,
+.glass-panel-hover:hover {
+  outline: 2px solid #10B981;
+  outline-offset: 2px;
+}
+
+/* Target links wrapping white background cards */
+a:hover > div[class*="bg-white"],
+a:hover > div[class*="bg-gray-50"],
+a:hover > div.glass-panel {
+  outline: 2px solid #10B981;
+  outline-offset: 2px;
+}
+
+/* Buttons with white/light backgrounds */
+button[class*="bg-white"]:hover,
+button[class*="bg-gray-50"]:hover,
+button[class*="bg-gray-100"]:hover {
+  outline: 2px solid #10B981;
+  outline-offset: 2px;
+}
+
+/* Interactive cards in modals and menus */
+button[class*="rounded-xl"]:hover,
+button[class*="rounded-2xl"]:hover,
+button[class*="rounded-3xl"]:hover {
+  outline: 2px solid #10B981;
+  outline-offset: 2px;
+}
+
+/* Language selector buttons and role buttons */
+button[class*="border-gray"]:hover {
+  outline: 2px solid #10B981;
+  outline-offset: 2px;
 }
 
 /* Custom scrollbar for the light theme */

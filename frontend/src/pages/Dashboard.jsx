@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import CropCard from '../components/CropCard';
 import LoadingSpinner from '../components/LoadingSpinner';
+import WeatherCropWidget from '../components/WeatherCropWidget';
+import MarketFactorsSection from '../components/MarketFactorsSection';
 import { fetchCrops, fetchWeather } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
@@ -359,12 +361,24 @@ const Dashboard = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredCrops.map((crop) => (
               <CropCard key={crop.id} crop={crop} />
             ))}
           </div>
         )}
+      </div>
+
+      {/* Weather x Crop Insights Widget - Full width for farmers */}
+      {role === 'farmer' && (
+        <div className="mt-8">
+          <WeatherCropWidget crops={crops} />
+        </div>
+      )}
+
+      {/* Market Factors Section */}
+      <div className="mt-8">
+        <MarketFactorsSection />
       </div>
     </div>
   );
