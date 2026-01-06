@@ -6,7 +6,6 @@ import {
   CloudRain, 
   Thermometer, 
   Droplets, 
-  Wind,
   ThumbsUp,
   ThumbsDown,
   AlertTriangle,

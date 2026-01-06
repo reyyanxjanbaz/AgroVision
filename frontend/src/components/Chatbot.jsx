@@ -4,7 +4,6 @@ import { sendChatMessage } from '../services/api';
 import usePageContext from '../hooks/usePageContext';
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const Chatbot = () => {
   const { role } = useAuth();

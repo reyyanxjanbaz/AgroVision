@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { subDays, format } from 'date-fns';
-import { motion, AnimatePresence } from 'framer-motion';
 import PriceChart from '../components/PriceChart';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PredictionCard from '../components/PredictionCard';
@@ -11,11 +10,8 @@ import { fetchCropDetails, fetchPriceHistory, refreshPriceHistory, fetchPredicti
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
 import { 
-  ArrowLeft, 
   TrendingUp, 
   TrendingDown, 
-  Calendar, 
-  ExternalLink, 
   Activity, 
   Layers, 
   Share2, 
@@ -23,7 +19,8 @@ import {
   Info,
   ChevronRight,
   Newspaper,
-  CloudSun
+  CloudSun,
+  ExternalLink
 } from 'lucide-react';
 
 const getCropImage = (name) => {

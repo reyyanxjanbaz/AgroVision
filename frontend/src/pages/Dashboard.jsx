@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import CropCard from '../components/CropCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import WeatherCropWidget from '../components/WeatherCropWidget';
 import MarketFactorsSection from '../components/MarketFactorsSection';
-import { fetchCrops, fetchWeather } from '../services/api';
+import { fetchCrops } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
 import { format } from 'date-fns';
@@ -201,7 +201,7 @@ const SearchFilterBar = ({
 };
 
 const Dashboard = () => {
-  const { role, user } = useAuth();
+  const { role } = useAuth();
   const { t } = useSettings();
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q');
@@ -213,7 +213,6 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState(query || '');
   const [filterCategory, setFilterCategory] = useState('All');
   const [isExporting, setIsExporting] = useState(false);
-  const [weather, setWeather] = useState(null);
 
   // --- Data Loading ---
   useEffect(() => {
@@ -236,23 +235,6 @@ const Dashboard = () => {
     if (query) setSearchTerm(query);
   }, [query]);
 
-  useEffect(() => {
-    const loadWeather = async () => {
-      try {
-        const weatherData = await fetchWeather('default');
-        setWeather(weatherData);
-      } catch (err) {
-        setWeather({
-          temperature: '--',
-          condition: 'Unavailable',
-          impact: { description: 'Weather service offline' }
-        });
-      }
-    };
-    loadWeather();
-  }, []);
-
-  // --- Filtering ---
   const filteredCrops = useMemo(() => {
     return crops.filter(crop => {
       const matchesSearch = crop.name.toLowerCase().includes(searchTerm.toLowerCase()) || 

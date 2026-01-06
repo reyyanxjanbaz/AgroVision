@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Cloud, 
@@ -118,39 +118,39 @@ const MarketFactorsSection = ({ compact = false }) => {
   const [expanded, setExpanded] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Fallback factors if API fails
-  const FALLBACK_FACTORS = [
-    {
-      id: 'weather-fallback',
-      factor_type: 'weather',
-      title: 'Seasonal Weather Patterns',
-      description: 'Current weather conditions are generally favorable for agricultural activities across most regions.',
-      impact_score: 5.2,
-    },
-    {
-      id: 'demand-fallback',
-      factor_type: 'demand',
-      title: 'Stable Market Demand',
-      description: 'Consumer demand remains steady with slight uptick expected during upcoming festive season.',
-      impact_score: 8.5,
-    },
-    {
-      id: 'supply-fallback',
-      factor_type: 'supply',
-      title: 'Supply Chain Update',
-      description: 'Supply levels normal across major crops. Some regional variations due to transportation logistics.',
-      impact_score: -2.1,
-    },
-    {
-      id: 'policy-fallback',
-      factor_type: 'policy',
-      title: 'Government Initiatives',
-      description: 'New agricultural policies aimed at supporting farmers and stabilizing commodity prices.',
-      impact_score: 12.0,
-    }
-  ];
+  const loadFactors = useCallback(async () => {
+    // Fallback factors if API fails
+    const FALLBACK_FACTORS = [
+      {
+        id: 'weather-fallback',
+        factor_type: 'weather',
+        title: 'Seasonal Weather Patterns',
+        description: 'Current weather conditions are generally favorable for agricultural activities across most regions.',
+        impact_score: 5.2,
+      },
+      {
+        id: 'demand-fallback',
+        factor_type: 'demand',
+        title: 'Stable Market Demand',
+        description: 'Consumer demand remains steady with slight uptick expected during upcoming festive season.',
+        impact_score: 8.5,
+      },
+      {
+        id: 'supply-fallback',
+        factor_type: 'supply',
+        title: 'Supply Chain Update',
+        description: 'Supply levels normal across major crops. Some regional variations due to transportation logistics.',
+        impact_score: -2.1,
+      },
+      {
+        id: 'policy-fallback',
+        factor_type: 'policy',
+        title: 'Government Initiatives',
+        description: 'New agricultural policies aimed at supporting farmers and stabilizing commodity prices.',
+        impact_score: 12.0,
+      }
+    ];
 
-  const loadFactors = async () => {
     try {
       setRefreshing(true);
       const data = await fetchGlobalFactors();
@@ -166,11 +166,12 @@ const MarketFactorsSection = ({ compact = false }) => {
       setLoading(false);
       setRefreshing(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadFactors();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadFactors]);
 
   if (loading) {
     return (
