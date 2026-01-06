@@ -53,7 +53,7 @@ const MetricCard = ({ title, value, subValue, icon: Icon, trend, trendValue, col
   };
 
   return (
-    <div className="glass-panel p-4 rounded-xl flex items-start justify-between relative overflow-hidden dark:bg-gray-800 dark:border-gray-700 hover:shadow-md transition-shadow">
+    <div className="glass-panel p-4 rounded-xl flex items-start justify-between relative overflow-hidden dark:bg-gray-800 border border-green-500 hover:shadow-md transition-shadow">
       <div className="relative z-10">
         <p className="text-text-secondary dark:text-gray-400 text-xs font-mono uppercase tracking-wider mb-1">{title}</p>
         <h3 className="text-2xl font-bold text-text-primary dark:text-white font-mono">{value}</h3>
@@ -282,7 +282,7 @@ const CropDetail = () => {
         <div className="lg:col-span-2 space-y-8">
           
           {/* Chart Section */}
-          <div className="glass-panel p-6 rounded-2xl dark:bg-gray-800 dark:border-gray-700">
+          <div className="glass-panel p-6 rounded-2xl dark:bg-gray-800 border border-green-500">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <div>
                 <h3 className="text-lg font-bold text-text-primary dark:text-white flex items-center gap-2">
@@ -342,7 +342,7 @@ const CropDetail = () => {
                   href={article.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="group flex gap-4 p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all hover:border-primary/20"
+                  className="group flex gap-4 p-4 rounded-xl bg-white dark:bg-gray-800 border border-green-500 hover:shadow-lg transition-all"
                 >
                   {article.image_url && (
                     <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
@@ -395,9 +395,11 @@ const CropDetail = () => {
                   {t('keyDrivers')}
                 </h3>
              </div>
-             <FactorsList factors={factors} cropName={crop.name} />
+             <div className="rounded-xl border border-green-500 p-4">
+              <FactorsList factors={factors} cropName={crop.name} />
+             </div>
           </div>
-
+ border border-green-500
           {/* Tip Card */}
           <div className="p-5 rounded-2xl bg-gradient-to-br from-primary/90 to-primary text-white shadow-lg shadow-primary/20">
             <div className="flex items-start gap-3">

@@ -46,7 +46,7 @@ const StatCard = ({ icon: Icon, label, value, trend, color, subtext, onClick }) 
     <motion.div 
       whileHover={{ y: -2 }}
       onClick={onClick}
-      className="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all cursor-pointer relative overflow-hidden"
+      className="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-green-500 shadow-sm hover:shadow-md transition-all cursor-pointer relative overflow-hidden"
     >
       <div className="flex justify-between items-start mb-3">
         <div className={`p-2.5 rounded-xl ${colorStyles[color].split(' ')[0]} ${colorStyles[color].split(' ')[1]}`}>
@@ -385,7 +385,7 @@ const Dashboard = () => {
           </div>
 
           {/* Market Data Area */}
-          <div className="bg-white/50 dark:bg-gray-800/20 backdrop-blur-sm rounded-3xl md:p-1">
+          <div className="bg-white/50 dark:bg-gray-800/20 backdrop-blur-sm rounded-3xl md:p-1 border border-green-500">
             <div className="flex items-center gap-3 mb-4 px-2">
               <div className="p-2 bg-primary/10 rounded-lg text-primary">
                 <Activity size={20} />
@@ -421,7 +421,7 @@ const Dashboard = () => {
                     initial={{ opacity: 0 }} 
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex flex-col items-center justify-center py-20 bg-white dark:bg-gray-800 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 text-center shadow-sm"
+                    className="flex flex-col items-center justify-center py-20 bg-white dark:bg-gray-800 rounded-2xl border border-green-500 text-center shadow-sm"
                 >
                     <div className="w-16 h-16 bg-gray-50 dark:bg-gray-700/50 rounded-full flex items-center justify-center mb-4">
                         <Search size={32} className="text-gray-400" />
@@ -446,7 +446,7 @@ const Dashboard = () => {
         <div className="col-span-12 lg:col-span-4 space-y-6 lg:sticky lg:top-24">
           
           {/* Quick Actions Panel */}
-          <section className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm">
+          <section className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-green-500 shadow-sm">
             <div className="flex items-center gap-2 mb-4">
               <Zap className="text-amber-500" size={18} />
               <h3 className="font-bold text-gray-900 dark:text-white">{t('quickActions')}</h3>
@@ -462,12 +462,12 @@ const Dashboard = () => {
           <WeatherCropWidget crops={crops} />
 
           {/* Market Factors (Simplified/Compact View) */}
-          <section>
+          <section className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-green-500 shadow-sm">
              <MarketFactorsSection compact={true} />
           </section>
 
           {/* Pro Tip / Insight Card */}
-          <div className="bg-gradient-to-br from-primary to-emerald-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group hover:shadow-xl transition-shadow">
+          <div className="bg-gradient-to-br from-primary to-emerald-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group hover:shadow-xl transition-shadow border border-green-500">
             <div className="absolute top-0 right-0 p-12 bg-white/10 rounded-full -mr-8 -mt-8 transition-transform group-hover:scale-110 duration-500" />
             
             <div className="relative z-10">

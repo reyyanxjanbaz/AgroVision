@@ -7,7 +7,7 @@ const PredictionCard = ({ prediction, unit = 'Quintal' }) => {
   if (!prediction) return null;
 
   return (
-    <div className="glass-panel p-6 relative overflow-hidden group dark:bg-gray-800 dark:border-gray-700">
+    <div className="glass-panel p-6 relative overflow-hidden group dark:bg-gray-800 border border-green-500">
       <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
         <Sparkles size={80} className="text-primary" />
       </div>

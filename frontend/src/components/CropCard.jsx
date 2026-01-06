@@ -59,7 +59,7 @@ const CropCard = ({ crop, featured }) => {
 
   return (
     <Link to={`/crop/${crop.id}`} className="block h-full">
-      <div className={`glass-panel glass-panel-hover p-6 rounded-3xl h-full flex flex-col justify-between group relative overflow-hidden ${featured ? 'bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900' : ''}`}>
+      <div className={`glass-panel glass-panel-hover p-6 rounded-3xl h-full flex flex-col justify-between group relative overflow-hidden border border-green-500 ${featured ? 'bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900' : ''}`}>
         {/* Tech decoration */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-full" />
         
