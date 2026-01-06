@@ -14,9 +14,9 @@ import { ArrowLeft, TrendingUp, TrendingDown, Calendar, ExternalLink, Activity, 
 
 const getCropImage = (name) => {
   const lower = name.toLowerCase();
-  if (lower.includes('cotton')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Cotton_field_kv17.jpg/800px-Cotton_field_kv17.jpg';
-  if (lower.includes('sugarcane')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Sugarcane_field.jpg/800px-Sugarcane_field.jpg';
-  if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Soybean.JPG/800px-Soybean.JPG';
+  if (lower.includes('cotton')) return 'https://cdn.pixabay.com/photo/2014/03/26/17/55/cotton-298925_1280.jpg';
+  if (lower.includes('sugarcane')) return 'https://cdn.pixabay.com/photo/2016/10/25/12/26/sugar-cane-1768652_1280.jpg';
+  if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://cdn.pixabay.com/photo/2016/09/19/20/09/soy-1681284_1280.jpg';
   return null;
 };
 
@@ -206,7 +206,12 @@ const CropDetail = () => {
                   className="w-32 h-32 rounded-2xl border border-gray-200 dark:border-gray-600 object-cover shadow-lg"
                   onError={(e) => {
                     e.target.onerror = null; 
-                    e.target.src = `https://ui-avatars.com/api/?name=${crop.name}&background=random&size=400`;
+                    const fallback = getCropImage(crop.name);
+                    if (fallback && e.target.src !== fallback) {
+                      e.target.src = fallback;
+                    } else {
+                      e.target.src = `https://ui-avatars.com/api/?name=${crop.name}&background=random&size=400`;
+                    }
                   }}
                 />
                 <div className="absolute -bottom-3 -right-3 bg-white dark:bg-gray-700 px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-600 text-xs font-mono text-primary shadow-sm">

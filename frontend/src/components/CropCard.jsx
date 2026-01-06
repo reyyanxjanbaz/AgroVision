@@ -7,9 +7,9 @@ import { useSettings } from '../context/SettingsContext';
 const getCropImage = (name) => {
   if (!name) return null;
   const lower = name.toLowerCase();
-  if (lower.includes('cotton')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Cotton_field_kv17.jpg/800px-Cotton_field_kv17.jpg';
-  if (lower.includes('sugarcane')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Sugarcane_field.jpg/800px-Sugarcane_field.jpg';
-  if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Soybean.JPG/800px-Soybean.JPG';
+  if (lower.includes('cotton')) return 'https://cdn.pixabay.com/photo/2014/03/26/17/55/cotton-298925_1280.jpg';
+  if (lower.includes('sugarcane')) return 'https://cdn.pixabay.com/photo/2016/10/25/12/26/sugar-cane-1768652_1280.jpg';
+  if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://cdn.pixabay.com/photo/2016/09/19/20/09/soy-1681284_1280.jpg';
   return null;
 };
 
@@ -67,7 +67,12 @@ const CropCard = ({ crop, featured }) => {
                 className={`${featured ? 'w-16 h-16' : 'w-12 h-12'} rounded-2xl object-cover shadow-sm group-hover:scale-105 transition-transform duration-500`}
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = `https://ui-avatars.com/api/?name=${crop.name}&background=random&size=200`;
+                  const fallback = getCropImage(crop.name);
+                  if (fallback && e.target.src !== fallback) {
+                    e.target.src = fallback;
+                  } else {
+                    e.target.src = `https://ui-avatars.com/api/?name=${crop.name}&background=random&size=200`;
+                  }
                 }}
               />
               <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-secondary rounded-full border-2 border-white dark:border-gray-800" />

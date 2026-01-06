@@ -40,7 +40,7 @@ const crops = [
   {
     name: 'Soybeans',
     category: 'Pulses',
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Soybean.JPG/800px-Soybean.JPG',
+    image_url: 'https://cdn.pixabay.com/photo/2016/09/19/20/09/soy-1681284_1280.jpg',
     current_price: 4520.00,
     price_change_24h: 1.5,
     price_change_7d: 3.2,
@@ -49,7 +49,7 @@ const crops = [
   {
     name: 'Cotton',
     category: 'Fiber',
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Cotton_field_kv17.jpg/800px-Cotton_field_kv17.jpg',
+    image_url: 'https://cdn.pixabay.com/photo/2014/03/26/17/55/cotton-298925_1280.jpg',
     current_price: 5680.00,
     price_change_24h: -2.1,
     price_change_7d: -4.5,
@@ -58,7 +58,7 @@ const crops = [
   {
     name: 'Sugarcane',
     category: 'Cash Crops',
-    image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Sugarcane_field.jpg/800px-Sugarcane_field.jpg',
+    image_url: 'https://cdn.pixabay.com/photo/2016/10/25/12/26/sugar-cane-1768652_1280.jpg',
     current_price: 350.00,
     price_change_24h: 0.5,
     price_change_7d: 1.2,

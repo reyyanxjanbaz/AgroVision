@@ -473,9 +473,9 @@ router.get('/:id/news', async (req, res) => {
   const getFallbackImage = (name) => {
     if (!name) return 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=80';
     const lower = name.toLowerCase();
-    if (lower.includes('cotton')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Cotton_field_kv17.jpg/800px-Cotton_field_kv17.jpg';
-    if (lower.includes('sugarcane')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Sugarcane_field.jpg/800px-Sugarcane_field.jpg';
-    if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Soybean.JPG/800px-Soybean.JPG';
+    if (lower.includes('cotton')) return 'https://cdn.pixabay.com/photo/2014/03/26/17/55/cotton-298925_1280.jpg';
+    if (lower.includes('sugarcane')) return 'https://cdn.pixabay.com/photo/2016/10/25/12/26/sugar-cane-1768652_1280.jpg';
+    if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://cdn.pixabay.com/photo/2016/09/19/20/09/soy-1681284_1280.jpg';
     if (lower.includes('wheat')) return 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80';
     if (lower.includes('rice')) return 'https://images.unsplash.com/photo-1536617621572-1d5f1e6269a0?auto=format&fit=crop&w=800&q=80';
     if (lower.includes('corn') || lower.includes('maize')) return 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=800&q=80';
