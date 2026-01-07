@@ -11,15 +11,15 @@ module.exports = {
         background: '#FAFAFA', // Zinc 50
         surface: '#FFFFFF',
         surfaceHighlight: '#F4F4F5', // Zinc 100
-        primary: '#10B981',    // Emerald 500 - High Voltage
-        primaryGlow: '#34D399', // Emerald 400
-        secondary: '#059669',  // Emerald 600
-        accent: '#F59E0B',     // Amber 500
-        danger: '#EF4444',     // Red 500
+        primary: '#047857',    // Emerald 700 - Maximized Contrast
+        primaryGlow: '#059669', // Emerald 600
+        secondary: '#064E3B',  // Emerald 800
+        accent: '#B45309',     // Amber 700
+        danger: '#B91C1C',     // Red 700
         text: {
           primary: '#18181B',  // Zinc 900
-          secondary: '#71717A', // Zinc 500
-          muted: '#A1A1AA',    // Zinc 400
+          secondary: '#3F3F46', // Zinc 700 (Darker)
+          muted: '#52525B',    // Zinc 600 (Darker)
         }
       },
       fontFamily: {

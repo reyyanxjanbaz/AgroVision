@@ -60,9 +60,9 @@ const StatCard = ({ icon: Icon, label, value, trend, color, subtext, onClick }) 
         )}
       </div>
       <div>
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1 font-mono tracking-tight">{value}</h3>
+        <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1 font-mono tracking-tight">{value}</div>
         <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">{label}</p>
-        <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 truncate">{subtext}</p>
+        <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1 truncate">{subtext}</p>
       </div>
     </motion.div>
   );
@@ -102,7 +102,7 @@ const SearchFilterBar = ({
       <div className="flex flex-col md:flex-row gap-3 md:items-center justify-between">
         {/* Search Input */}
         <div className="relative flex-1 group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" size={18} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 group-focus-within:text-primary transition-colors" size={18} />
           <input
             type="text"
             placeholder={t('searchCrops') || "Search for crops..."}
@@ -170,6 +170,7 @@ const SearchFilterBar = ({
           <button 
             onClick={onExport}
             disabled={isExporting}
+            aria-label={t('exportCSV')}
             className="whitespace-nowrap px-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary hover:border-primary/50 transition-all flex items-center gap-2 text-sm font-medium shadow-sm active:scale-95 duration-200"
           >
             {isExporting ? <Check size={16} className="text-green-500" /> : <Download size={16} />}

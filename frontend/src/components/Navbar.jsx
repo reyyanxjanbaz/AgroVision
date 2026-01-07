@@ -72,6 +72,7 @@ const Navbar = () => {
               <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 hover:border-primary/30 transition-all cursor-pointer">
                 <span className="text-[10px] text-text-secondary dark:text-gray-400 uppercase font-mono tracking-wider">{t('role')}</span>
                 <select
+                  aria-label={t('role')}
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   className="bg-transparent text-sm font-bold text-text-primary dark:text-white focus:outline-none cursor-pointer appearance-none pr-4"
@@ -87,6 +88,7 @@ const Navbar = () => {
             {/* User Profile & Settings */}
             <div className="relative" ref={profileRef}>
               <button 
+                aria-label={t('profile') || "User Profile"}
                 className="flex items-center gap-3 pl-4 border-l border-gray-100 dark:border-gray-700 group"
                 onClick={() => setProfileMenuOpen(!profileMenuOpen)}
               >
@@ -214,21 +216,22 @@ const Navbar = () => {
       </AnimatePresence>
 
       {/* MOBILE: Top Bar (Logo Only) */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 px-4 py-3 flex items-center justify-between">
+      <header className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 px-4 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <Activity className="text-primary w-6 h-6" />
           <span className="text-lg font-display font-bold text-text-primary dark:text-white">AGRO<span className="text-primary">VISION</span></span>
         </Link>
         <button 
+          aria-label={t('openMenu') || "Open Menu"}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-text-primary dark:text-white"
         >
           <SettingsIcon size={20} />
         </button>
-      </div>
+      </header>
 
       {/* MOBILE: Bottom Navigation Bar (Thumb Zone) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 pb-safe">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 pb-safe">
         <div className="flex items-center justify-around p-2">
           <Link to="/" className="flex flex-col items-center gap-1 p-2 text-primary">
             <Home size={24} />
@@ -243,7 +246,7 @@ const Navbar = () => {
             <span className="text-[10px] font-medium">Profile</span>
           </button>
         </div>
-      </div>
+      </nav>
 
       {/* MOBILE: Full Screen Menu Overlay */}
       <AnimatePresence>
@@ -258,6 +261,7 @@ const Navbar = () => {
             <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
               <h2 className="text-lg font-display font-bold text-text-primary dark:text-white">Menu</h2>
               <button 
+                aria-label={t('closeMenu') || "Close Menu"}
                 onClick={() => setMobileMenuOpen(false)}
                 className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-text-primary dark:text-white"
               >

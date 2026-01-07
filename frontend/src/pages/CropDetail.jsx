@@ -210,6 +210,7 @@ const CropDetail = () => {
 
         <div className="flex items-center gap-3">
           <select
+            aria-label={t('selectRegion') || "Select Region"}
             value={region}
             onChange={(e) => setRegion(e.target.value)}
             className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:border-primary/50 focus:outline-none shadow-sm text-text-primary dark:text-white"

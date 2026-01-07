@@ -56,7 +56,7 @@ const MarketFactorCard = ({ factor, index }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 1, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       className={`
@@ -75,14 +75,14 @@ const MarketFactorCard = ({ factor, index }) => {
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-1">
-            <h4 className="font-bold text-sm text-text-primary dark:text-white line-clamp-1">
+            <h3 className="font-bold text-sm text-text-primary dark:text-white line-clamp-1">
               {factor.title}
-            </h4>
+            </h3>
             <div className={`
               flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold font-mono flex-shrink-0
               ${isPositive 
-                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
-                : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                ? 'bg-green-100 text-green-900 dark:bg-green-900/30 dark:text-green-300' 
+                : 'bg-red-100 text-red-900 dark:bg-red-900/30 dark:text-red-300'
               }
             `}>
               {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
@@ -96,7 +96,7 @@ const MarketFactorCard = ({ factor, index }) => {
 
           {/* Type badge */}
           <div className="mt-2 flex items-center gap-2">
-            <span className="text-[10px] font-medium uppercase tracking-wide text-text-muted dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
+            <span className="text-[10px] font-medium uppercase tracking-wide text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
               {t(factor.factor_type)}
             </span>
             {factor.details && factor.details.temperature && (
@@ -222,6 +222,7 @@ const MarketFactorsSection = ({ compact = false }) => {
         <button
           onClick={loadFactors}
           disabled={refreshing}
+          aria-label={t('refreshFactors') || "Refresh Factors"}
           className="p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 
                      text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-primary 
                      hover:border-primary/30 transition-all disabled:opacity-50"

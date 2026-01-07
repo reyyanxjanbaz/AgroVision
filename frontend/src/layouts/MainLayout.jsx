@@ -23,7 +23,7 @@ const MainLayoutContent = ({ children }) => {
 
   return (
     <div className="min-h-screen relative text-text-primary dark:text-gray-100 transition-colors duration-300">
-      <div className="fixed inset-0 -z-10">
+      <div className="fixed inset-0 -z-10" aria-hidden="true">
         <Squares 
           speed={0.1} 
           squareSize={50}

@@ -106,6 +106,7 @@ const Chatbot = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
+          aria-label={t('openChatbot') || "Open Chatbot"}
           className="fixed bottom-24 right-6 md:bottom-8 md:right-8 w-16 h-16 bg-primary text-white rounded-full shadow-glow-green flex items-center justify-center z-50 group border border-white/20 backdrop-blur-sm hover:scale-105 active:scale-95 transition-transform duration-200"
         >
           <Bot size={28} className="group-hover:rotate-12 transition-transform duration-300" />
