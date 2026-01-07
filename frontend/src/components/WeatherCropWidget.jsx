@@ -100,7 +100,7 @@ const WeatherCropWidget = ({ crops = [] }) => {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-panel p-6 rounded-2xl overflow-hidden relative dark:bg-gray-800 border border-green-500"
+      className="glass-panel p-6 rounded-2xl overflow-hidden relative dark:bg-gray-800"
     >
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/10 to-transparent rounded-bl-full opacity-50" />

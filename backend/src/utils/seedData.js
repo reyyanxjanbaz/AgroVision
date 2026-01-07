@@ -40,7 +40,7 @@ const crops = [
   {
     name: 'Soybeans',
     category: 'Pulses',
-    image_url: 'https://cdn.pixabay.com/photo/2016/09/19/20/09/soy-1681284_1280.jpg',
+    image_url: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=400&h=400&fit=crop',
     current_price: 4520.00,
     price_change_24h: 1.5,
     price_change_7d: 3.2,
@@ -49,7 +49,7 @@ const crops = [
   {
     name: 'Cotton',
     category: 'Fiber',
-    image_url: 'https://cdn.pixabay.com/photo/2014/03/26/17/55/cotton-298925_1280.jpg',
+    image_url: 'https://images.unsplash.com/photo-1593452243765-b169543e475e?w=400&h=400&fit=crop',
     current_price: 5680.00,
     price_change_24h: -2.1,
     price_change_7d: -4.5,
@@ -58,7 +58,7 @@ const crops = [
   {
     name: 'Sugarcane',
     category: 'Cash Crops',
-    image_url: 'https://cdn.pixabay.com/photo/2016/10/25/12/26/sugar-cane-1768652_1280.jpg',
+    image_url: 'https://images.unsplash.com/photo-1601625463687-25541fb72f62?w=400&h=400&fit=crop',
     current_price: 350.00,
     price_change_24h: 0.5,
     price_change_7d: 1.2,
@@ -67,7 +67,7 @@ const crops = [
   {
     name: 'Onion',
     category: 'Vegetables',
-    image_url: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&q=80&w=400',
+    image_url: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400&h=400&fit=crop',
     current_price: 1500.00,
     price_change_24h: 3.2,
     price_change_7d: 8.5,
@@ -76,7 +76,7 @@ const crops = [
   {
     name: 'Mustard',
     category: 'Oilseeds',
-    image_url: 'https://cdn.pixabay.com/photo/2014/05/27/18/05/rape-355608_1280.jpg',
+    image_url: 'https://images.unsplash.com/photo-1507724732152-0cf754907a3c?w=400&h=400&fit=crop',
     current_price: 5250.00,
     price_change_24h: 1.1,
     price_change_7d: 2.3,
@@ -85,7 +85,7 @@ const crops = [
   {
     name: 'Chickpea',
     category: 'Pulses',
-    image_url: 'https://cdn.pixabay.com/photo/2015/10/02/13/46/chickpeas-968393_1280.jpg',
+    image_url: 'https://images.unsplash.com/photo-1588613488219-4828695034c5?w=400&h=400&fit=crop',
     current_price: 4800.00,
     price_change_24h: -0.8,
     price_change_7d: -1.5,
@@ -94,7 +94,7 @@ const crops = [
   {
     name: 'Groundnut',
     category: 'Oilseeds',
-    image_url: 'https://cdn.pixabay.com/photo/2016/08/25/11/49/peanuts-1619478_1280.jpg',
+    image_url: 'https://images.unsplash.com/photo-1567492985871-6c23ce087095?w=400&h=400&fit=crop',
     current_price: 5900.00,
     price_change_24h: 0.5,
     price_change_7d: 1.8,
@@ -103,7 +103,7 @@ const crops = [
   {
     name: 'Barley',
     category: 'Grains',
-    image_url: 'https://cdn.pixabay.com/photo/2015/07/03/17/37/barley-830606_1280.jpg',
+    image_url: 'https://images.unsplash.com/photo-1563205764-67c293674646?w=400&h=400&fit=crop',
     current_price: 1850.00,
     price_change_24h: 0.2,
     price_change_7d: 0.9,
@@ -112,7 +112,7 @@ const crops = [
   {
     name: 'Coffee',
     category: 'Plantation',
-    image_url: 'https://cdn.pixabay.com/photo/2016/03/30/21/59/coffee-beans-1291656_1280.jpg',
+    image_url: 'https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=400&h=400&fit=crop',
     current_price: 12500.00,
     price_change_24h: 1.5,
     price_change_7d: 4.2,

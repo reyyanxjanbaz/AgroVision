@@ -80,7 +80,7 @@ const CropWeatherImpact = ({ cropName }) => {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-panel p-6 rounded-2xl overflow-hidden relative dark:bg-gray-800 border border-green-500"
+      className="glass-panel p-6 rounded-2xl overflow-hidden relative dark:bg-gray-800"
     >
       {/* Background decoration based on sentiment */}
       <div className={`absolute top-0 right-0 w-40 h-40 rounded-bl-full opacity-20 ${

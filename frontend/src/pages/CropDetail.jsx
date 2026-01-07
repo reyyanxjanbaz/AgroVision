@@ -9,6 +9,7 @@ import CropWeatherImpact from '../components/CropWeatherImpact';
 import { fetchCropDetails, fetchPriceHistory, refreshPriceHistory, fetchPrediction, fetchFactors, fetchNews } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
+import { getCropImage } from '../utils/cropImages';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -23,20 +24,6 @@ import {
   ExternalLink
 } from 'lucide-react';
 
-const getCropImage = (name) => {
-  const lower = name.toLowerCase();
-  if (lower.includes('cotton')) return 'https://cdn.pixabay.com/photo/2014/03/26/17/55/cotton-298925_1280.jpg';
-  if (lower.includes('sugarcane')) return 'https://cdn.pixabay.com/photo/2016/10/25/12/26/sugar-cane-1768652_1280.jpg';
-  if (lower.includes('soyabean') || lower.includes('soybean')) return 'https://cdn.pixabay.com/photo/2016/09/19/20/09/soy-1681284_1280.jpg';
-  if (lower.includes('onion')) return 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&q=80&w=400';
-  if (lower.includes('mustard')) return 'https://cdn.pixabay.com/photo/2014/05/27/18/05/rape-355608_1280.jpg';
-  if (lower.includes('chickpea') || lower.includes('chana')) return 'https://cdn.pixabay.com/photo/2015/10/02/13/46/chickpeas-968393_1280.jpg';
-  if (lower.includes('groundnut') || lower.includes('peanut')) return 'https://cdn.pixabay.com/photo/2016/08/25/11/49/peanuts-1619478_1280.jpg';
-  if (lower.includes('barley')) return 'https://cdn.pixabay.com/photo/2015/07/03/17/37/barley-830606_1280.jpg';
-  if (lower.includes('coffee')) return 'https://cdn.pixabay.com/photo/2016/03/30/21/59/coffee-beans-1291656_1280.jpg';
-  return null;
-};
-
 const MetricCard = ({ title, value, subValue, icon: Icon, trend, trendValue, color = "primary" }) => {
   const getColorClasses = (c) => {
     // Map of color names to tailwind classes if needed, or rely on simple interpolation for basics
@@ -50,7 +37,7 @@ const MetricCard = ({ title, value, subValue, icon: Icon, trend, trendValue, col
   };
 
   return (
-    <div className="glass-panel p-4 rounded-xl flex items-start justify-between relative overflow-hidden dark:bg-gray-800 border border-green-500 hover:shadow-md transition-shadow">
+    <div className="glass-panel p-4 rounded-xl flex items-start justify-between relative overflow-hidden dark:bg-gray-800 hover:shadow-md transition-shadow">
       <div className="relative z-10">
         <p className="text-text-secondary dark:text-gray-400 text-xs font-mono uppercase tracking-wider mb-1">{title}</p>
         <h3 className="text-2xl font-bold text-text-primary dark:text-white font-mono">{value}</h3>
@@ -186,7 +173,7 @@ const CropDetail = () => {
             <span className="text-text-primary dark:text-white font-medium">{crop.name}</span>
           </div>
           <div className="flex items-center gap-4">
-            <div className="relative">
+            <div className="relative shrink-0">
               <img 
                 src={crop.image_url || getCropImage(crop.name)} 
                 alt={crop.name} 
@@ -280,7 +267,7 @@ const CropDetail = () => {
         <div className="lg:col-span-2 space-y-8">
           
           {/* Chart Section */}
-          <div className="glass-panel p-6 rounded-2xl dark:bg-gray-800 border border-green-500">
+          <div className="glass-panel p-6 rounded-2xl dark:bg-gray-800">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <div>
                 <h3 className="text-lg font-bold text-text-primary dark:text-white flex items-center gap-2">
@@ -340,7 +327,7 @@ const CropDetail = () => {
                   href={article.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="group flex gap-4 p-4 rounded-xl bg-white dark:bg-gray-800 border border-green-500 hover:shadow-lg transition-all"
+                  className="group flex gap-4 p-4 rounded-xl bg-white dark:bg-gray-800 hover:shadow-lg transition-all"
                 >
                   {article.image_url && (
                     <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
@@ -393,11 +380,10 @@ const CropDetail = () => {
                   {t('keyDrivers')}
                 </h3>
              </div>
-             <div className="rounded-xl border border-green-500 p-4">
+             <div className="rounded-xl p-4">
               <FactorsList factors={factors} cropName={crop.name} />
              </div>
           </div>
- border border-green-500
           {/* Tip Card */}
           <div className="p-5 rounded-2xl bg-gradient-to-br from-primary/90 to-primary text-white shadow-lg shadow-primary/20">
             <div className="flex items-start gap-3">
