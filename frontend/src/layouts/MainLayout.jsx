@@ -8,16 +8,16 @@ import { SettingsProvider, useSettings } from '../context/SettingsContext';
 const MainLayoutContent = ({ children }) => {
   const { theme } = useSettings();
   
-  // Define colors based on theme - subtle background
+  // Define colors based on theme - improved visibility
   const squaresProps = theme === 'dark' 
     ? {
-        borderColor: 'rgba(34, 197, 94, 0.15)', // Subtle green
-        hoverFillColor: 'rgba(34, 197, 94, 0.25)',
+        borderColor: 'rgba(34, 197, 94, 0.3)', // Increased visibility
+        hoverFillColor: 'rgba(34, 197, 94, 0.4)',
         backgroundColor: '#060010' 
       }
     : {
-        borderColor: 'rgba(34, 197, 94, 0.12)',
-        hoverFillColor: 'rgba(34, 197, 94, 0.2)',
+        borderColor: 'rgba(34, 197, 94, 0.3)', // Increased visibility
+        hoverFillColor: 'rgba(34, 197, 94, 0.4)',
         backgroundColor: '#FAFAFA' 
       };
 
