@@ -36,7 +36,15 @@ const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto glass-panel px-6 py-3 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
+          <Link 
+            to="/" 
+            className="flex items-center gap-3 group"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.sessionStorage.removeItem('agrovision_entered_app');
+              }
+            }}
+          >
             <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors border border-primary/20 overflow-hidden">
               <Activity className="text-primary w-5 h-5 relative z-10" />
               <div className="absolute inset-0 bg-primary/20 blur-lg rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
